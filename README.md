@@ -60,7 +60,7 @@
 
 ```bash
 # 저장소 클론
-git clone https://github.com/your-username/stock-client-standalone.git
+git clone git@github.com:dongpallee/stock-client-standalone.git
 cd stock-client-standalone
 
 # 의존성 설치
