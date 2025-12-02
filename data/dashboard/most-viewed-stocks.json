@@ -1,0 +1,45 @@
+{
+  "stocks": [
+    {
+      "stock_code": "005930",
+      "stock_name": "삼성전자",
+      "current_price": 70000,
+      "change_rate": 2.19,
+      "view_count": 1250,
+      "sector": "반도체"
+    },
+    {
+      "stock_code": "000660",
+      "stock_name": "SK하이닉스",
+      "current_price": 125000,
+      "change_rate": -1.57,
+      "view_count": 890,
+      "sector": "반도체"
+    },
+    {
+      "stock_code": "035420",
+      "stock_name": "NAVER",
+      "current_price": 215000,
+      "change_rate": 2.38,
+      "view_count": 720,
+      "sector": "IT서비스"
+    },
+    {
+      "stock_code": "373220",
+      "stock_name": "LG에너지솔루션",
+      "current_price": 385000,
+      "change_rate": 1.99,
+      "view_count": 650,
+      "sector": "전기전자"
+    },
+    {
+      "stock_code": "005380",
+      "stock_name": "현대차",
+      "current_price": 185000,
+      "change_rate": 1.93,
+      "view_count": 580,
+      "sector": "자동차"
+    }
+  ],
+  "timestamp": "2025-12-02T15:30:00Z"
+}

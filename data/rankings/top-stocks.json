@@ -1,0 +1,198 @@
+{
+  "overall": [
+    {
+      "rank": 1,
+      "stock_code": "005930",
+      "stock_name": "삼성전자",
+      "composite_score": 88,
+      "grade": "A",
+      "change_rate": 2.19,
+      "investment_opinion": "매수"
+    },
+    {
+      "rank": 2,
+      "stock_code": "373220",
+      "stock_name": "LG에너지솔루션",
+      "composite_score": 85,
+      "grade": "A",
+      "change_rate": 1.99,
+      "investment_opinion": "매수"
+    },
+    {
+      "rank": 3,
+      "stock_code": "035420",
+      "stock_name": "NAVER",
+      "composite_score": 82,
+      "grade": "A-",
+      "change_rate": 2.38,
+      "investment_opinion": "매수"
+    },
+    {
+      "rank": 4,
+      "stock_code": "051910",
+      "stock_name": "LG화학",
+      "composite_score": 80,
+      "grade": "B+",
+      "change_rate": 2.38,
+      "investment_opinion": "매수"
+    },
+    {
+      "rank": 5,
+      "stock_code": "005380",
+      "stock_name": "현대차",
+      "composite_score": 78,
+      "grade": "B+",
+      "change_rate": 1.93,
+      "investment_opinion": "보유"
+    }
+  ],
+  "by_sector": {
+    "반도체": [
+      {
+        "rank": 1,
+        "stock_code": "005930",
+        "stock_name": "삼성전자",
+        "composite_score": 88,
+        "grade": "A",
+        "sector_weight": 45.5
+      },
+      {
+        "rank": 2,
+        "stock_code": "000660",
+        "stock_name": "SK하이닉스",
+        "composite_score": 75,
+        "grade": "B",
+        "sector_weight": 38.2
+      }
+    ],
+    "자동차": [
+      {
+        "rank": 1,
+        "stock_code": "005380",
+        "stock_name": "현대차",
+        "composite_score": 78,
+        "grade": "B+",
+        "sector_weight": 52.3
+      },
+      {
+        "rank": 2,
+        "stock_code": "000270",
+        "stock_name": "기아",
+        "composite_score": 76,
+        "grade": "B",
+        "sector_weight": 35.7
+      }
+    ],
+    "IT서비스": [
+      {
+        "rank": 1,
+        "stock_code": "035420",
+        "stock_name": "NAVER",
+        "composite_score": 82,
+        "grade": "A-",
+        "sector_weight": 58.9
+      },
+      {
+        "rank": 2,
+        "stock_code": "035720",
+        "stock_name": "카카오",
+        "composite_score": 70,
+        "grade": "B-",
+        "sector_weight": 34.2
+      }
+    ],
+    "전기전자": [
+      {
+        "rank": 1,
+        "stock_code": "373220",
+        "stock_name": "LG에너지솔루션",
+        "composite_score": 85,
+        "grade": "A",
+        "sector_weight": 62.1
+      },
+      {
+        "rank": 2,
+        "stock_code": "006400",
+        "stock_name": "삼성SDI",
+        "composite_score": 72,
+        "grade": "B",
+        "sector_weight": 28.9
+      }
+    ]
+  },
+  "by_volume": [
+    {
+      "rank": 1,
+      "stock_code": "005930",
+      "stock_name": "삼성전자",
+      "volume": 12500000,
+      "volume_change_rate": 15.5
+    },
+    {
+      "rank": 2,
+      "stock_code": "000660",
+      "stock_name": "SK하이닉스",
+      "volume": 8500000,
+      "volume_change_rate": -8.2
+    },
+    {
+      "rank": 3,
+      "stock_code": "035720",
+      "stock_name": "카카오",
+      "volume": 5500000,
+      "volume_change_rate": 22.3
+    },
+    {
+      "rank": 4,
+      "stock_code": "005380",
+      "stock_name": "현대차",
+      "volume": 3200000,
+      "volume_change_rate": 5.8
+    },
+    {
+      "rank": 5,
+      "stock_code": "000270",
+      "stock_name": "기아",
+      "volume": 2800000,
+      "volume_change_rate": 3.2
+    }
+  ],
+  "by_change_rate": [
+    {
+      "rank": 1,
+      "stock_code": "051910",
+      "stock_name": "LG화학",
+      "change_rate": 2.38,
+      "current_price": 365000
+    },
+    {
+      "rank": 2,
+      "stock_code": "035420",
+      "stock_name": "NAVER",
+      "change_rate": 2.38,
+      "current_price": 215000
+    },
+    {
+      "rank": 3,
+      "stock_code": "005930",
+      "stock_name": "삼성전자",
+      "change_rate": 2.19,
+      "current_price": 70000
+    },
+    {
+      "rank": 4,
+      "stock_code": "373220",
+      "stock_name": "LG에너지솔루션",
+      "change_rate": 1.99,
+      "current_price": 385000
+    },
+    {
+      "rank": 5,
+      "stock_code": "005380",
+      "stock_name": "현대차",
+      "change_rate": 1.93,
+      "current_price": 185000
+    }
+  ],
+  "timestamp": "2025-12-02T15:30:00Z"
+}

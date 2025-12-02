@@ -1,0 +1,78 @@
+{
+  "stock_code": "035420",
+  "stock_name": "NAVER",
+  "current_price": 215000,
+  "change_amount": 5000,
+  "change_rate": 2.38,
+  "volume": 1200000,
+  "market_cap": 3200000000000,
+  "sector": "IT서비스",
+  "industry": "인터넷 검색 및 콘텐츠",
+  "listed_shares": 14880000,
+  "description": "인터넷 검색 및 콘텐츠 플랫폼",
+  "basic_info": {
+    "stock_code": "035420",
+    "stock_name": "NAVER",
+    "current_price": 215000,
+    "change_amount": 5000,
+    "change_rate": 2.38,
+    "previous_close": 210000,
+    "open": 211000,
+    "high": 217000,
+    "low": 210500,
+    "volume": 1200000,
+    "market_cap": 3200000000000,
+    "sector": "IT서비스",
+    "industry": "인터넷 검색 및 콘텐츠"
+  },
+  "price_data": {
+    "open": 211000,
+    "high": 217000,
+    "low": 210500,
+    "close": 215000,
+    "volume": 1200000,
+    "week_52_high": 250000,
+    "week_52_low": 180000,
+    "avg_volume": 1100000
+  },
+  "financial_ratios": {
+    "per": 22.5,
+    "pbr": 2.1,
+    "eps": 9556,
+    "bps": 102381,
+    "roe": 10.5,
+    "roa": 7.8,
+    "debt_ratio": 38.5,
+    "dividend_yield": 0.8,
+    "dividend_per_share": 1720
+  },
+  "analysis": {
+    "composite_score": 82,
+    "grade": "A-",
+    "investment_opinion": "매수",
+    "target_price": 240000,
+    "technical_score": 78,
+    "fundamental_score": 84,
+    "sentiment_score": 84,
+    "technical_analysis": {
+      "trend": "상승",
+      "support_level": 205000,
+      "resistance_level": 225000,
+      "rsi": 58.2,
+      "macd": "매수"
+    },
+    "ai_recommendation": {
+      "summary": "AI 검색 및 클라우드 사업 성장으로 중장기 긍정적 전망",
+      "strengths": [
+        "국내 검색 시장 1위",
+        "AI 기술 투자 확대",
+        "클라우드 사업 성장"
+      ],
+      "risks": [
+        "해외 사업 불확실성",
+        "규제 리스크"
+      ]
+    }
+  },
+  "last_updated": "2025-12-02T15:30:00Z"
+}

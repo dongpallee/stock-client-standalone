@@ -1,0 +1,23 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "demo",
+      "email": "demo@example.com",
+      "password": "demo1234",
+      "name": "데모 사용자",
+      "created_at": "2025-01-01T00:00:00Z",
+      "watchlist": ["005930", "000660", "035420"]
+    },
+    {
+      "id": 2,
+      "username": "test",
+      "email": "test@example.com",
+      "password": "test1234",
+      "name": "테스트 사용자",
+      "created_at": "2025-01-15T00:00:00Z",
+      "watchlist": ["005930", "373220"]
+    }
+  ],
+  "sessions": {}
+}

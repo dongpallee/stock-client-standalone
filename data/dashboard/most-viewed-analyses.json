@@ -1,0 +1,35 @@
+{
+  "analyses": [
+    {
+      "stock_code": "005930",
+      "stock_name": "삼성전자",
+      "analysis_date": "2025-12-02T10:30:00Z",
+      "composite_score": 88,
+      "grade": "A",
+      "investment_opinion": "매수",
+      "view_count": 450,
+      "summary": "AI 반도체 수요 증가로 긍정적 전망"
+    },
+    {
+      "stock_code": "373220",
+      "stock_name": "LG에너지솔루션",
+      "analysis_date": "2025-12-02T09:15:00Z",
+      "composite_score": 85,
+      "grade": "A",
+      "investment_opinion": "매수",
+      "view_count": 320,
+      "summary": "전기차 배터리 시장 성장 지속"
+    },
+    {
+      "stock_code": "035420",
+      "stock_name": "NAVER",
+      "analysis_date": "2025-12-02T08:45:00Z",
+      "composite_score": 82,
+      "grade": "A-",
+      "investment_opinion": "매수",
+      "view_count": 280,
+      "summary": "AI 검색 및 클라우드 사업 확대"
+    }
+  ],
+  "timestamp": "2025-12-02T15:30:00Z"
+}

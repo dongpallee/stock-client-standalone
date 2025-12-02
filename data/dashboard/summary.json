@@ -1,0 +1,35 @@
+{
+  "timestamp": "2025-12-02T15:30:00Z",
+  "market_overview": {
+    "kospi": {
+      "value": 2650.5,
+      "change": 15.2,
+      "change_rate": 0.58
+    },
+    "kosdaq": {
+      "value": 850.3,
+      "change": -3.5,
+      "change_rate": -0.41
+    }
+  },
+  "total_stocks": 10,
+  "analyzed_stocks": 10,
+  "hot_stocks_count": 5,
+  "trending_sectors": [
+    {
+      "sector": "반도체",
+      "change_rate": 2.5,
+      "stock_count": 2
+    },
+    {
+      "sector": "IT서비스",
+      "change_rate": 1.2,
+      "stock_count": 2
+    },
+    {
+      "sector": "자동차",
+      "change_rate": -0.8,
+      "stock_count": 2
+    }
+  ]
+}

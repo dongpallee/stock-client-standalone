@@ -1,0 +1,146 @@
+{
+  "timestamp": "2025-12-02T15:30:00Z",
+  "summary": {
+    "total_agents": 15,
+    "active_agents": 14,
+    "idle_agents": 1,
+    "error_agents": 0
+  },
+  "agents_by_type": {
+    "collectors": {
+      "total": 5,
+      "active": 4,
+      "agents": [
+        {
+          "name": "MarketDataCollector",
+          "status": "active",
+          "last_run": "2025-12-02T15:25:00Z",
+          "success_rate": 98.5,
+          "avg_response_time_ms": 250
+        },
+        {
+          "name": "NewsCollector",
+          "status": "active",
+          "last_run": "2025-12-02T15:28:00Z",
+          "success_rate": 95.2,
+          "avg_response_time_ms": 1200
+        },
+        {
+          "name": "FinancialDataCollector",
+          "status": "active",
+          "last_run": "2025-12-02T15:20:00Z",
+          "success_rate": 99.1,
+          "avg_response_time_ms": 800
+        },
+        {
+          "name": "CompanyInfoCollector",
+          "status": "idle",
+          "last_run": "2025-12-02T14:30:00Z",
+          "success_rate": 97.8,
+          "avg_response_time_ms": 500
+        },
+        {
+          "name": "InvestmentInfoCollector",
+          "status": "active",
+          "last_run": "2025-12-02T15:29:00Z",
+          "success_rate": 96.5,
+          "avg_response_time_ms": 650
+        }
+      ]
+    },
+    "analyzers": {
+      "total": 4,
+      "active": 4,
+      "agents": [
+        {
+          "name": "TechnicalAnalyzer",
+          "status": "active",
+          "last_run": "2025-12-02T15:29:00Z",
+          "success_rate": 99.5,
+          "avg_response_time_ms": 150
+        },
+        {
+          "name": "FundamentalAnalyzer",
+          "status": "active",
+          "last_run": "2025-12-02T15:28:00Z",
+          "success_rate": 98.2,
+          "avg_response_time_ms": 320
+        },
+        {
+          "name": "SentimentAnalyzer",
+          "status": "active",
+          "last_run": "2025-12-02T15:27:00Z",
+          "success_rate": 94.8,
+          "avg_response_time_ms": 1500
+        },
+        {
+          "name": "CompositeAnalyzer",
+          "status": "active",
+          "last_run": "2025-12-02T15:30:00Z",
+          "success_rate": 99.0,
+          "avg_response_time_ms": 200
+        }
+      ]
+    },
+    "llm_processors": {
+      "total": 3,
+      "active": 3,
+      "agents": [
+        {
+          "name": "ComprehensiveAnalysisAgent",
+          "status": "active",
+          "last_run": "2025-12-02T15:25:00Z",
+          "success_rate": 92.5,
+          "avg_response_time_ms": 3500
+        },
+        {
+          "name": "InvestmentRecommendationAgent",
+          "status": "active",
+          "last_run": "2025-12-02T15:24:00Z",
+          "success_rate": 93.8,
+          "avg_response_time_ms": 3200
+        },
+        {
+          "name": "RiskAssessmentAgent",
+          "status": "active",
+          "last_run": "2025-12-02T15:23:00Z",
+          "success_rate": 95.2,
+          "avg_response_time_ms": 2800
+        }
+      ]
+    },
+    "report_generators": {
+      "total": 2,
+      "active": 2,
+      "agents": [
+        {
+          "name": "IndividualReportGenerator",
+          "status": "active",
+          "last_run": "2025-12-02T15:20:00Z",
+          "success_rate": 98.5,
+          "avg_response_time_ms": 500
+        },
+        {
+          "name": "PortfolioReportGenerator",
+          "status": "active",
+          "last_run": "2025-12-02T15:15:00Z",
+          "success_rate": 97.2,
+          "avg_response_time_ms": 1200
+        }
+      ]
+    },
+    "monitors": {
+      "total": 1,
+      "active": 1,
+      "agents": [
+        {
+          "name": "RealTimeMonitor",
+          "status": "active",
+          "last_run": "2025-12-02T15:30:00Z",
+          "success_rate": 99.8,
+          "avg_response_time_ms": 50
+        }
+      ]
+    }
+  }
+}

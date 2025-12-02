@@ -1,0 +1,158 @@
+# ==============================================================================
+# Stock Analysis Client - Standalone Edition
+# .gitignore
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# Dependencies
+# ------------------------------------------------------------------------------
+node_modules/
+.pnpm-debug.log*
+.npm
+.yarn/
+.pnp.*
+
+# ------------------------------------------------------------------------------
+# Build Output
+# ------------------------------------------------------------------------------
+dist/
+dist-ssr/
+build/
+*.local
+
+# ------------------------------------------------------------------------------
+# Environment Variables
+# ------------------------------------------------------------------------------
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# DO commit .env.example for documentation
+
+# ------------------------------------------------------------------------------
+# IDE & Editor Files
+# ------------------------------------------------------------------------------
+# VSCode
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# JetBrains IDEs (WebStorm, IntelliJ, etc.)
+.idea/
+*.iml
+*.iws
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*.swp
+*.swo
+*~
+
+# Emacs
+*~
+\#*\#
+.\#*
+
+# ------------------------------------------------------------------------------
+# Operating System Files
+# ------------------------------------------------------------------------------
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+.directory
+.Trash-*
+
+# ------------------------------------------------------------------------------
+# Logs
+# ------------------------------------------------------------------------------
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# ------------------------------------------------------------------------------
+# Testing
+# ------------------------------------------------------------------------------
+coverage/
+*.lcov
+.nyc_output/
+.coverage/
+htmlcov/
+.pytest_cache/
+
+# ------------------------------------------------------------------------------
+# Temporary Files
+# ------------------------------------------------------------------------------
+*.tmp
+*.temp
+.cache/
+.parcel-cache/
+.vite/
+
+# ------------------------------------------------------------------------------
+# Production
+# ------------------------------------------------------------------------------
+# Uncomment if you don't want to commit production builds
+# /dist
+
+# ------------------------------------------------------------------------------
+# Package Manager Lock Files
+# ------------------------------------------------------------------------------
+# Uncomment the lock files you're NOT using
+
+# Keep pnpm lock file (recommended)
+# pnpm-lock.yaml
+
+# Remove npm lock file if using pnpm
+package-lock.json
+
+# Remove yarn lock file if using pnpm
+yarn.lock
+
+# ------------------------------------------------------------------------------
+# Local Data (Optional)
+# ------------------------------------------------------------------------------
+# Uncomment if you want to ignore local data modifications
+# data/**/*.json
+# !data/**/.gitkeep
+
+# But always keep the README and example files
+!data/README.md
+!data/**/.gitkeep
+
+# ------------------------------------------------------------------------------
+# Documentation Build
+# ------------------------------------------------------------------------------
+docs/.vitepress/dist
+docs/.vitepress/cache
+
+# ------------------------------------------------------------------------------
+# Misc
+# ------------------------------------------------------------------------------
+.env.backup
+.vscode-test
+.turbo
+*.tsbuildinfo

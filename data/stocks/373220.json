@@ -1,0 +1,78 @@
+{
+  "stock_code": "373220",
+  "stock_name": "LG에너지솔루션",
+  "current_price": 385000,
+  "change_amount": 7500,
+  "change_rate": 1.99,
+  "volume": 780000,
+  "market_cap": 8970000000000,
+  "sector": "전기전자",
+  "industry": "전기차 배터리 제조",
+  "listed_shares": 23300000,
+  "description": "전기차 배터리 제조업체",
+  "basic_info": {
+    "stock_code": "373220",
+    "stock_name": "LG에너지솔루션",
+    "current_price": 385000,
+    "change_amount": 7500,
+    "change_rate": 1.99,
+    "previous_close": 377500,
+    "open": 379000,
+    "high": 388000,
+    "low": 378000,
+    "volume": 780000,
+    "market_cap": 8970000000000,
+    "sector": "전기전자",
+    "industry": "전기차 배터리 제조"
+  },
+  "price_data": {
+    "open": 379000,
+    "high": 388000,
+    "low": 378000,
+    "close": 385000,
+    "volume": 780000,
+    "week_52_high": 520000,
+    "week_52_low": 350000,
+    "avg_volume": 650000
+  },
+  "financial_ratios": {
+    "per": 28.5,
+    "pbr": 2.8,
+    "eps": 13509,
+    "bps": 137500,
+    "roe": 11.2,
+    "roa": 8.5,
+    "debt_ratio": 42.8,
+    "dividend_yield": 0.5,
+    "dividend_per_share": 1925
+  },
+  "analysis": {
+    "composite_score": 85,
+    "grade": "A",
+    "investment_opinion": "매수",
+    "target_price": 450000,
+    "technical_score": 80,
+    "fundamental_score": 88,
+    "sentiment_score": 87,
+    "technical_analysis": {
+      "trend": "상승",
+      "support_level": 370000,
+      "resistance_level": 410000,
+      "rsi": 61.5,
+      "macd": "매수"
+    },
+    "ai_recommendation": {
+      "summary": "전기차 시장 성장과 북미 IRA 수혜로 긍정적 전망",
+      "strengths": [
+        "글로벌 배터리 시장 2위",
+        "북미 IRA 수혜 기대",
+        "고객사 다변화"
+      ],
+      "risks": [
+        "경쟁 심화",
+        "원재료 가격 변동"
+      ]
+    }
+  },
+  "last_updated": "2025-12-02T15:30:00Z"
+}

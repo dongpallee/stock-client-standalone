@@ -1,0 +1,122 @@
+[
+  {
+    "stock_code": "005930",
+    "stock_name": "삼성전자",
+    "current_price": 70000,
+    "change_amount": 1500,
+    "change_rate": 2.19,
+    "volume": 12500000,
+    "market_cap": 4200000000000,
+    "sector": "반도체",
+    "listed_shares": 60000000,
+    "description": "글로벌 반도체 및 전자제품 제조업체"
+  },
+  {
+    "stock_code": "000660",
+    "stock_name": "SK하이닉스",
+    "current_price": 125000,
+    "change_amount": -2000,
+    "change_rate": -1.57,
+    "volume": 8500000,
+    "market_cap": 3500000000000,
+    "sector": "반도체",
+    "listed_shares": 28000000,
+    "description": "메모리 반도체 전문 제조업체"
+  },
+  {
+    "stock_code": "005380",
+    "stock_name": "현대차",
+    "current_price": 185000,
+    "change_amount": 3500,
+    "change_rate": 1.93,
+    "volume": 3200000,
+    "market_cap": 2800000000000,
+    "sector": "자동차",
+    "listed_shares": 15135000,
+    "description": "글로벌 자동차 제조 및 판매"
+  },
+  {
+    "stock_code": "000270",
+    "stock_name": "기아",
+    "current_price": 95000,
+    "change_amount": 1800,
+    "change_rate": 1.93,
+    "volume": 2800000,
+    "market_cap": 1900000000000,
+    "sector": "자동차",
+    "listed_shares": 20000000,
+    "description": "자동차 제조 및 판매"
+  },
+  {
+    "stock_code": "035720",
+    "stock_name": "카카오",
+    "current_price": 42500,
+    "change_amount": -850,
+    "change_rate": -1.96,
+    "volume": 5500000,
+    "market_cap": 1850000000000,
+    "sector": "IT서비스",
+    "listed_shares": 43550000,
+    "description": "모바일 메신저 및 인터넷 서비스"
+  },
+  {
+    "stock_code": "035420",
+    "stock_name": "NAVER",
+    "current_price": 215000,
+    "change_amount": 5000,
+    "change_rate": 2.38,
+    "volume": 1200000,
+    "market_cap": 3200000000000,
+    "sector": "IT서비스",
+    "listed_shares": 14880000,
+    "description": "인터넷 검색 및 콘텐츠 플랫폼"
+  },
+  {
+    "stock_code": "051910",
+    "stock_name": "LG화학",
+    "current_price": 365000,
+    "change_amount": 8500,
+    "change_rate": 2.38,
+    "volume": 850000,
+    "market_cap": 2580000000000,
+    "sector": "화학",
+    "listed_shares": 7070000,
+    "description": "화학, 전지 소재 제조"
+  },
+  {
+    "stock_code": "006400",
+    "stock_name": "삼성SDI",
+    "current_price": 425000,
+    "change_amount": -12000,
+    "change_rate": -2.75,
+    "volume": 950000,
+    "market_cap": 2950000000000,
+    "sector": "전기전자",
+    "listed_shares": 6940000,
+    "description": "2차전지 및 전자재료 제조"
+  },
+  {
+    "stock_code": "373220",
+    "stock_name": "LG에너지솔루션",
+    "current_price": 385000,
+    "change_amount": 7500,
+    "change_rate": 1.99,
+    "volume": 780000,
+    "market_cap": 8970000000000,
+    "sector": "전기전자",
+    "listed_shares": 23300000,
+    "description": "전기차 배터리 제조"
+  },
+  {
+    "stock_code": "207940",
+    "stock_name": "삼성바이오로직스",
+    "current_price": 850000,
+    "change_amount": 15000,
+    "change_rate": 1.8,
+    "volume": 125000,
+    "market_cap": 6120000000000,
+    "sector": "제약바이오",
+    "listed_shares": 7200000,
+    "description": "바이오의약품 위탁생산"
+  }
+]

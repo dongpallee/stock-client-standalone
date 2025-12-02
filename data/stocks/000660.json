@@ -1,0 +1,79 @@
+{
+  "stock_code": "000660",
+  "stock_name": "SK하이닉스",
+  "current_price": 125000,
+  "change_amount": -2000,
+  "change_rate": -1.57,
+  "volume": 8500000,
+  "market_cap": 3500000000000,
+  "sector": "반도체",
+  "industry": "메모리 반도체 제조",
+  "listed_shares": 28000000,
+  "description": "메모리 반도체 전문 제조업체",
+  "basic_info": {
+    "stock_code": "000660",
+    "stock_name": "SK하이닉스",
+    "current_price": 125000,
+    "change_amount": -2000,
+    "change_rate": -1.57,
+    "previous_close": 127000,
+    "open": 126500,
+    "high": 127500,
+    "low": 124000,
+    "volume": 8500000,
+    "market_cap": 3500000000000,
+    "sector": "반도체",
+    "industry": "메모리 반도체 제조"
+  },
+  "price_data": {
+    "open": 126500,
+    "high": 127500,
+    "low": 124000,
+    "close": 125000,
+    "volume": 8500000,
+    "week_52_high": 145000,
+    "week_52_low": 95000,
+    "avg_volume": 7500000
+  },
+  "financial_ratios": {
+    "per": 18.2,
+    "pbr": 1.5,
+    "eps": 6868,
+    "bps": 83333,
+    "roe": 9.8,
+    "roa": 6.5,
+    "debt_ratio": 52.1,
+    "dividend_yield": 1.6,
+    "dividend_per_share": 2000
+  },
+  "analysis": {
+    "composite_score": 75,
+    "grade": "B",
+    "investment_opinion": "보유",
+    "target_price": 140000,
+    "technical_score": 70,
+    "fundamental_score": 78,
+    "sentiment_score": 77,
+    "technical_analysis": {
+      "trend": "횡보",
+      "support_level": 120000,
+      "resistance_level": 135000,
+      "rsi": 48.5,
+      "macd": "중립",
+      "moving_average_20": 126000,
+      "moving_average_60": 123000
+    },
+    "ai_recommendation": {
+      "summary": "메모리 반도체 업황 회복 기대감은 있으나 단기적 불확실성 존재",
+      "strengths": [
+        "HBM(고대역폭메모리) 시장 선도",
+        "AI 서버용 메모리 수요 증가"
+      ],
+      "risks": [
+        "메모리 가격 변동성",
+        "재고 조정 우려"
+      ]
+    }
+  },
+  "last_updated": "2025-12-02T15:30:00Z"
+}

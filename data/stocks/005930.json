@@ -1,0 +1,209 @@
+{
+  "stock_code": "005930",
+  "stock_name": "삼성전자",
+  "current_price": 70000,
+  "change_amount": 1500,
+  "change_rate": 2.19,
+  "volume": 12500000,
+  "market_cap": 4200000000000,
+  "sector": "반도체",
+  "industry": "반도체 제조",
+  "listed_shares": 60000000,
+  "description": "글로벌 반도체 및 전자제품 제조업체",
+  "basic_info": {
+    "stock_code": "005930",
+    "stock_name": "삼성전자",
+    "current_price": 70000,
+    "change_amount": 1500,
+    "change_rate": 2.19,
+    "previous_close": 68500,
+    "open": 68500,
+    "high": 71000,
+    "low": 68000,
+    "volume": 12500000,
+    "market_cap": 4200000000000,
+    "sector": "반도체",
+    "industry": "반도체 제조",
+    "ceo": "한종희",
+    "founded": "1969-01-13",
+    "employees": 267937,
+    "website": "https://www.samsung.com/sec"
+  },
+  "price_data": {
+    "open": 68500,
+    "high": 71000,
+    "low": 68000,
+    "close": 70000,
+    "volume": 12500000,
+    "week_52_high": 85000,
+    "week_52_low": 55000,
+    "avg_volume": 11000000
+  },
+  "financial_ratios": {
+    "per": 15.5,
+    "pbr": 1.8,
+    "eps": 4516,
+    "bps": 38889,
+    "roe": 12.5,
+    "roa": 8.2,
+    "debt_ratio": 45.3,
+    "dividend_yield": 2.8,
+    "dividend_per_share": 1960
+  },
+  "chart_data": [
+    {
+      "date": "2025-11-01",
+      "open": 65000,
+      "high": 66500,
+      "low": 64500,
+      "close": 66000,
+      "volume": 9500000
+    },
+    {
+      "date": "2025-11-04",
+      "open": 66000,
+      "high": 67000,
+      "low": 65500,
+      "close": 66500,
+      "volume": 10200000
+    },
+    {
+      "date": "2025-11-05",
+      "open": 66500,
+      "high": 67500,
+      "low": 66000,
+      "close": 67000,
+      "volume": 11000000
+    },
+    {
+      "date": "2025-11-06",
+      "open": 67000,
+      "high": 68000,
+      "low": 66500,
+      "close": 67500,
+      "volume": 10500000
+    },
+    {
+      "date": "2025-11-07",
+      "open": 67500,
+      "high": 68500,
+      "low": 67000,
+      "close": 68000,
+      "volume": 11500000
+    },
+    {
+      "date": "2025-11-08",
+      "open": 68000,
+      "high": 69000,
+      "low": 67500,
+      "close": 68500,
+      "volume": 12000000
+    },
+    {
+      "date": "2025-11-11",
+      "open": 68500,
+      "high": 69500,
+      "low": 68000,
+      "close": 69000,
+      "volume": 11800000
+    },
+    {
+      "date": "2025-11-12",
+      "open": 69000,
+      "high": 70000,
+      "low": 68500,
+      "close": 69500,
+      "volume": 12500000
+    },
+    {
+      "date": "2025-11-13",
+      "open": 69500,
+      "high": 70500,
+      "low": 69000,
+      "close": 70000,
+      "volume": 13000000
+    },
+    {
+      "date": "2025-11-14",
+      "open": 70000,
+      "high": 71000,
+      "low": 69500,
+      "close": 70500,
+      "volume": 12800000
+    }
+  ],
+  "analysis": {
+    "composite_score": 88,
+    "grade": "A",
+    "investment_opinion": "매수",
+    "target_price": 85000,
+    "technical_score": 82,
+    "fundamental_score": 88,
+    "sentiment_score": 85,
+    "technical_analysis": {
+      "trend": "상승",
+      "support_level": 68000,
+      "resistance_level": 75000,
+      "rsi": 62.5,
+      "macd": "매수",
+      "moving_average_20": 67500,
+      "moving_average_60": 65000,
+      "bollinger_upper": 72000,
+      "bollinger_lower": 65000
+    },
+    "fundamental_analysis": {
+      "revenue_growth": 12.5,
+      "profit_margin": 15.8,
+      "asset_quality": "우수",
+      "liquidity": "양호",
+      "profitability": "우수"
+    },
+    "news_sentiment": {
+      "overall": "긍정적",
+      "positive_ratio": 75,
+      "negative_ratio": 10,
+      "neutral_ratio": 15,
+      "recent_news": [
+        {
+          "title": "삼성전자, 차세대 반도체 기술 개발 성공",
+          "date": "2025-12-01",
+          "sentiment": "positive"
+        },
+        {
+          "title": "삼성전자 3분기 실적 시장 기대치 상회",
+          "date": "2025-11-28",
+          "sentiment": "positive"
+        }
+      ]
+    },
+    "ai_recommendation": {
+      "summary": "삼성전자는 반도체 업황 회복과 AI 관련 수요 증가로 긍정적 전망이 우세합니다. 기술적으로 상승 추세를 유지하고 있으며, 펀더멘털도 견고합니다.",
+      "strengths": [
+        "세계 1위 메모리 반도체 제조사",
+        "AI 반도체 수요 증가 수혜 예상",
+        "안정적인 재무구조",
+        "지속적인 배당 정책"
+      ],
+      "risks": [
+        "글로벌 경기 둔화 우려",
+        "중국 반도체 업체와의 경쟁 심화",
+        "환율 변동성"
+      ],
+      "investor_type_recommendation": {
+        "conservative": {
+          "recommended": true,
+          "reason": "안정적인 배당과 우량 기업으로 장기 투자에 적합"
+        },
+        "moderate": {
+          "recommended": true,
+          "reason": "업황 개선으로 중장기 성장 기대"
+        },
+        "aggressive": {
+          "recommended": true,
+          "reason": "AI 수요 증가로 단기 모멘텀 발생 가능"
+        }
+      }
+    }
+  },
+  "last_updated": "2025-12-02T15:30:00Z"
+}

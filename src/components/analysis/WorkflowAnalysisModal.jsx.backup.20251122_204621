@@ -1,0 +1,1042 @@
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
+import ReactFlow, {
+  Background,
+  Controls,
+  MiniMap,
+  useNodesState,
+  useEdgesState,
+  MarkerType,
+  Position,
+  ReactFlowProvider,
+  Handle
+} from 'reactflow';
+import 'reactflow/dist/style.css';
+import {
+  Brain,
+  Loader2,
+  CheckCircle2,
+  XCircle,
+  Clock,
+  AlertCircle,
+  Download
+} from 'lucide-react';
+import { Card } from '../ui/card';
+import { Badge } from '../ui/badge';
+
+/**
+ * WorkflowAnalysisModal
+ *
+ * LangGraph 기반 멀티에이전트 워크플로우 시각화 컴포넌트
+ * - React-Flow를 통한 인터랙티브 워크플로우 시각화
+ * - 실시간 진행 상황 표시 (Progress Bar)
+ * - Timeline 형식의 에이전트 실행 과정 표시
+ * - WebSocket을 통한 실시간 업데이트
+ * - 병렬 처리 노드 시각화
+ */
+
+// Custom Node Component - 상태별 색상 코딩 강화
+const CustomNode = ({ data }) => {
+  const getNodeColor = () => {
+    // 완료: 녹색 (bg-green-50, border-green-500)
+    if (data.status === 'completed') {
+      return 'bg-green-50 border-green-500 text-green-900';
+    }
+    // 실행중: 파란색 + 애니메이션 (bg-blue-50, border-blue-500)
+    if (data.status === 'running') {
+      return 'bg-blue-50 border-blue-500 text-blue-900 animate-pulse';
+    }
+    // 실패: 빨간색 (bg-red-50, border-red-500)
+    if (data.status === 'failed') {
+      return 'bg-red-50 border-red-500 text-red-900';
+    }
+    // 대기: 회색 (bg-gray-50, border-gray-300)
+    return 'bg-gray-50 border-gray-300 text-gray-600';
+  };
+
+  const getIcon = () => {
+    if (data.status === 'completed') return <CheckCircle2 className="h-4 w-4 text-green-600" />;
+    if (data.status === 'running') return <Loader2 className="h-4 w-4 text-blue-600 animate-spin" />;
+    if (data.status === 'failed') return <XCircle className="h-4 w-4 text-red-600" />;
+    return <Clock className="h-4 w-4 text-gray-400" />;
+  };
+
+  const getShape = () => {
+    if (data.type === 'entry' || data.type === 'end') {
+      return 'rounded-full';
+    }
+    if (data.type === 'orchestration') {
+      return 'rounded-lg';
+    }
+    if (data.type === 'validation') {
+      return 'rounded-md transform rotate-45';
+    }
+    return 'rounded-md';
+  };
+
+  const getBorderStyle = () => {
+    // 재실행 노드는 주황색 점선 테두리
+    if (data.is_retry) {
+      return 'border-dashed border-orange-500';
+    }
+    return '';
+  };
+
+  return (
+    <div
+      className={`px-4 py-3 border-2 ${getNodeColor()} ${getShape()} ${getBorderStyle()} shadow-md transition-all duration-200 hover:shadow-lg`}
+      style={{ width: '180px', height: '60px', display: 'flex', alignItems: 'center' }}
+    >
+      <Handle type="target" position={Position.Left} style={{ background: '#555' }} />
+      <div className="flex items-center gap-2 w-full">
+        {getIcon()}
+        <div className="flex-1 overflow-hidden">
+          <div className="text-xs font-semibold text-gray-800 truncate">{data.label}</div>
+          <div className="flex gap-1 mt-0.5">
+            {data.parallel && (
+              <Badge variant="secondary" className="text-[10px]">병렬</Badge>
+            )}
+            {data.is_retry && data.retry_count > 0 && (
+              <Badge variant="destructive" className="text-[10px]">재시도 #{data.retry_count}</Badge>
+            )}
+          </div>
+        </div>
+      </div>
+      <Handle type="source" position={Position.Right} style={{ background: '#555' }} />
+    </div>
+  );
+};
+
+const nodeTypes = {
+  custom: CustomNode
+};
+
+const WorkflowAnalysisModal = ({
+  isOpen,
+  onClose,
+  socket,
+  requestId,
+  userId,
+  stockCode
+}) => {
+  // State 관리
+  const [flowNodes, setFlowNodes, onNodesChange] = useNodesState([]);
+  const [flowEdges, setFlowEdges, onEdgesChange] = useEdgesState([]);
+  const [nodeStatuses, setNodeStatuses] = useState({});
+  const [isConnected, setIsConnected] = useState(false);
+  const [isCompleted, setIsCompleted] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [workflowMetadata, setWorkflowMetadata] = useState(null);
+  const [timelineEvents, setTimelineEvents] = useState([]);
+  const [expandedCards, setExpandedCards] = useState({});
+  const [reactFlowInstance, setReactFlowInstance] = useState(null);
+  const [viewMode, setViewMode] = useState('detailed'); // 'simple' or 'detailed'
+
+  // Timeline auto-scroll ref
+  const timelineRef = useRef(null);
+
+  // Progress 계산 (running 상태를 50%로 계산하여 실제 진행 상황 반영)
+  const progressPercentage = useMemo(() => {
+    const total = Object.keys(nodeStatuses).length;
+    if (total === 0) return 0;
+
+    // 각 상태별 가중치 적용
+    let weightedProgress = 0;
+    Object.values(nodeStatuses).forEach(status => {
+      if (status === 'completed') {
+        weightedProgress += 1.0;  // 완료: 100%
+      } else if (status === 'running') {
+        weightedProgress += 0.5;  // 실행중: 50%
+      } else if (status === 'pending') {
+        weightedProgress += 0.0;  // 대기: 0%
+      } else if (status === 'failed') {
+        weightedProgress += 0.0;  // 실패: 0%
+      }
+    });
+
+    return Math.round((weightedProgress / total) * 100);
+  }, [nodeStatuses]);
+
+  // 상태별 노드 수 계산
+  const statusCounts = useMemo(() => {
+    const counts = {
+      pending: 0,
+      running: 0,
+      completed: 0,
+      failed: 0,
+      total: 0
+    };
+
+    Object.values(nodeStatuses).forEach(status => {
+      if (counts[status] !== undefined) {
+        counts[status]++;
+      }
+      counts.total++;
+    });
+
+    return counts;
+  }, [nodeStatuses]);
+
+  // WebSocket 연결 상태 관리
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleConnect = () => setIsConnected(true);
+    const handleDisconnect = () => setIsConnected(false);
+
+    socket.on('connect', handleConnect);
+    socket.on('disconnect', handleDisconnect);
+
+    setIsConnected(socket.connected);
+
+    return () => {
+      socket.off('connect', handleConnect);
+      socket.off('disconnect', handleDisconnect);
+    };
+  }, [socket]);
+
+  // Timeline 자동 스크롤 - 새 이벤트 추가 시 하단으로 스크롤
+  useEffect(() => {
+    if (timelineRef.current && timelineEvents.length > 0) {
+      // 부드러운 스크롤 애니메이션
+      timelineRef.current.scrollTo({
+        top: timelineRef.current.scrollHeight,
+        behavior: 'smooth'
+      });
+    }
+  }, [timelineEvents]);
+
+  // Workflow metadata 로딩 및 노드/엣지 생성
+  useEffect(() => {
+    if (!socket || !requestId || !userId) return;
+
+    socket.emit('get_workflow_metadata', { request_id: requestId });
+
+    socket.on('workflow_metadata', (data) => {
+      if (data.request_id === requestId) {
+        setWorkflowMetadata(data.metadata);
+
+        // React-Flow 노드 및 엣지 생성 (현재 viewMode에 따라)
+        const currentView = data.metadata[viewMode] || data.metadata.simple;
+        const { nodes: metaNodes, edges: metaEdges } = currentView;
+
+        // 레이어별로 노드 그룹화
+        const nodesByLayer = {};
+        metaNodes.forEach(node => {
+          const layer = Math.floor(node.layer);
+          if (!nodesByLayer[layer]) {
+            nodesByLayer[layer] = [];
+          }
+          nodesByLayer[layer].push(node);
+        });
+
+        // 노드 생성 (개선된 레이아웃)
+        const generatedNodes = metaNodes.map((node) => {
+          const layer = Math.floor(node.layer);
+          const sublayer = (node.layer - layer) * 150;
+
+          // 같은 레이어 내에서의 인덱스
+          const layerNodes = nodesByLayer[layer];
+          const indexInLayer = layerNodes.indexOf(node);
+          const totalInLayer = layerNodes.length;
+
+          // Y 위치 계산: 레이어 내에서 균등하게 배치
+          const ySpacing = 150;
+          const yOffset = (indexInLayer - (totalInLayer - 1) / 2) * ySpacing;
+
+          return {
+            id: node.id,
+            type: 'custom',
+            position: {
+              x: layer * 400 + sublayer,
+              y: 300 + yOffset
+            },
+            data: {
+              label: node.name,
+              type: node.type,
+              parallel: node.parallel,
+              status: 'pending'
+            },
+            sourcePosition: Position.Right,
+            targetPosition: Position.Left,
+            style: {
+              width: 180,
+              height: 60
+            }
+          };
+        });
+
+        // 엣지 생성 (개선된 스타일링)
+        const generatedEdges = metaEdges.map((edge, index) => {
+          let style = { stroke: '#94a3b8', strokeWidth: 2 };
+          let markerEnd = { type: MarkerType.ArrowClosed, color: '#94a3b8' };
+          let animated = false;
+          let edgeType = 'smoothstep';
+
+          if (edge.type === 'conditional') {
+            style = { strokeDasharray: '5,5', stroke: '#f59e0b', strokeWidth: 2 };
+            markerEnd = { type: MarkerType.ArrowClosed, color: '#f59e0b' };
+          } else if (edge.type === 'parallel') {
+            style = { stroke: '#8b5cf6', strokeWidth: 2 };
+            markerEnd = { type: MarkerType.ArrowClosed, color: '#8b5cf6' };
+            animated = true;
+          } else if (edge.type === 'convergence') {
+            style = { stroke: '#10b981', strokeWidth: 2 };
+            markerEnd = { type: MarkerType.ArrowClosed, color: '#10b981' };
+          } else if (edge.type === 'start' || edge.type === 'end') {
+            style = { strokeWidth: 3, stroke: '#10b981' };
+            markerEnd = { type: MarkerType.ArrowClosed, color: '#10b981' };
+          } else if (edge.type === 'parallel_sync') {
+            edgeType = 'step';
+            style = { stroke: '#6366f1', strokeWidth: 2 };
+            markerEnd = { type: MarkerType.ArrowClosed, color: '#6366f1' };
+          }
+
+          return {
+            id: `edge-${index}`,
+            source: edge.from,
+            target: edge.to,
+            type: edgeType,
+            label: edge.condition || '',
+            labelStyle: { fill: '#64748b', fontSize: 12 },
+            labelBgStyle: { fill: '#ffffff', fillOpacity: 0.8 },
+            style,
+            markerEnd,
+            animated
+          };
+        });
+
+        console.log('[WorkflowModal] ===== WORKFLOW DEBUG =====');
+        console.log('[WorkflowModal] Total nodes:', generatedNodes.length);
+        console.log('[WorkflowModal] Node IDs:', generatedNodes.map(n => n.id));
+        console.log('[WorkflowModal] Total edges:', generatedEdges.length);
+        console.log('[WorkflowModal] All edges:', generatedEdges);
+
+        // 엣지 유효성 검증
+        const nodeIds = new Set(generatedNodes.map(n => n.id));
+        const invalidEdges = generatedEdges.filter(e =>
+          !nodeIds.has(e.source) || !nodeIds.has(e.target)
+        );
+        if (invalidEdges.length > 0) {
+          console.error('[WorkflowModal] Invalid edges found:', invalidEdges);
+        } else {
+          console.log('[WorkflowModal] ✓ All edges are valid');
+        }
+
+        console.log('[WorkflowModal] Setting nodes and edges to React-Flow...');
+        setFlowNodes(generatedNodes);
+        setFlowEdges(generatedEdges);
+        console.log('[WorkflowModal] Nodes and edges set successfully');
+
+        // 초기 상태 설정
+        const initialStatuses = {};
+        metaNodes.forEach(node => {
+          initialStatuses[node.id] = 'pending';
+        });
+        setNodeStatuses(initialStatuses);
+      }
+    });
+
+    return () => {
+      socket.off('workflow_metadata');
+    };
+  }, [socket, requestId, userId, viewMode]);
+
+  // viewMode 변경 시 워크플로우 재생성
+  useEffect(() => {
+    if (!workflowMetadata) return;
+
+    console.log('[WorkflowModal] View mode changed to:', viewMode);
+
+    // 현재 viewMode에 맞는 데이터 가져오기
+    const currentView = workflowMetadata[viewMode] || workflowMetadata.simple;
+    const { nodes: metaNodes, edges: metaEdges } = currentView;
+
+    // 레이어별로 노드 그룹화
+    const nodesByLayer = {};
+    metaNodes.forEach(node => {
+      const layer = Math.floor(node.layer);
+      if (!nodesByLayer[layer]) {
+        nodesByLayer[layer] = [];
+      }
+      nodesByLayer[layer].push(node);
+    });
+
+    // 노드 생성
+    const generatedNodes = metaNodes.map((node) => {
+      const layer = Math.floor(node.layer);
+
+      const layerNodes = nodesByLayer[layer];
+      const indexInLayer = layerNodes.indexOf(node);
+      const totalInLayer = layerNodes.length;
+
+      const ySpacing = viewMode === 'detailed' ? 100 : 150; // 상세 뷰에서 더 촘촘하게
+      const yOffset = (indexInLayer - (totalInLayer - 1) / 2) * ySpacing;
+
+      // 현재 상태 유지
+      const currentStatus = nodeStatuses[node.id] || 'pending';
+
+      return {
+        id: node.id,
+        type: 'custom',
+        position: {
+          x: layer * (viewMode === 'detailed' ? 300 : 400),
+          y: 300 + yOffset
+        },
+        data: {
+          label: node.name,
+          type: node.type,
+          parallel: node.parallel,
+          status: currentStatus
+        },
+        sourcePosition: Position.Right,
+        targetPosition: Position.Left,
+        style: {
+          width: 180,
+          height: 60
+        }
+      };
+    });
+
+    // 엣지 생성
+    const generatedEdges = metaEdges.map((edge, index) => {
+      let style = { stroke: '#94a3b8', strokeWidth: 2 };
+      let markerEnd = { type: MarkerType.ArrowClosed, color: '#94a3b8' };
+      let animated = false;
+      let edgeType = 'smoothstep';
+
+      if (edge.type === 'conditional') {
+        style = { strokeDasharray: '5,5', stroke: '#f59e0b', strokeWidth: 2 };
+        markerEnd = { type: MarkerType.ArrowClosed, color: '#f59e0b' };
+      } else if (edge.type === 'parallel') {
+        style = { stroke: '#8b5cf6', strokeWidth: 2 };
+        markerEnd = { type: MarkerType.ArrowClosed, color: '#8b5cf6' };
+        animated = true;
+      } else if (edge.type === 'convergence') {
+        style = { stroke: '#10b981', strokeWidth: 2 };
+        markerEnd = { type: MarkerType.ArrowClosed, color: '#10b981' };
+      } else if (edge.type === 'start' || edge.type === 'end') {
+        style = { strokeWidth: 3, stroke: '#10b981' };
+        markerEnd = { type: MarkerType.ArrowClosed, color: '#10b981' };
+      } else if (edge.type === 'monitoring') {
+        style = { strokeDasharray: '3,3', stroke: '#f97316', strokeWidth: 1 };
+        markerEnd = { type: MarkerType.ArrowClosed, color: '#f97316' };
+      }
+
+      return {
+        id: `edge-${index}`,
+        source: edge.from,
+        target: edge.to,
+        type: edgeType,
+        label: edge.condition || '',
+        labelBgStyle: { fill: '#ffffff', fillOpacity: 0.8 },
+        style,
+        markerEnd,
+        animated
+      };
+    });
+
+    console.log(`[WorkflowModal] Regenerated ${viewMode} view: ${generatedNodes.length} nodes, ${generatedEdges.length} edges`);
+
+    setFlowNodes(generatedNodes);
+    setFlowEdges(generatedEdges);
+
+    // 초기 상태 업데이트 (새로운 노드에 대해서만)
+    setNodeStatuses(prevStatuses => {
+      const updatedStatuses = { ...prevStatuses };
+      let hasChanges = false;
+      metaNodes.forEach(node => {
+        if (!updatedStatuses[node.id]) {
+          updatedStatuses[node.id] = 'pending';
+          hasChanges = true;
+        }
+      });
+      return hasChanges ? updatedStatuses : prevStatuses;
+    });
+
+    // React-Flow 뷰 자동 조정
+    if (reactFlowInstance) {
+      setTimeout(() => {
+        reactFlowInstance.fitView({ padding: 0.2, maxZoom: viewMode === 'detailed' ? 0.5 : 1, duration: 300 });
+      }, 100);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [viewMode, workflowMetadata, reactFlowInstance]);
+
+  // React-Flow 인스턴스가 준비되면 edges를 다시 피팅
+  useEffect(() => {
+    if (reactFlowInstance && flowEdges.length > 0) {
+      setTimeout(() => {
+        reactFlowInstance.fitView({ padding: 0.2, maxZoom: viewMode === 'detailed' ? 0.5 : 1, duration: 200 });
+      }, 50);
+    }
+  }, [reactFlowInstance, flowEdges.length]);
+
+  // 노드가 업데이트될 때 엣지도 강제 업데이트
+  useEffect(() => {
+    if (flowNodes.length > 0 && flowEdges.length > 0) {
+      console.log('[WorkflowModal] Nodes and edges ready:', {
+        nodes: flowNodes.length,
+        edges: flowEdges.length,
+        nodesWithDimensions: flowNodes.filter(n => n.width && n.height).length
+      });
+
+      // DOM에서 실제 렌더링된 엣지 확인
+      setTimeout(() => {
+        const edgeElements = document.querySelectorAll('.react-flow__edge');
+        const edgePaths = document.querySelectorAll('.react-flow__edge path');
+        console.log('[WorkflowModal] ===== EDGE RENDERING CHECK =====');
+        console.log('[WorkflowModal] Edge elements in DOM:', edgeElements.length);
+        console.log('[WorkflowModal] Edge paths in DOM:', edgePaths.length);
+
+        if (edgeElements.length === 0) {
+          console.error('[WorkflowModal] ❌ No edge elements found in DOM!');
+          console.log('[WorkflowModal] React-Flow container check:');
+          const rfContainer = document.querySelector('.react-flow');
+          console.log('[WorkflowModal] - React-Flow container exists:', !!rfContainer);
+          if (rfContainer) {
+            console.log('[WorkflowModal] - Container dimensions:', {
+              width: rfContainer.offsetWidth,
+              height: rfContainer.offsetHeight
+            });
+          }
+          const rfEdgesLayer = document.querySelector('.react-flow__edges');
+          console.log('[WorkflowModal] - Edges layer exists:', !!rfEdgesLayer);
+          if (rfEdgesLayer) {
+            console.log('[WorkflowModal] - Edges layer style:', window.getComputedStyle(rfEdgesLayer).display);
+          }
+        } else {
+          console.log('[WorkflowModal] ✓ Edges are rendered in DOM');
+          edgePaths.forEach((path, i) => {
+            const pathData = path.getAttribute('d');
+            const visibility = window.getComputedStyle(path).visibility;
+            const opacity = window.getComputedStyle(path).opacity;
+            console.log(`[WorkflowModal] Edge ${i}:`, {
+              hasPath: !!pathData,
+              pathLength: pathData?.length || 0,
+              visibility,
+              opacity
+            });
+          });
+        }
+      }, 500);
+    }
+  }, [flowNodes, flowEdges]);
+
+  // Agent progress 이벤트 핸들러
+  useEffect(() => {
+    if (!socket || !requestId) return;
+
+    socket.emit('subscribe_agent_thinking', { request_id: requestId });
+
+    const handleAgentProgress = (data) => {
+      if (data.request_id !== requestId) return;
+
+      console.log('[WorkflowModal] Agent progress:', data);
+
+      // 타임라인에 이벤트 추가
+      setTimelineEvents(prev => [...prev, {
+        ...data,
+        timestamp: data.timestamp || new Date().toISOString(),
+        eventId: `${data.stage}_${Date.now()}_${Math.random()}`
+      }]);
+
+      // 노드 ID 매핑 개선 - 다양한 ID 형식 지원
+      const nodeId = data.agent_id || data.node_id || data.stage?.toLowerCase().replace(/ /g, '_');
+
+      if (nodeId) {
+        // 노드 상태 업데이트 (명시적 상태 값 사용, 상태 전환 유효성 검증)
+        const newStatus = data.status || 'running';
+
+        setNodeStatuses(prev => {
+          // 기존 상태 확인
+          const currentStatus = prev[nodeId];
+
+          // 상태 전환 유효성 검증: completed 노드는 다시 변경하지 않음
+          if (currentStatus === 'completed' && newStatus !== 'completed') {
+            console.log(`[WorkflowModal] Ignoring status change for completed node: ${nodeId}`);
+            return prev;
+          }
+
+          return {
+            ...prev,
+            [nodeId]: newStatus
+          };
+        });
+
+        // React-Flow 노드 업데이트
+        setFlowNodes(nodes => nodes.map(node => {
+          if (node.id === nodeId || node.data.label === data.agent_name) {
+            return {
+              ...node,
+              data: {
+                ...node.data,
+                status: newStatus,
+                timestamp: data.timestamp,
+                message: data.message || data.stage,
+              }
+            };
+          }
+          return node;
+        }));
+      }
+
+      // 완료 상태 체크 (전체 워크플로우 완료)
+      if (data.status === 'completed' &&
+          (data.stage === 'Complete' ||
+           data.agent_id === 'llm_complete' ||
+           nodeId === 'llm_complete' ||
+           data.is_final_complete === true)) {
+        console.log('[WorkflowModal] Workflow completed!', data);
+        setIsCompleted(true);
+        setIsSuccess(data.success !== false);  // success 필드 확인
+      }
+    };
+
+    socket.on('agent_thinking', handleAgentProgress);
+    socket.on('analysis_progress', handleAgentProgress);
+
+    return () => {
+      socket.emit('unsubscribe_agent_thinking', { request_id: requestId });
+      socket.off('agent_thinking', handleAgentProgress);
+      socket.off('analysis_progress', handleAgentProgress);
+    };
+  }, [socket, requestId, setFlowNodes]);
+
+  // Dynamic Workflow Structure Update Handler
+  useEffect(() => {
+    if (!socket || !requestId) return;
+
+    const handleWorkflowStructureUpdate = (data) => {
+      if (data.request_id !== requestId) return;
+
+      console.log('[WorkflowModal] Dynamic workflow structure update received:', data.structure);
+
+      const structure = data.structure;
+      if (!structure || !structure.nodes || !structure.edges) {
+        console.warn('[WorkflowModal] Invalid dynamic structure received');
+        return;
+      }
+
+      // 동적으로 받은 노드와 엣지를 React Flow 형식으로 변환
+      const dynamicNodes = structure.nodes.map(node => ({
+        id: node.id,
+        type: 'custom',
+        position: node.position,
+        data: {
+          label: node.data.label,
+          status: node.data.status,
+          type: node.data.metadata?.type || 'default',
+          parallel: false,
+          is_retry: node.data.is_retry || false,
+          retry_count: node.data.retry_count || 0,
+          message: node.data.message,
+          duration: node.data.duration
+        },
+        sourcePosition: Position.Right,
+        targetPosition: Position.Left,
+        style: {
+          width: 180,
+          height: 60,
+          ...(node.data.is_retry ? { borderColor: '#ff6b35', borderStyle: 'dashed' } : {})
+        }
+      }));
+
+      const dynamicEdges = structure.edges.map(edge => ({
+        id: edge.id,
+        source: edge.source,
+        target: edge.target,
+        type: edge.type || 'smoothstep',
+        animated: edge.animated || false,
+        style: edge.style || { stroke: '#94a3b8', strokeWidth: 2 },
+        markerEnd: { type: MarkerType.ArrowClosed, color: edge.style?.stroke || '#94a3b8' }
+      }));
+
+      console.log('[WorkflowModal] Setting dynamic nodes:', dynamicNodes.length);
+      console.log('[WorkflowModal] Setting dynamic edges:', dynamicEdges.length);
+
+      // 노드와 엣지 업데이트
+      setFlowNodes(dynamicNodes);
+      setFlowEdges(dynamicEdges);
+
+      // 노드 상태 업데이트
+      const newStatuses = {};
+      dynamicNodes.forEach(node => {
+        newStatuses[node.id] = node.data.status;
+      });
+      setNodeStatuses(newStatuses);
+
+      // 진행률 업데이트
+      if (structure.metadata?.progress) {
+        console.log('[WorkflowModal] Progress update:', structure.metadata.progress);
+      }
+    };
+
+    socket.on('workflow_structure_update', handleWorkflowStructureUpdate);
+
+    return () => {
+      socket.off('workflow_structure_update', handleWorkflowStructureUpdate);
+    };
+  }, [socket, requestId, setFlowNodes, setFlowEdges]);
+
+  // Export to Draw.io XML
+  const exportToDrawio = useCallback(() => {
+    if (!workflowMetadata) return;
+
+    const currentView = workflowMetadata[viewMode] || workflowMetadata.simple;
+    const { nodes, edges } = currentView;
+
+    // Draw.io XML 생성
+    let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
+    xml += '<mxfile host="app.diagrams.net">\n';
+    xml += '  <diagram name="LangGraph Workflow">\n';
+    xml += '    <mxGraphModel>\n';
+    xml += '      <root>\n';
+    xml += '        <mxCell id="0"/>\n';
+    xml += '        <mxCell id="1" parent="0"/>\n';
+
+    // 노드 추가
+    nodes.forEach((node, index) => {
+      const x = Math.floor(node.layer) * 200;
+      const y = index * 80;
+      const style = node.parallel ? 'rounded=1;fillColor=#dae8fc;strokeColor=#6c8ebf' : 'rounded=0;fillColor=#d5e8d4;strokeColor=#82b366';
+
+      xml += `        <mxCell id="node_${node.id}" value="${node.name}" style="${style}" vertex="1" parent="1">\n`;
+      xml += `          <mxGeometry x="${x}" y="${y}" width="160" height="60" as="geometry"/>\n`;
+      xml += `        </mxCell>\n`;
+    });
+
+    // 엣지 추가
+    edges.forEach((edge, index) => {
+      const style = edge.type === 'conditional' ? 'dashed=1;strokeColor=#d79b00' : 'strokeColor=#000000';
+      xml += `        <mxCell id="edge_${index}" value="${edge.condition || ''}" style="${style}" edge="1" parent="1" source="node_${edge.from}" target="node_${edge.to}">\n`;
+      xml += `          <mxGeometry relative="1" as="geometry"/>\n`;
+      xml += `        </mxCell>\n`;
+    });
+
+    xml += '      </root>\n';
+    xml += '    </mxGraphModel>\n';
+    xml += '  </diagram>\n';
+    xml += '</mxfile>';
+
+    // 다운로드
+    const blob = new Blob([xml], { type: 'application/xml' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `workflow_${viewMode}_${requestId}_${Date.now()}.drawio`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }, [workflowMetadata, requestId, viewMode]);
+
+  // 모달이 닫혀있으면 렌더링하지 않음
+  if (!isOpen) return null;
+
+  return (
+    <ReactFlowProvider>
+      <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
+        <div className="bg-white rounded-lg shadow-2xl w-full max-w-[95vw] h-[90vh] flex flex-col">
+        {/* Header */}
+        <div className="flex items-center justify-between p-4 border-b">
+          <div className="flex items-center gap-3">
+            <Brain className="h-6 w-6 text-blue-600" />
+            <div>
+              <h2 className="text-xl font-bold text-gray-900">Multi-Agent Workflow</h2>
+              <p className="text-sm text-gray-500">
+                종목: {stockCode} | 요청 ID: {requestId?.slice(0, 8)}... |
+                에이전트: {workflowMetadata?.[viewMode]?.total_agents || 0}개
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            {/* Connection Status */}
+            <Badge variant={isConnected ? 'default' : 'destructive'}>
+              {isConnected ? '연결됨' : '연결 끊김'}
+            </Badge>
+
+            {/* View Mode Toggle */}
+            <div className="flex items-center bg-gray-200 rounded-md p-1">
+              <button
+                onClick={() => setViewMode('simple')}
+                className={`px-3 py-1 text-sm rounded-md transition-colors ${
+                  viewMode === 'simple'
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-transparent text-gray-700 hover:bg-gray-300'
+                }`}
+              >
+                간단 (10개)
+              </button>
+              <button
+                onClick={() => setViewMode('detailed')}
+                className={`px-3 py-1 text-sm rounded-md transition-colors ${
+                  viewMode === 'detailed'
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-transparent text-gray-700 hover:bg-gray-300'
+                }`}
+              >
+                상세 (32개)
+              </button>
+            </div>
+
+            {/* Export Button */}
+            <button
+              onClick={exportToDrawio}
+              className="px-3 py-2 text-sm bg-green-600 text-white rounded-md hover:bg-green-700 flex items-center gap-2"
+            >
+              <Download className="h-4 w-4" />
+              Draw.io로 내보내기
+            </button>
+
+            {/* Close Button */}
+            <button
+              onClick={onClose}
+              className="px-3 py-2 text-sm bg-gray-600 text-white rounded-md hover:bg-gray-700"
+            >
+              닫기
+            </button>
+          </div>
+        </div>
+
+        {/* Progress Bar - 상태별 카운트 표시 */}
+        <div className="px-4 py-3 bg-gray-50 border-b">
+          <div className="space-y-2">
+            {/* 진행률 바 */}
+            <div className="flex items-center gap-4">
+              <div className="flex-1">
+                <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                  <div
+                    className={`h-full transition-all duration-500 ${
+                      isCompleted
+                        ? isSuccess
+                          ? 'bg-green-600'
+                          : 'bg-red-600'
+                        : 'bg-blue-600'
+                    }`}
+                    style={{ width: `${progressPercentage}%` }}
+                  />
+                </div>
+              </div>
+              <div className="text-sm font-semibold text-gray-700">
+                {progressPercentage}% 완료
+              </div>
+              {isCompleted && (
+                <Badge variant={isSuccess ? 'default' : 'destructive'}>
+                  {isSuccess ? '성공' : '실패'}
+                </Badge>
+              )}
+            </div>
+
+            {/* 상태별 카운트 */}
+            {statusCounts.total > 0 && (
+              <div className="flex items-center gap-2 text-xs">
+                <span className="inline-flex items-center px-2 py-1 rounded-md bg-gray-100 text-gray-700">
+                  대기: {statusCounts.pending}
+                </span>
+                {statusCounts.running > 0 && (
+                  <span className="inline-flex items-center px-2 py-1 rounded-md bg-blue-100 text-blue-700 animate-pulse">
+                    실행중: {statusCounts.running}
+                  </span>
+                )}
+                {statusCounts.completed > 0 && (
+                  <span className="inline-flex items-center px-2 py-1 rounded-md bg-green-100 text-green-700">
+                    완료: {statusCounts.completed}
+                  </span>
+                )}
+                {statusCounts.failed > 0 && (
+                  <span className="inline-flex items-center px-2 py-1 rounded-md bg-red-100 text-red-700">
+                    실패: {statusCounts.failed}
+                  </span>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Main Content */}
+        <div className="flex-1 flex overflow-hidden">
+          {/* Left: React-Flow Diagram */}
+          <div className="flex-1 flex flex-col border-r">
+            <div className="flex-1 bg-gray-50" style={{ position: 'relative', width: '100%', height: '100%' }}>
+              <div style={{ width: '100%', height: '100%' }}>
+                <ReactFlow
+                  nodes={flowNodes}
+                  edges={flowEdges}
+                  onNodesChange={onNodesChange}
+                  onEdgesChange={onEdgesChange}
+                  onInit={(instance) => {
+                    setReactFlowInstance(instance);
+                    setTimeout(() => {
+                      instance.fitView({ padding: 0.2, maxZoom: 1 });
+                    }, 100);
+                  }}
+                  nodeTypes={nodeTypes}
+                  fitView
+                  fitViewOptions={{ padding: 0.2, maxZoom: 1, duration: 200 }}
+                  nodesDraggable={true}
+                  nodesConnectable={false}
+                  edgesUpdatable={false}
+                  elementsSelectable={true}
+                  defaultEdgeOptions={{
+                    type: 'smoothstep',
+                    animated: false,
+                    style: { strokeWidth: 2, stroke: '#94a3b8' },
+                    markerEnd: {
+                      type: MarkerType.ArrowClosed,
+                      color: '#94a3b8'
+                    }
+                  }}
+                  minZoom={0.1}
+                  maxZoom={2}
+                  attributionPosition="bottom-left"
+                  proOptions={{ hideAttribution: true }}
+                  deleteKeyCode={null}
+                  elevateEdgesOnSelect={true}
+                  connectionLineType="smoothstep"
+                  style={{ width: '100%', height: '100%' }}
+                >
+                  <Background color="#aaa" gap={16} />
+                  <Controls />
+                  <MiniMap
+                    nodeColor={(node) => {
+                      if (node.data.status === 'completed') return '#10b981';
+                      if (node.data.status === 'running') return '#3b82f6';
+                      if (node.data.status === 'failed') return '#ef4444';
+                      return '#9ca3af';
+                    }}
+                    maskColor="rgba(0, 0, 0, 0.1)"
+                  />
+                </ReactFlow>
+              </div>
+            </div>
+
+            {/* Legend */}
+            <div className="p-3 bg-white border-t flex items-center gap-6 text-sm">
+              <div className="flex items-center gap-2">
+                <div className="w-4 h-4 bg-gray-100 border-2 border-gray-300 rounded"></div>
+                <span>대기</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-4 h-4 bg-blue-100 border-2 border-blue-500 rounded"></div>
+                <span>실행중</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-4 h-4 bg-green-100 border-2 border-green-500 rounded"></div>
+                <span>완료</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-4 h-4 bg-red-100 border-2 border-red-500 rounded"></div>
+                <span>실패</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 border-2 border-purple-500 rounded-full"></div>
+                <span>병렬 처리</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Right: Execution Timeline */}
+          <div className="w-96 flex flex-col bg-gray-50">
+            <div className="p-3 border-b bg-white">
+              <h3 className="font-semibold text-gray-900">실행 타임라인</h3>
+              <p className="text-xs text-gray-500 mt-1">
+                총 {timelineEvents.length}개 이벤트
+              </p>
+            </div>
+
+            <div ref={timelineRef} className="flex-1 p-4 overflow-y-auto space-y-2">
+              {timelineEvents.length === 0 ? (
+                <div className="flex flex-col items-center justify-center h-full text-gray-400">
+                  <AlertCircle className="h-12 w-12 mb-3" />
+                  <p className="text-sm">워크플로우 실행 대기 중</p>
+                </div>
+              ) : (
+                timelineEvents.map((event) => (
+                  <Card
+                    key={event.eventId}
+                    className="p-3 hover:shadow-md transition-shadow cursor-pointer"
+                    onClick={() => setExpandedCards(prev => ({
+                      ...prev,
+                      [event.eventId]: !prev[event.eventId]
+                    }))}
+                  >
+                    <div className="flex gap-2">
+                      {/* Status Icon */}
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center border-2 flex-shrink-0 ${
+                        event.status === 'running' ? 'border-blue-500 bg-blue-50 text-blue-500' :
+                        event.status === 'completed' ? 'border-green-500 bg-green-50 text-green-600' :
+                        event.status === 'failed' ? 'border-red-500 bg-red-50 text-red-600' :
+                        'border-gray-300 bg-white text-gray-400'
+                      }`}>
+                        {event.status === 'running' ? <Loader2 className="h-4 w-4 animate-spin" /> :
+                         event.status === 'completed' ? <CheckCircle2 className="h-4 w-4" /> :
+                         event.status === 'failed' ? <XCircle className="h-4 w-4" /> :
+                         <Clock className="h-4 w-4" />}
+                      </div>
+
+                      {/* Event Info */}
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-gray-900 truncate">
+                          {event.message || event.agent_name || event.stage}
+                        </p>
+                        <p className="text-xs text-gray-500 mt-1">
+                          {event.stage}
+                        </p>
+                        <p className="text-xs text-gray-400 mt-1">
+                          {new Date(event.timestamp).toLocaleTimeString('ko-KR')}
+                        </p>
+
+                        {/* Expanded Details */}
+                        {expandedCards[event.eventId] && event.details && (
+                          <div className="mt-2 p-2 bg-gray-50 rounded text-xs">
+                            <pre className="whitespace-pre-wrap">
+                              {JSON.stringify(event.details, null, 2)}
+                            </pre>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </Card>
+                ))
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Footer Stats */}
+        <div className="px-4 py-3 bg-gray-50 border-t flex items-center justify-between text-sm">
+          <div className="flex items-center gap-6">
+            <div>
+              <span className="text-gray-600">전체 에이전트:</span>
+              <span className="ml-2 font-semibold">{workflowMetadata?.total_agents || 0}</span>
+            </div>
+            <div>
+              <span className="text-gray-600">표시된 노드:</span>
+              <span className="ml-2 font-semibold">{flowNodes.length}</span>
+            </div>
+            <div>
+              <span className="text-gray-600">연결선:</span>
+              <span className="ml-2 font-semibold">{flowEdges.length}</span>
+            </div>
+            <div>
+              <span className="text-gray-600">병렬 에이전트:</span>
+              <span className="ml-2 font-semibold">{workflowMetadata?.parallel_agents || 0}</span>
+            </div>
+            <div>
+              <span className="text-gray-600">레이어:</span>
+              <span className="ml-2 font-semibold">{workflowMetadata?.layers || 0}</span>
+            </div>
+          </div>
+
+          <div className="text-xs text-gray-500">
+            Powered by React-Flow & LangGraph
+          </div>
+        </div>
+      </div>
+    </div>
+    </ReactFlowProvider>
+  );
+};
+
+export default WorkflowAnalysisModal;

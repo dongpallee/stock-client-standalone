@@ -1,0 +1,78 @@
+{
+  "stock_code": "005380",
+  "stock_name": "현대차",
+  "current_price": 185000,
+  "change_amount": 3500,
+  "change_rate": 1.93,
+  "volume": 3200000,
+  "market_cap": 2800000000000,
+  "sector": "자동차",
+  "industry": "자동차 제조 및 판매",
+  "listed_shares": 15135000,
+  "description": "글로벌 자동차 제조 및 판매",
+  "basic_info": {
+    "stock_code": "005380",
+    "stock_name": "현대차",
+    "current_price": 185000,
+    "change_amount": 3500,
+    "change_rate": 1.93,
+    "previous_close": 181500,
+    "open": 182000,
+    "high": 186500,
+    "low": 181500,
+    "volume": 3200000,
+    "market_cap": 2800000000000,
+    "sector": "자동차",
+    "industry": "자동차 제조 및 판매"
+  },
+  "price_data": {
+    "open": 182000,
+    "high": 186500,
+    "low": 181500,
+    "close": 185000,
+    "volume": 3200000,
+    "week_52_high": 220000,
+    "week_52_low": 165000,
+    "avg_volume": 2800000
+  },
+  "financial_ratios": {
+    "per": 5.8,
+    "pbr": 0.8,
+    "eps": 31897,
+    "bps": 231250,
+    "roe": 14.5,
+    "roa": 6.2,
+    "debt_ratio": 85.2,
+    "dividend_yield": 4.3,
+    "dividend_per_share": 7955
+  },
+  "analysis": {
+    "composite_score": 78,
+    "grade": "B+",
+    "investment_opinion": "보유",
+    "target_price": 210000,
+    "technical_score": 74,
+    "fundamental_score": 80,
+    "sentiment_score": 80,
+    "technical_analysis": {
+      "trend": "상승",
+      "support_level": 178000,
+      "resistance_level": 195000,
+      "rsi": 55.8,
+      "macd": "매수"
+    },
+    "ai_recommendation": {
+      "summary": "전기차 전환 가속화와 북미 시장 회복으로 안정적 성장 기대",
+      "strengths": [
+        "글로벌 완성차 5위",
+        "전기차 라인업 확대",
+        "높은 배당 수익률"
+      ],
+      "risks": [
+        "노조 파업 우려",
+        "중국 시장 부진"
+      ]
+    }
+  },
+  "last_updated": "2025-12-02T15:30:00Z"
+}

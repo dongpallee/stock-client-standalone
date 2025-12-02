@@ -1,0 +1,113 @@
+{
+  "kospi": {
+    "value": 2650.5,
+    "change": 15.2,
+    "change_rate": 0.58,
+    "volume": 450000000,
+    "value_traded": 12500000000000,
+    "timestamp": "2025-12-02T15:30:00Z",
+    "open": 2635.3,
+    "high": 2658.7,
+    "low": 2632.1,
+    "previous_close": 2635.3
+  },
+  "kosdaq": {
+    "value": 850.3,
+    "change": -3.5,
+    "change_rate": -0.41,
+    "volume": 280000000,
+    "value_traded": 8200000000000,
+    "timestamp": "2025-12-02T15:30:00Z",
+    "open": 853.8,
+    "high": 856.2,
+    "low": 848.5,
+    "previous_close": 853.8
+  },
+  "sectors": {
+    "반도체": {
+      "name": "반도체",
+      "change_rate": 2.5,
+      "top_stocks": ["005930", "000660"],
+      "market_cap": 7700000000000,
+      "volume": 21000000
+    },
+    "자동차": {
+      "name": "자동차",
+      "change_rate": -0.8,
+      "top_stocks": ["005380", "000270"],
+      "market_cap": 4700000000000,
+      "volume": 6000000
+    },
+    "IT서비스": {
+      "name": "IT서비스",
+      "change_rate": 1.2,
+      "top_stocks": ["035420", "035720"],
+      "market_cap": 5050000000000,
+      "volume": 6700000
+    },
+    "전기전자": {
+      "name": "전기전자",
+      "change_rate": 0.5,
+      "top_stocks": ["373220", "006400"],
+      "market_cap": 11920000000000,
+      "volume": 1730000
+    },
+    "화학": {
+      "name": "화학",
+      "change_rate": 1.8,
+      "top_stocks": ["051910"],
+      "market_cap": 2580000000000,
+      "volume": 850000
+    },
+    "제약바이오": {
+      "name": "제약바이오",
+      "change_rate": 1.5,
+      "top_stocks": ["207940"],
+      "market_cap": 6120000000000,
+      "volume": 125000
+    }
+  },
+  "market_summary": {
+    "advancing": 542,
+    "declining": 378,
+    "unchanged": 125,
+    "new_highs": 48,
+    "new_lows": 23,
+    "trading_value": 20700000000000,
+    "foreign_net_buy": 850000000000,
+    "institutional_net_buy": -320000000000,
+    "retail_net_buy": -530000000000
+  },
+  "indices_historical": [
+    {
+      "date": "2025-11-25",
+      "kospi": 2635.3,
+      "kosdaq": 853.8
+    },
+    {
+      "date": "2025-11-26",
+      "kospi": 2642.1,
+      "kosdaq": 851.2
+    },
+    {
+      "date": "2025-11-27",
+      "kospi": 2638.5,
+      "kosdaq": 849.6
+    },
+    {
+      "date": "2025-11-28",
+      "kospi": 2645.8,
+      "kosdaq": 852.4
+    },
+    {
+      "date": "2025-12-01",
+      "kospi": 2648.2,
+      "kosdaq": 854.1
+    },
+    {
+      "date": "2025-12-02",
+      "kospi": 2650.5,
+      "kosdaq": 850.3
+    }
+  ]
+}
