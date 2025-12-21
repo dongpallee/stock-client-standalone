@@ -14,6 +14,44 @@ import {
   Plus
 } from 'lucide-react';
 
+// 날짜 파싱 안정화 함수
+const formatKoreanDate = (value?: string | number | Date | null) => {
+  if (!value) return "-";
+
+  if (value instanceof Date) {
+    return Number.isNaN(value.getTime())
+      ? "-"
+      : value.toLocaleDateString("ko-KR");
+  }
+
+  if (typeof value === "number") {
+    const d = new Date(value);
+    return Number.isNaN(d.getTime()) ? "-" : d.toLocaleDateString("ko-KR");
+  }
+
+  const raw = String(value).trim();
+  if (!raw) return "-";
+
+  let d = new Date(raw);
+  if (!Number.isNaN(d.getTime())) {
+    return d.toLocaleDateString("ko-KR");
+  }
+
+  const normalized = raw.replace(" ", "T");
+  d = new Date(normalized);
+  if (!Number.isNaN(d.getTime())) {
+    return d.toLocaleDateString("ko-KR");
+  }
+
+  const m = raw.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (m) {
+    d = new Date(Date.UTC(+m[1], +m[2] - 1, +m[3]));
+    return Number.isNaN(d.getTime()) ? "-" : d.toLocaleDateString("ko-KR");
+  }
+
+  return "-";
+};
+
 const Watchlist = () => {
   const queryClient = useQueryClient();
 
