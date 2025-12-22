@@ -230,8 +230,10 @@ const StockList = () => {
   const handleSearch = (e) => {
     e.preventDefault();
     setCurrentPage(1);
-    refetch();
+    // refetch 제거: queryKey 변화로 자동 조회
   };
+
+
 
   const handleAnalyze = (stockCode) => {
     // 이미 분석 중이거나 mutation이 진행 중이면 무시
