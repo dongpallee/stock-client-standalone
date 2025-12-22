@@ -105,7 +105,7 @@ const CacheStatusWidget = () => {
   const formatBytes = (bytes) => {
     if (bytes === 0) return '0 Bytes';
     const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   };
@@ -131,6 +131,7 @@ const CacheStatusWidget = () => {
 
   const calculateHitRate = () => {
     if (!currentStats || !currentStats.hits || !currentStats.misses) return 0;
+    
     const total = currentStats.hits + currentStats.misses;
     return total > 0 ? (currentStats.hits / total) * 100 : 0;
   };
