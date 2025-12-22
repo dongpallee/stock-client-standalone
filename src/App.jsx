@@ -5,11 +5,11 @@ import { queryClient } from './lib/queryClient';
 import { AuthProvider } from './contexts/AuthContext';
 import { useInactivityTimer } from './hooks/useInactivityTimer';
 
-// Components
+// Layout & Route Components
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import DashboardLayout from './components/layout/DashboardLayout';
 
-// Pages
+// Page-level Route Components
 import LoginForm from './components/auth/LoginForm';
 import RegisterForm from './components/auth/RegisterForm';
 import Dashboard from './pages/Dashboard';
