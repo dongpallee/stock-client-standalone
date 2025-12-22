@@ -177,7 +177,7 @@ const AlertSystem = ({ className = "" }) => {
           
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2 text-sm">
-              <span>알림</span>
+              <span>알림 수신</span>
               <Switch 
                 checked={isEnabled} 
                 onCheckedChange={setIsEnabled}
