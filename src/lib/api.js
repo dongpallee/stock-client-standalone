@@ -85,7 +85,7 @@ export const stockAPI = {
   },
 
   // Analyze stock (mock - just returns existing analysis)
-  analyzeStock: async (stockCode, requestId) => {
+  analyzeStock: async (stockCode) => {
     await simulateDelay(2000); // Simulate analysis time
     const data = await fetchJSON(`/stocks/${stockCode}.json`);
     return data.analysis || null;
