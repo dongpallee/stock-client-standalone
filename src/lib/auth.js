@@ -24,6 +24,7 @@ export const removeToken = () => {
   localStorage.removeItem('refresh_token');
   localStorage.removeItem('user');
   localStorage.removeItem('session_start_time');
+  localStorage.removeItem('last_activity'); // 추가: 로그아웃 시 활동시간도 정리
 };
 
 // 세션 시작 시간 설정
