@@ -25,6 +25,12 @@ import {
   Info
 } from 'lucide-react';
 
+useEffect(() => {
+  return () => {
+    if (avatarObjectUrl) URL.revokeObjectURL(avatarObjectUrl);
+  };
+}, [avatarObjectUrl]);
+
 const Settings = () => {
   const { user, logout } = useAuth();
   const queryClient = useQueryClient();
