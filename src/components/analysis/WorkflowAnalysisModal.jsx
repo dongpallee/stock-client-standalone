@@ -294,26 +294,19 @@ const WorkflowAnalysisModal = ({ requestId, socket, onClose }) => {
   }, [socket, requestId]); // selectedNode 제거하여 재연결 방지
 
   // 노드/엣지 변경 시 레이아웃 재계산 (Debounced)
-  useEffect(() => {
-    if (nodes.length === 0) return;
+    const layoutTimerRef = useRef(null);
 
-    const timer = setTimeout(() => {
-      const { nodes: layoutedNodes, edges: layoutedEdges } = calculateLayout(nodes, edges);
-      
-      // 위치가 변경된 경우에만 업데이트 (무한 루프 방지)
-      const hasPositionChanged = layoutedNodes.some((n) => {
-        const current = nodes.find(curr => curr.id === n.id);
-        return current && (Math.abs(current.position.x - n.position.x) > 1 || Math.abs(current.position.y - n.position.y) > 1);
-      });
+    const scheduleLayout = useCallback(() => {
+      if (layoutTimerRef.current) clearTimeout(layoutTimerRef.current);
 
-      if (hasPositionChanged) {
-        setNodes(layoutedNodes);
-        setEdges(layoutedEdges);
-      }
-    }, 100); // 100ms debounce
+      layoutTimerRef.current = setTimeout(() => {
+        setNodes((currNodes) => {
+          // edges는 최신을 별도로 읽어야 함 → 아래 3)와 같이 구조 개선 권장
+          return currNodes;
+        });
+      }, 100);
+    }, [setNodes]);
 
-    return () => clearTimeout(timer);
-  }, [nodes.length, edges.length, nodes, edges, setNodes, setEdges]); 
 
   // 오버레이 클릭 핸들러
   const handleOverlayClick = useCallback((e) => {
