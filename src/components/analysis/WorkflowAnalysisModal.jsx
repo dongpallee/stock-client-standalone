@@ -329,7 +329,7 @@ const WorkflowAnalysisModal = ({ requestId, socket, onClose }) => {
             </div>
             <div>
               <h2 className="text-xl font-bold text-slate-800">
-                워크플로우 실행 분석
+                워크플로우 실행 현황
                 {isDynamic && <Badge variant="outline" className="ml-2 text-blue-600 border-blue-200 bg-blue-50">실시간</Badge>}
               </h2>
               <div className="flex items-center gap-2 text-xs text-slate-500 mt-1">
