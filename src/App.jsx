@@ -39,7 +39,7 @@ function App() {
               <Route path="/login" element={<LoginForm />} />
               <Route path="/register" element={<RegisterForm />} />
               
-              {/* 보호된 라우트 */}
+              {/* 인증이 필요한 보호된 라우트 */}
               <Route path="/dashboard" element={
                 <ProtectedRoute>
                   <DashboardLayout>
