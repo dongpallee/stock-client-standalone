@@ -130,8 +130,10 @@ const InvestmentRecommendation = ({ analysisData, className = "" }) => {
             </CardDescription>
           </div>
           <Badge className={`${getRiskColor(riskLevel)} border-0`}>
-            {riskLevel === 'low' ? '낮음' : 
-             riskLevel === 'medium' ? '보통' : '높음'} 위험
+             {riskLevel === 'low' ? '낮음'
+              : riskLevel === 'medium' ? '보통'
+              : riskLevel === 'high' ? '높음'
+              : '알 수 없음'} 위험
           </Badge>
         </div>
       </CardHeader>
