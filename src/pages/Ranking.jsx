@@ -129,7 +129,7 @@ const Ranking = () => {
         </div>
       </div>
 
-      <Tabs defaultValue="overall" className="space-y-6">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
         <TabsList className="grid w-full grid-cols-2 lg:grid-cols-4">
           <TabsTrigger value="overall">전체 랭킹</TabsTrigger>
           <TabsTrigger value="category">카테고리별</TabsTrigger>
