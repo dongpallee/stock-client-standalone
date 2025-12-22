@@ -115,7 +115,7 @@ const AccountOverview = ({ data }) => {
             <div className="space-y-2">
               <div className="flex items-center space-x-2">
                 <Target className="h-4 w-4 text-purple-500" />
-                <span className="text-sm font-medium">일일 손익</span>
+                <span className="text-sm font-medium">금일 손익</span>
               </div>
               <div className={`text-xl font-bold ${accountData.daily_profit >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                 {formatKoreanCurrency(accountData.daily_profit)}
