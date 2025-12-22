@@ -217,7 +217,7 @@ const AlertSystem = ({ className = "" }) => {
           
           <div className="ml-auto text-xs text-gray-500 flex items-center gap-1">
             <Clock className="h-3 w-3" />
-            마지막 업데이트: {formatTime(lastUpdate)}
+            업데이트: {formatTime(lastUpdate)}
           </div>
         </div>
 
