@@ -68,7 +68,7 @@ const SystemStatus = ({ data }) => {
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center space-x-2">
-          <CheckCircle className="h-5 w-5 text-green-500" />
+          {getStatusIcon(systemData?.status)}
           <span>시스템 상태</span>
         </CardTitle>
         <CardDescription>
