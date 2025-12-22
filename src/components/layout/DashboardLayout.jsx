@@ -6,7 +6,6 @@ import {
   TrendingUp,
   BarChart3,
   Star,
-  Trophy,
   Settings,
   LogOut,
   Menu,
