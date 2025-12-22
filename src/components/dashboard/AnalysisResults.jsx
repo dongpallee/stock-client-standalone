@@ -7,7 +7,6 @@ import {
   TrendingUp, 
   TrendingDown, 
   Target,
-  Zap,
   Eye,
   AlertCircle,
   Star,
