@@ -87,7 +87,10 @@ export const getUser = () => {
   }
 };
 
-// 로그인 상태 확인 (세션 유효성 포함)
+// 로그인 상태 확인
+// - 토큰 유효성
+// - 사용자 정보 존재 여부
+// - 세션 시간 제한(24h) 충족 여부
 export const isAuthenticated = () => {
   return isTokenValid() && getUser() !== null && isSessionValid();
 };
