@@ -24,7 +24,7 @@ import './App.css';
 // 비활성 타이머를 사용하는 래퍼 컴포넌트
 const AppWithInactivityTimer = ({ children }) => {
   useInactivityTimer();
-  return children;
+  return <>{children}</>;
 };
 
 function App() {
