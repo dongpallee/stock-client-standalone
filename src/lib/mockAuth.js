@@ -290,7 +290,11 @@ export const mockAuthAPI = {
     const watchlistKey = `${STORAGE_KEYS.WATCHLIST}_${currentUser.id}`;
     let watchlist = JSON.parse(localStorage.getItem(watchlistKey) || '[]');
 
-    watchlist = watchlist.filter(item => item.id !== parseInt(watchlistId));
+    const id = Number.parseInt(String(watchlistId), 10);
+    if (Number.isNaN(id)) {
+      throw new Error('Invalid watchlist id');
+    }
+    watchlist = watchlist.filter(item => item.id !== id);
     localStorage.setItem(watchlistKey, JSON.stringify(watchlist));
 
     return { message: 'Removed from watchlist' };
