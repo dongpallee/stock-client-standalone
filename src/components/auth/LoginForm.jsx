@@ -52,7 +52,7 @@ const LoginForm = () => {
       return;
     }
 
-    // 사용자명 길이 및 형식 검증
+    // 아이디 길이 및 형식 검증
     if (formData.username.length < 3 || formData.username.length > 50) {
       setError('사용자명은 3-50자 사이여야 합니다.');
       setLoading(false);
