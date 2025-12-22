@@ -30,7 +30,7 @@ export const removeToken = () => {
   localStorage.removeItem('last_activity');
 };
 
-// 세션 시작 시간 설정
+// 로그인 성공 시 세션 시작 시각 기록 (세션 유효성 판단 기준)
 export const setSessionStartTime = () => {
   localStorage.setItem('session_start_time', Date.now().toString());
 };
@@ -41,7 +41,7 @@ export const getSessionStartTime = () => {
   return v ? Number(v) : null;
 };
 
-// 세션 유효성 확인 (24시간)
+// 세션 유효성 확인 (세션 시작 시점 기준 최대 24시간)
 export const isSessionValid = () => {
   const startTime = getSessionStartTime();
   if (!startTime) return false;
