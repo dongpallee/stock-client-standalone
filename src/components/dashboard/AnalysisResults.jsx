@@ -132,7 +132,9 @@ const AnalysisResults = () => {
               <div className="text-sm text-muted-foreground">분석 종목 수</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-green-600">2</div>
+              <div className="text-2xl font-bold text-green-600">
+                {Object.values(analysisData).filter(d => d.signal === 'buy').length}
+              </div>
               <div className="text-sm text-muted-foreground">매수 신호 수</div>
             </div>
           </div>
