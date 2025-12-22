@@ -16,7 +16,6 @@ import {
   Trash2,
   Activity,
   Clock,
-  HardDrive,
   Zap,
   AlertCircle,
   CheckCircle,
