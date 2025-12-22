@@ -35,7 +35,7 @@ const CacheStatusWidget = () => {
   const { data: cacheStats, isLoading, refetch } = useQuery({
     queryKey: [queryKeys.cacheStats],
     queryFn: cacheAPI.getStats,
-    refetchInterval: 30000
+    refetchInterval: isSubscribed ? false : 30000
   });
 
   // 캐시 설정 조회
