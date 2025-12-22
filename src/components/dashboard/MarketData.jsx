@@ -10,7 +10,6 @@ import {
   BarChart3,
   Activity,
   RefreshCw,
-  Globe
 } from 'lucide-react';
 
 const MarketData = () => {
