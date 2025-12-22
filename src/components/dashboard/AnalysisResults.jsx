@@ -123,7 +123,7 @@ const AnalysisResults = () => {
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold text-blue-600">76%</div>
-              <div className="text-sm text-muted-foreground">평균 신뢰도</div>
+              <div className="text-sm text-muted-foreground">평균 분석 신뢰도</div>
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold text-purple-600">4</div>
