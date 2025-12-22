@@ -103,7 +103,7 @@ export const getLastActivity = () => {
   return v ? Number(v) : null;
 };
 
-// 비활성 시간 확인 (30분)
+// 사용자 비활성 제한 시간 초과 여부 확인 (마지막 활동 기준 30분)
 export const isInactivityTimeoutReached = () => {
   const lastActivity = getLastActivity();
   if (!lastActivity) return false;
