@@ -106,7 +106,7 @@ const LoginForm = () => {
             )}
             
             <div className="space-y-2">
-              <Label htmlFor="username">사용자명</Label>
+              <Label htmlFor="username">아이디</Label>
               <Input
                 id="username"
                 name="username"
