@@ -72,6 +72,7 @@ const PerformanceMetrics = () => {
           minute: '2-digit',
           ...(timeRange !== '1h' && { month: '2-digit', day: '2-digit' })
         }),
+        
         timestamp: time.getTime(),
         hitRate: Math.max(0, Math.min(100, baseHitRate + (Math.random() - 0.5) * 5)),
         responseTime: Math.max(10, baseResponseTime + (Math.random() - 0.5) * 20),
@@ -180,9 +181,9 @@ const PerformanceMetrics = () => {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="1h">최근 1시간</SelectItem>
-                  <SelectItem value="24h">최근 24시간</SelectItem>
-                  <SelectItem value="7d">최근 7일</SelectItem>
+                  <SelectItem value="1h">지난 1시간</SelectItem>
+                  <SelectItem value="24h">지난24시간</SelectItem>
+                  <SelectItem value="7d">지난7일</SelectItem>
                 </SelectContent>
               </Select>
               <Select value={metricType} onValueChange={setMetricType}>
