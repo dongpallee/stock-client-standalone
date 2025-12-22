@@ -74,7 +74,7 @@ export const stockAPI = {
   getStock: async (stockCode) => {
     try {
       const data = await fetchJSON(`/stocks/${stockCode}.json`);
-      return data;
+      return { data };
     } catch {
       // Fallback: get from stock list
       const list = await fetchJSON('/stocks/stock-list.json');
