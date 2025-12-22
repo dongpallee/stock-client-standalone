@@ -157,7 +157,7 @@ const AccountOverview = ({ data }) => {
                 ? ((accountData.profitable_stocks / accountData.watchlist_count) * 100).toFixed(1)
                 : '0.0'}%
             </div>
-            <div className="text-xs text-muted-foreground">수익종목 비율</div>
+            <div className="text-xs text-muted-foreground">수익종목 비중</div>
           </div>
           <div className="text-center">
             <div className="text-lg font-bold text-purple-600">
