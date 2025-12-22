@@ -44,7 +44,7 @@ export const getSessionStartTime = () => {
   return toNumber(v);
 };
 
-// 세션 유효성 확인 (24시간)
+// 세션 유효성 확인 (세션 시작 시점 기준 24시간)
 export const isSessionValid = () => {
   const startTime = getSessionStartTime(); // 이제 숫자 or null
   if (startTime === null) return false;
