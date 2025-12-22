@@ -136,7 +136,13 @@ const AccountOverview = ({ data }) => {
             </div>
             <span className="text-sm font-medium">{profitPercentage.toFixed(1)}%</span>
           </div>
-          <Progress value={Math.min(Math.abs(profitPercentage), 100)} className="h-3" />
+          <Progress
+            value={Math.min(Math.abs(profitPercentage), 100)}
+            className="h-3"
+          />
+          <span className="text-xs text-muted-foreground">
+            {profitPercentage >= 0 ? '수익 구간' : '손실 구간'}
+          </span>
           <div className="flex justify-between text-xs text-muted-foreground">
             <span>투자원금: {formatKoreanCurrency(accountData.total_investment)}</span>
             <span>수익: {formatKoreanCurrency(accountData.total_profit)}</span>
