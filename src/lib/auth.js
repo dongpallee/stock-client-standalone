@@ -72,7 +72,15 @@ export const setUser = (user) => {
 // 사용자 정보 조회
 export const getUser = () => {
   const userStr = localStorage.getItem('user');
-  return userStr ? JSON.parse(userStr) : null;
+  if (!userStr) return null;
+
+  try {
+    return JSON.parse(userStr);
+  } catch {
+    // 깨진 user 값이면 정리
+    localStorage.removeItem('user');
+    return null;
+  }
 };
 
 // 로그인 상태 확인 (세션 유효성 포함)
