@@ -223,8 +223,11 @@ const MarketData = () => {
                 <LineChart data={chartData}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="time" />
-                  <YAxis 
-                    domain={['dataMin - 1000', 'dataMax + 1000']}
+                  <YAxis
+                    domain={[
+                      (dataMin) => dataMin - 1000,
+                      (dataMax) => dataMax + 1000
+                    ]}
                     tickFormatter={(value) => `${Math.round(value / 1000)}K`}
                   />
                   <Tooltip 
