@@ -18,7 +18,6 @@ import {
   TrendingUp,
   TrendingDown,
   Circle,
-  RefreshCw,
   Loader2,
   BarChart3,
   ChevronDown,
