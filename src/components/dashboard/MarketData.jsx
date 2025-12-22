@@ -141,7 +141,10 @@ const MarketData = () => {
             size="sm" 
             onClick={() => {
               setIsLoading(true);
-              setTimeout(() => setIsLoading(false), 1000);
+              setTimeout(() => {
+                setChartData(generateChartData());
+                setIsLoading(false);
+              }, 1000);
             }}
             disabled={isLoading}
           >
