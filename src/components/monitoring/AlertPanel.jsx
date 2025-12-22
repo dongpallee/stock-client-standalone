@@ -112,7 +112,9 @@ const AlertPanel = () => {
   };
 
   const formatDateTime = (dateString) => {
-    return new Date(dateString).toLocaleString('ko-KR', {
+    const d = new Date(dateString);
+    if (Number.isNaN(d.getTime())) return '-';
+    return d.toLocaleString('ko-KR', {
       year: 'numeric',
       month: '2-digit',
       day: '2-digit',
