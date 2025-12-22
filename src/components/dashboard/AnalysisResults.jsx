@@ -119,7 +119,7 @@ const AnalysisResults = () => {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 rounded-lg bg-gray-50 dark:bg-gray-800">
             <div className="text-center">
               <div className="text-2xl font-bold text-red-600">강세</div>
-              <div className="text-sm text-muted-foreground">시장 심리</div>
+              <div className="text-sm text-muted-foreground">시장 분위기</div>
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold text-blue-600">76%</div>
