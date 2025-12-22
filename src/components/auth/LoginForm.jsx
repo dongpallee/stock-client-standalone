@@ -151,7 +151,7 @@ const LoginForm = () => {
           
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
-              계정이 없으신가요?{' '}
+              처음이신가요? 회원가입
               <Link 
                 to="/register" 
                 className="text-blue-600 hover:text-blue-500 font-medium"
