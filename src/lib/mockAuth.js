@@ -265,7 +265,7 @@ export const mockAuthAPI = {
     }
 
     const newItem = {
-      id: watchlist.length + 1,
+      id: Date.now(),
       stock_code: stockData.stock_code,
       stock_name: stockData.stock_name,
       notes: stockData.notes || '',
