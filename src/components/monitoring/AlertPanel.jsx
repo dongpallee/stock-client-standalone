@@ -49,7 +49,7 @@ const AlertPanel = () => {
   const acknowledgeMutation = useMutation({
     mutationFn: (alertId) => monitoringAPI.acknowledgeAlert(alertId),
     onSuccess: () => {
-      queryClient.invalidateQueries([queryKeys.monitoringAlerts]);
+      queryClient.invalidateQueries({ queryKey: [queryKeys.monitoringAlerts] });
     }
   });
 
@@ -57,7 +57,7 @@ const AlertPanel = () => {
   const testAlertMutation = useMutation({
     mutationFn: (params) => monitoringAPI.testAlert(params),
     onSuccess: () => {
-      queryClient.invalidateQueries([queryKeys.monitoringAlerts]);
+      queryClient.invalidateQueries({ queryKey: [queryKeys.monitoringAlerts] });
     }
   });
 
