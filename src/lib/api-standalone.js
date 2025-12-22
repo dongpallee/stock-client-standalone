@@ -1,6 +1,7 @@
 files/**
- * Standalone API - Frontend-only mode using local JSON files
- * No backend server required!
+ * Standalone API (Frontend-only)
+ * - Uses static JSON files (/public/data) + LocalStorage-based mock auth
+ * - No backend server required
  */
 
 import { mockAuthAPI } from './mockAuth';
@@ -225,6 +226,8 @@ export const stockAPI = {
 
       return { message: 'Removed from watchlist' };
     },
+      
+
 
     check: async (stockCode) => {
       const currentUser = JSON.parse(localStorage.getItem('current_user'));
