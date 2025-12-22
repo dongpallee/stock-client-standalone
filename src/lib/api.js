@@ -21,7 +21,7 @@ const fetchJSON = async (path) => {
 
   const response = await fetch(joinPath(DATA_BASE_PATH, path));
     if (!response.ok) {
-      throw new Error(`Failed to fetch ${path}`);
+      throw new Error(`Failed to fetch ${path} (HTTP ${response.status})`);
     }
     return await response.json();
   } catch (error) {
