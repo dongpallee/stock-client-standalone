@@ -188,7 +188,7 @@ const AnalysisResults = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <div className="text-sm font-medium">핵심 요인</div>
+                  <div className="text-sm font-medium">핵심 근거</div>
                   <div className="flex flex-wrap gap-2">
                     {data.factors.map((factor, index) => (
                       <Badge key={index} variant="outline" className="text-xs">
