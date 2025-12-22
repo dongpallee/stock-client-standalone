@@ -374,7 +374,7 @@ const WorkflowAnalysisModal = ({ requestId, socket, onClose }) => {
               <div className="absolute inset-0 flex flex-col items-center justify-center">
                 <Loader2 className="w-12 h-12 text-blue-500 animate-spin mb-4" />
                 <p className="text-slate-500 font-medium">실행 이벤트를 기다리는 중...</p>
-                <p className="text-xs text-slate-400 mt-1">실시간 데이터 스트림 연결됨</p>
+                <p className="text-xs text-slate-400 mt-1">실시간 스트림에 연결되었습니다. </p>
               </div>
             ) : (
               <ReactFlowProvider>
