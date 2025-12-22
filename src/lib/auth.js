@@ -40,7 +40,8 @@ export const setSessionStartTime = () => {
 
 // 세션 시작 시간 조회
 export const getSessionStartTime = () => {
-  return localStorage.getItem('session_start_time');
+  const v = localStorage.getItem('session_start_time');
+  return toNumber(v);
 };
 
 // 세션 유효성 확인 (24시간)
