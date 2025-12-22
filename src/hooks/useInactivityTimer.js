@@ -64,7 +64,7 @@ export const useInactivityTimer = () => {
 
     // 페이지 로드 시 비활성 시간 확인
     if (isInactivityTimeoutReached()) {
-      alert('세션이 만료되어 자동 로그아웃됩니다.');
+      alert('장시간 미사용으로 자동 로그아웃됩니다.');
       logout();
       return;
     }
