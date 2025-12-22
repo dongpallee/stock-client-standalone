@@ -40,7 +40,7 @@ const AlertSystem = ({ className = "" }) => {
       type: 'price_target',
       priority: 'high',
       title: '삼성전자 목표가 도달',
-      message: '목표가 75,000원에 근접했습니다. 현재: 74,500원 입니다.',
+      message: '목표가 75,000원에 근접했습니다. 현재 74,500원 입니다.',
       stockCode: '005930',
       stockName: '삼성전자',
       timestamp: new Date(Date.now() - 5 * 60 * 1000),
