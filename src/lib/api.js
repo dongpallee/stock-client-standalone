@@ -16,7 +16,10 @@ const simulateDelay = (ms = 300) => new Promise(resolve => setTimeout(resolve, m
 const fetchJSON = async (path) => {
   await simulateDelay();
   try {
-    const response = await fetch(`${DATA_BASE_PATH}${path}`);
+    const joinPath = (base, p) =>
+    `${base.replace(/\/$/, '')}/${String(p).replace(/^\//, '')}`;
+
+  const response = await fetch(joinPath(DATA_BASE_PATH, path));
     if (!response.ok) {
       throw new Error(`Failed to fetch ${path}`);
     }
