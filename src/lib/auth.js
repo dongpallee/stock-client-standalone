@@ -46,14 +46,15 @@ export const getSessionStartTime = () => {
 
 // 세션 유효성 확인 (24시간)
 export const isSessionValid = () => {
-  const startTime = getSessionStartTime();
-  if (!startTime) return false;
-  
+  const startTime = getSessionStartTime(); // 이제 숫자 or null
+  if (startTime === null) return false;
+
   const now = Date.now();
   const sessionDuration = 24 * 60 * 60 * 1000; // 24시간
-  
-  return (now - parseInt(startTime)) < sessionDuration;
+
+  return (now - startTime) < sessionDuration;
 };
+
 
 // 토큰 유효성 검사
 export const isTokenValid = () => {
