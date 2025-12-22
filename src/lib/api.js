@@ -1,6 +1,8 @@
 /**
- * Standalone API - Frontend-only mode using local JSON files
- * No backend server required!
+ * Standalone API (Frontend-only)
+ * - Stock/Market data: served from /public/data JSON files
+ * - Auth/Settings: mockAuthAPI (LocalStorage 기반)
+ * - No backend required
  */
 
 import { mockAuthAPI } from './mockAuth';
