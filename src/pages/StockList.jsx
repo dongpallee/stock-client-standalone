@@ -175,10 +175,19 @@ const StockList = () => {
   });
 
   // 분석 데이터가 당일 것인지 확인하는 헬퍼 함수
+  const parseLocalDate = (v) => {
+    if (!v) return null;
+    // "YYYY-MM-DD" 형태면 로컬 날짜로 강제
+    const m = String(v).match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (m) return new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+    const d = new Date(v);
+    return Number.isFinite(d.getTime()) ? d : null;
+  };
+
   const isAnalysisFromToday = (analysisDate) => {
-    if (!analysisDate) return false;
+    const analysisDt = parseLocalDate(analysisDate);
+    if (!analysisDt) return false;
     const today = new Date();
-    const analysisDt = new Date(analysisDate);
     return (
       analysisDt.getFullYear() === today.getFullYear() &&
       analysisDt.getMonth() === today.getMonth() &&
