@@ -171,10 +171,11 @@ export const mockAuthAPI = {
   updateProfile: async (userData) => {
     await new Promise(resolve => setTimeout(resolve, 500));
 
-    const currentUser = JSON.parse(localStorage.getItem(STORAGE_KEYS.CURRENT_USER));
-    if (!currentUser) {
+    const currentUserRaw = localStorage.getItem(STORAGE_KEYS.CURRENT_USER);
+    if (!currentUserRaw) {
       throw new Error('Not authenticated');
     }
+    const currentUser = JSON.parse(currentUserRaw);
 
     const users = JSON.parse(localStorage.getItem(STORAGE_KEYS.USERS) || '[]');
     const userIndex = users.findIndex(u => u.id === currentUser.id);
