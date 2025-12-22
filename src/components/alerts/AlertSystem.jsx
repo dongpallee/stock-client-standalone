@@ -8,7 +8,6 @@ import {
   Bell, 
   BellRing, 
   TrendingUp, 
-  AlertTriangle, 
   Info, 
   CheckCircle,
   X,
