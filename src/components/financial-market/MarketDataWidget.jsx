@@ -132,9 +132,9 @@ const MarketDataWidget = () => {
               </div>
             ) : (
               <div className="space-y-3">
-                {exchangeRates.slice(0, 6).map((rate, index) => (
+                {exchangeRates.slice(0, 6).map((rate) => (
                   <div
-                    key={index}
+                    key={rate.currency ?? `${rate.currency_name ?? 'UNKNOWN'}-${rate.last_updated ?? ''}`}
                     className="flex items-center justify-between p-3 bg-muted rounded-lg"
                   >
                     <div className="flex items-center space-x-3">
