@@ -341,7 +341,11 @@ const CacheStatusWidget = () => {
                 </Button>
 
                 <Button
-                  onClick={() => clearMutation.mutate()}
+                  onClick={() => {
+                    if (confirm('정말 캐시를 전체 삭제하시겠습니까?')) {
+                      clearMutation.mutate();
+                    }
+                  }}
                   disabled={clearMutation.isLoading}
                   className="h-20 flex-col"
                   variant="outline"
