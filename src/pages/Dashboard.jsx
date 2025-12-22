@@ -363,8 +363,9 @@ const Dashboard = () => {
               {/* 타입별 요약 (항상 표시) */}
               <div className="space-y-2 mb-4">
                 {Object.entries(agentsData?.agents || {}).map(([type, agents]) => {
-                  const activeCount = agents.filter(a => a.status === 'active').length;
-                  const totalCount = agents.length;
+                  const list = Array.isArray(agents) ? agents : [];
+                  const activeCount = list.filter(a => a.status === 'active').length;
+                  const totalCount = list.length;
 
                   return (
                     <div key={type} className="flex items-center justify-between py-2 px-3 bg-gray-50 rounded">
