@@ -60,9 +60,10 @@ export const isSessionValid = () => {
 export const isTokenValid = () => {
   const token = getToken();
   if (!token) return false;
-  
+
   try {
     const decoded = jwtDecode(token);
+    if (!decoded?.exp) return false; // exp 없으면 만료 판단 불가 → 무효 처리
     const currentTime = Date.now() / 1000;
     return decoded.exp > currentTime;
   } catch (error) {
@@ -130,12 +131,16 @@ export const logout = () => {
 export const getUserIdFromToken = () => {
   const token = getToken();
   if (!token) return null;
-  
+
   try {
     const decoded = jwtDecode(token);
-    return decoded.sub || decoded.identity;
+    const id = decoded?.sub ?? decoded?.identity ?? null;
+
+    if (typeof id === 'string' || typeof id === 'number') {
+      return String(id);
+    }
+    return null;
   } catch (error) {
     return null;
   }
 };
-
