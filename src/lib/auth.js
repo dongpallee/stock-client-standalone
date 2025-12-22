@@ -127,7 +127,7 @@ export const logout = () => {
   window.location.href = '/login';
 };
 
-// 토큰에서 사용자 ID 추출
+// 토큰에서 사용자 ID 추출(JWT 토큰에서 사용자 식별자(sub 또는 identity) 추출)
 export const getUserIdFromToken = () => {
   const token = getToken();
   if (!token) return null;
