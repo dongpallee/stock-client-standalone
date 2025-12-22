@@ -38,7 +38,7 @@ export const setSessionStartTime = () => {
   localStorage.setItem('session_start_time', Date.now().toString());
 };
 
-// 세션 시작 시간 조회
+// 세션 시작 시간 조회(세션 만료 여부 판단용)
 export const getSessionStartTime = () => {
   const v = localStorage.getItem('session_start_time');
   return toNumber(v);
