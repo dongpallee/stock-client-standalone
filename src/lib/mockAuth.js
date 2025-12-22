@@ -179,15 +179,21 @@ export const mockAuthAPI = {
 
     const users = JSON.parse(localStorage.getItem(STORAGE_KEYS.USERS) || '[]');
     const userIndex = users.findIndex(u => u.id === currentUser.id);
+      if (userIndex === -1) {
+        throw new Error('User not found');
+      }
 
-    if (userIndex !== -1) {
       users[userIndex] = { ...users[userIndex], ...userData, id: currentUser.id };
-      localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
-      localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify({ ...users[userIndex], password: undefined }));
-    }
 
-    return { data: { ...users[userIndex], password: undefined } };
-  },
+      localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
+      localStorage.setItem(
+        STORAGE_KEYS.CURRENT_USER,
+        JSON.stringify({ ...users[userIndex], password: undefined })
+      );
+
+      return { data: { ...users[userIndex], password: undefined } }; 
+    },
+
 
   // Change password
   changePassword: async (passwordData) => {
