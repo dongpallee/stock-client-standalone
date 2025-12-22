@@ -47,7 +47,7 @@ const LoginForm = () => {
 
     // 입력값 검증
     if (!formData.username.trim() || !formData.password.trim()) {
-      setError('사용자명과 비밀번호를 모두 입력해주세요.');
+      setError('아이디과 비밀번호를 모두 입력해주세요.');
       setLoading(false);
       return;
     }
