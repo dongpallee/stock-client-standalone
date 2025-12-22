@@ -52,7 +52,12 @@ export const useInactivityTimer = () => {
   }, [user, logout]);
 
   // 사용자 활동 감지 이벤트
+  const lastResetRef = useRef(0);
+
   const handleUserActivity = useCallback(() => {
+    const now = Date.now();
+    if (now - lastResetRef.current < 1000) return; // 1초 throttle
+    lastResetRef.current = now;
     resetTimer();
   }, [resetTimer]);
 
