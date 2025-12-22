@@ -21,7 +21,7 @@ const initializeDefaultUsers = () => {
         id: 1,
         username: 'demo',
         email: 'demo@example.com',
-        password: 'demo1234', // In real app, this would be hashed
+        password: 'demo1234', // In real app, this would be hashed(보안 목적 아님)
         name: '데모 사용자',
         created_at: new Date().toISOString()
       }
