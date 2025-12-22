@@ -280,6 +280,14 @@ const Ranking = () => {
                 <div className="flex items-center justify-center py-8">
                   <Loader2 className="h-8 w-8 animate-spin" />
                 </div>
+              ) : categoryError ? (
+                <div className="flex items-center justify-center py-8">
+                  <div className="text-center">
+                    <AlertCircle className="h-10 w-10 text-red-500 mx-auto mb-3" />
+                    <p className="text-gray-600">카테고리 랭킹을 불러오지 못했습니다.</p>
+                  </div>
+                </div>
+
               ) : categoryRanking.length > 0 ? (
                 <div className="space-y-3">
                   {categoryRanking.map((stock) => (
