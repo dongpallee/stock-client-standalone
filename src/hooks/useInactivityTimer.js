@@ -14,7 +14,6 @@ export const useInactivityTimer = () => {
   const resetTimer = useCallback(() => {
     if (!user) return;
 
-    lastActivityRef.current = Date.now();
     updateLastActivity();
 
     // 기존 타이머 정리
