@@ -216,8 +216,8 @@ stock-client-standalone/
 - **Zod 3+** - TypeScript 우선 스키마 검증
 
 ### 데이터 시각화
-- **Recharts 2.15.3** - 구성 가능한 차트 라이브러리
-- **ReactFlow 11.11.4** - 인터랙티브 노드 기반 그래프
+- **Recharts 2+** - 구성 가능한 차트 라이브러리
+- **ReactFlow 11+** - 인터랙티브 노드 기반 그래프
 
 ---
 
