@@ -354,7 +354,7 @@ const WorkflowAnalysisModal = ({ requestId, socket, onClose }) => {
               onClick={onClose}
               className="px-4 py-2 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-lg transition-colors text-sm font-medium shadow-sm"
             >
-              닫기
+              분석 닫기
             </button>
           </div>
         </div>
