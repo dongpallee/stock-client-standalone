@@ -127,7 +127,7 @@ const AnalysisResults = () => {
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold text-purple-600">4</div>
-              <div className="text-sm text-muted-foreground">분석 종목</div>
+              <div className="text-sm text-muted-foreground">분석 종목 수</div>
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold text-green-600">2</div>
