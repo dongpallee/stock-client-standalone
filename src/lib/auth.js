@@ -106,7 +106,7 @@ export const getLastActivity = () => {
   return toNumber(v);
 };
 
-// 비활성 시간 확인 (30분)
+// 비활성 시간 확인 (30분을 초과했는지 여부)
 export const isInactivityTimeoutReached = () => {
   const lastActivity = getLastActivity(); // 이제 숫자 or null
   if (lastActivity === null) return false;
