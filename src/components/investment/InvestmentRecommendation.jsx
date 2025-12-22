@@ -1,16 +1,13 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
-import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
-import { Progress } from '../ui/progress';
-import { 
-  TrendingUp, 
-  TrendingDown, 
-  Target, 
-  Shield, 
+import {
+  TrendingUp,
+  TrendingDown,
+  Target,
+  Shield,
   Zap,
-  Star,
   AlertTriangle,
   CheckCircle,
   Clock,
