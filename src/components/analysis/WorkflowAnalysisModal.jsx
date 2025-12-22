@@ -334,7 +334,7 @@ const WorkflowAnalysisModal = ({ requestId, socket, onClose }) => {
               </h2>
               <div className="flex items-center gap-2 text-xs text-slate-500 mt-1">
                 <span className="font-mono bg-slate-200 px-1.5 py-0.5 rounded">{requestId}</span>
-                {lastUpdate && <span>• 업데이트: {new Date(lastUpdate).toLocaleTimeString()}</span>}
+                {lastUpdate && <span>• 마지막 수신: {new Date(lastUpdate).toLocaleTimeString()}</span>}
               </div>
             </div>
           </div>
