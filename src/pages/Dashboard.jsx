@@ -31,11 +31,16 @@ const Dashboard = () => {
   const [showAgentDetails, setShowAgentDetails] = useState(false);
 
   // D-1: 에이전트 상태 조회
-  const { data: agentsData, isLoading: agentsLoading } = useQuery({
+  const {
+    data: agentsData,
+    isLoading: agentsLoading,
+    dataUpdatedAt: agentsUpdatedAt
+  } = useQuery({
     queryKey: ['agents-status'],
     queryFn: () => stockAPI.getAgentsStatus(),
     refetchInterval: 10000 // 10초마다 갱신
   });
+
 
   // D-2: 인기 종목 조회
   const { data: mostViewedStocks, isLoading: stocksLoading } = useQuery({
@@ -424,7 +429,7 @@ const Dashboard = () => {
 
               {/* 마지막 업데이트 시간 */}
               <div className="mt-4 pt-4 border-t text-xs text-gray-400 text-right">
-                마지막 업데이트: {new Date().toLocaleTimeString('ko-KR')}
+                마지막 업데이트: {agentsUpdatedAt ? new Date(agentsUpdatedAt).toLocaleTimeString('ko-KR') : '-'}
               </div>
             </>
           )}
