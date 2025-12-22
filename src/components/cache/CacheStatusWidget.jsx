@@ -1,5 +1,7 @@
 /**
- * 캐시 상태 위젯 컴포넌트
+ *  * CacheStatusWidget
+ * - 캐시 통계 / 헬스 / 성능을 시각화하는 관리자용 위젯
+ * - React Query + WebSocket 실시간 갱신 지원
  */
 
 import React, { useState, useEffect } from 'react';
