@@ -24,6 +24,7 @@ export const removeToken = () => {
   localStorage.removeItem('refresh_token');
   localStorage.removeItem('user');
   localStorage.removeItem('session_start_time');
+  localStorage.removeItem('last_activity');
 };
 
 // 세션 시작 시간 설정
