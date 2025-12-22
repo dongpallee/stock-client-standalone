@@ -64,7 +64,7 @@ const LoginForm = () => {
       const result = await login(formData);
       
       if (result.success) {
-        navigate('/dashboard');
+        navigate('/dashboard', { replace: true });
       } else {
         setError(typeof result?.error === 'string' && result.error.trim()
           ? result.error
