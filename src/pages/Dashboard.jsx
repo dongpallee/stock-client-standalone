@@ -117,7 +117,7 @@ const Dashboard = () => {
                 <div className="flex items-end justify-between">
                   <div>
                     <div className="text-3xl font-bold">
-                      {marketIndices.indices.kospi.current?.toFixed(2)}
+                      {fmt2(marketIndices?.indices?.kospi?.current)}
                     </div>
                     <div className={`flex items-center gap-1 mt-1 ${
                       (marketIndices.indices.kospi.change_rate || 0) >= 0 ? 'text-red-600' : 'text-blue-600'
@@ -128,9 +128,9 @@ const Dashboard = () => {
                         <TrendingDown className="h-4 w-4" />
                       )}
                       <span className="font-semibold">
-                        {(marketIndices.indices.kospi.change_rate || 0) >= 0 ? '+' : ''}
-                        {marketIndices.indices.kospi.change?.toFixed(2)}
-                        ({marketIndices.indices.kospi.change_rate?.toFixed(2)}%)
+                        {(Number(marketIndices?.indices?.kospi?.change_rate) || 0) >= 0 ? '+' : ''}
+                        {fmt2(marketIndices?.indices?.kospi?.change)}
+                        ({fmt2(marketIndices?.indices?.kospi?.change_rate)}%)
                       </span>
                     </div>
                   </div>
@@ -155,7 +155,7 @@ const Dashboard = () => {
                   </div>
                   <div className="bg-gray-50 p-2 rounded">
                     <div className="text-gray-500 text-xs">거래량</div>
-                    <div className="font-semibold">{(marketIndices.indices.kospi.volume / 1000000).toFixed(1)}M</div>
+                    <div className="font-semibold">{fmtMillion(marketIndices?.indices?.kospi?.volume)</div>
                   </div>
                 </div>
 
