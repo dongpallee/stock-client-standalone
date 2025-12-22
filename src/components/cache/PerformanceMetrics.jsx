@@ -210,7 +210,7 @@ const PerformanceMetrics = () => {
               <div className="text-2xl font-bold text-green-600">
                 {formatNumber(aggregatedStats.avgHitRate || 0)}%
               </div>
-              <div className="text-sm text-muted-foreground">평균 히트율</div>
+              <div className="text-sm text-muted-foreground">평균 적중율</div>
             </div>
             <div className="text-center p-4 bg-muted rounded-lg">
               <div className="text-2xl font-bold text-blue-600">
