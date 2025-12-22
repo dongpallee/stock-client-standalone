@@ -1,6 +1,7 @@
 /**
- * Mock Authentication System for Standalone Mode
- * Uses LocalStorage to simulate backend authentication
+ * Standalone Mode Mock Auth
+ * - LocalStorage 기반으로 인증/세션을 "모의" 처리합니다.
+ * - 보안 목적이 아닌 데모/프로토타이핑 용도입니다.
  */
 
 const STORAGE_KEYS = {
