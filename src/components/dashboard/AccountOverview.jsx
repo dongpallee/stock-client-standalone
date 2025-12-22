@@ -169,7 +169,7 @@ const AccountOverview = ({ data }) => {
             <div className="text-lg font-bold text-green-600">
               {profitPercentage > 20 ? '공격적' : profitPercentage > 10 ? '중도' : '보수적'}
             </div>
-            <div className="text-xs text-muted-foreground">투자성향</div>
+            <div className="text-xs text-muted-foreground">성과 등급</div>
           </div>
         </div>
 
