@@ -200,8 +200,8 @@ const AnalysisResults = () => {
                 <div className="space-y-2">
                   <div className="text-sm font-medium">핵심 근거</div>
                   <div className="flex flex-wrap gap-2">
-                    {data.factors.map((factor, index) => (
-                      <Badge key={index} variant="outline" className="text-xs">
+                    {data.factors.map((factor) => (
+                      <Badge key={factor} variant="outline" className="text-xs">
                         {factor}
                       </Badge>
                     ))}
