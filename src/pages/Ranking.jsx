@@ -265,14 +265,15 @@ const Ranking = () => {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center">
-                {React.createElement(
-                  categories.find(c => c.id === selectedCategory)?.icon || Trophy,
-                  { className: "h-5 w-5 mr-2" }
-                )}
-                {categories.find(c => c.id === selectedCategory)?.name} 분석 Top 10
+                const selectedCategoryMeta =
+                  categories.find(c = c.id === selectedCategory) ?? categories[0];
+                const SelectedIcon = selectedCategoryMeta.icon;
+
+                <SelectedIcon className="h-5 w-5 mr-2" />
+                {selectedCategoryMeta.name} 분석 Top {CATEGORY_LIMIT}
               </CardTitle>
               <CardDescription>
-                {categories.find(c => c.id === selectedCategory)?.description} 기준 상위 10개 종목
+                {selectedCategoryMeta.description} 기준 상위 {CATEGORY_LIMIT}개 종목
               </CardDescription>
             </CardHeader>
             <CardContent>
