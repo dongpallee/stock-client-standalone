@@ -6,7 +6,7 @@ const toNumber = (v) => {
   return Number.isFinite(n) ? n : null;
 };
 
-// 로그인 성공 시 액세스 토큰 및 리프레시 토큰 저장
+// 토큰 저장(로그인 성공 시 액세스 토큰 및 리프레시 토큰 저장)
 export const setToken = (token, refreshToken = null) => {
   localStorage.setItem('access_token', token);
   if (refreshToken) {
@@ -24,7 +24,7 @@ export const getToken = () => {
   return localStorage.getItem('access_token');
 };
 
-// 토큰 제거
+// 토큰 제거(로그아웃 시 인증·세션 관련 로컬 스토리지 정리)
 export const removeToken = () => {
   localStorage.removeItem('access_token');
   localStorage.removeItem('refresh_token');
