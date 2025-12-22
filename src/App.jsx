@@ -35,7 +35,7 @@ function App() {
           <Router>
             <div className="min-h-screen bg-gray-50">
               <Routes>
-              {/* 공개 라우트 */}
+              {/* 인증 없이 접근 가능한 공개 라우트 */}
               <Route path="/login" element={<LoginForm />} />
               <Route path="/register" element={<RegisterForm />} />
               
