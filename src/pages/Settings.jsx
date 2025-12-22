@@ -89,16 +89,38 @@ const Settings = () => {
   });
 
   // 로그인 기록 조회
-  const { data: loginHistory, isLoading: historyLoading } = useQuery({
+  const {
+    data: loginHistory,
+    isLoading: historyLoading,
+    isError: historyError,
+    error: historyErrorObj,
+    refetch: refetchHistory,
+  } = useQuery({
     queryKey: ['login-history'],
     queryFn: () => stockAPI.settings.getLoginHistory(),
+    staleTime: 60_000,
+    retry: 1,
+    refetchOnWindowFocus: false,
   });
 
+
+
+
   // 활성 세션 조회
-  const { data: activeSessions, isLoading: sessionsLoading } = useQuery({
+  const {
+    data: activeSessions,
+    isLoading: sessionsLoading,
+    isError: sessionsError,
+    error: sessionsErrorObj,
+    refetch: refetchSessions,
+  } = useQuery({
     queryKey: ['active-sessions'],
     queryFn: () => stockAPI.settings.getActiveSessions(),
+    staleTime: 30_000,
+    retry: 1,
+    refetchOnWindowFocus: false,
   });
+
 
   // 프로필 업데이트 핸들러
   const handleProfileUpdate = (e) => {
