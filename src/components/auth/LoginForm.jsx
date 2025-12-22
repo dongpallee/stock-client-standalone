@@ -94,7 +94,7 @@ const LoginForm = () => {
           </div>
           <CardTitle className="text-2xl">로그인</CardTitle>
           <CardDescription>
-            계정에 로그인하여 주식 분석을 시작하세요
+            로그인하고 주식 분석을 시작해 보세요.
           </CardDescription>
         </CardHeader>
         <CardContent>
