@@ -170,7 +170,7 @@ const AlertSystem = ({ className = "" }) => {
             <div>
               <CardTitle>투자 알림</CardTitle>
               <CardDescription>
-                실시간 시장 동향 및 투자 기회 알림
+                시장 변동·신호·뉴스를 실시간으로 알려드려요
               </CardDescription>
             </div>
           </div>
