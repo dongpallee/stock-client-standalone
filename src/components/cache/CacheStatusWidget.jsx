@@ -16,7 +16,6 @@ import {
   Trash2,
   Activity,
   Clock,
-  Zap,
   AlertCircle,
   CheckCircle,
   TrendingUp,
