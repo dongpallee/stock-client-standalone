@@ -20,7 +20,6 @@ import {
   ResponsiveContainer,
   BarChart,
   Bar,
-  LineChart,
   Line,
   ScatterChart,
   Scatter,
