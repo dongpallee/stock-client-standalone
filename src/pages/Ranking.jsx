@@ -240,13 +240,15 @@ const Ranking = () => {
               return (
                 <Card 
                   key={category.id}
-                  className={`cursor-pointer transition-colors ${
-                    selectedCategory === category.id 
-                      ? 'ring-2 ring-blue-500 bg-blue-50' 
-                      : 'hover:bg-gray-50'
-                  }`}
+                  role="button"
+                  tabIndex={0}
+                  className="cursor-pointer ..."
                   onClick={() => setSelectedCategory(category.id)}
-                >
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') setSelectedCategory(category.id);
+                  }}
+                >  
+
                   <CardContent className="pt-6">
                     <div className="text-center">
                       <Icon className={`h-8 w-8 mx-auto mb-2 ${
