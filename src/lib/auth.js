@@ -3,8 +3,11 @@ import { jwtDecode } from 'jwt-decode';
 // 토큰 저장 (리프레시 토큰 포함)
 export const setToken = (token, refreshToken = null) => {
   localStorage.setItem('access_token', token);
+
   if (refreshToken) {
     localStorage.setItem('refresh_token', refreshToken);
+  } else {
+    localStorage.removeItem('refresh_token');
   }
 };
 
