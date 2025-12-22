@@ -60,7 +60,9 @@ const DashboardLayout = ({ children }) => {
               {/* 네비게이션 메뉴 */}
               <div className="hidden md:flex space-x-1">
                 {navigation.map((item) => {
-                  const isActive = location.pathname === item.href;
+                  const isActive =
+                    location.pathname === item.href ||
+                    (item.href !== '/dashboard' && location.pathname.startsWith(item.href));
                   return (
                     <Link
                       key={item.name}
