@@ -23,10 +23,15 @@ const LoginForm = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     // 사용자 입력값 정리
-    const sanitizedValue = sanitizeInput(value, { 
-      allowHtml: false, 
-      maxLength: name === 'username' ? 50 : 128 
-    });
+    let nextValue = value;
+
+    if (name === 'username') {
+      nextValue = sanitizeInput(value, { allowHtml: false, maxLength: 50 });
+    } else if (name === 'password') {
+      // 비밀번호는 sanitize로 변경/제거하지 말고 길이만 제한(원문 유지)
+      nextValue = value.slice(0, 128);
+    }
+
   
     setFormData((prev) => ({
       ...prev,
