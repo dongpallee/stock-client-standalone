@@ -46,8 +46,11 @@ const DashboardLayout = ({ children }) => {
             <div className="flex items-center space-x-8">
               {/* 모바일 메뉴 버튼 */}
               <button
+                type="button"
                 className="md:hidden"
-                onClick={() => setSidebarOpen(!sidebarOpen)}
+                aria-label={sidebarOpen ? '메뉴 닫기' : '메뉴 열기'}
+                aria-expanded={sidebarOpen}
+                onClick={() => setSidebarOpen((v) => !v)}
               >
                 <Menu className="h-6 w-6 text-gray-400" />
               </button>
