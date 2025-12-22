@@ -175,7 +175,7 @@ const AccountOverview = ({ data }) => {
 
         {/* Portfolio Breakdown */}
         <div className="space-y-3">
-          <h4 className="text-sm font-medium">포트폴리오 구성</h4>
+          <h4 className="text-sm font-medium">포트폴리오 구성 요약</h4>
           <div className="space-y-2">
             <div className="flex justify-between items-center p-2 rounded bg-gray-50 dark:bg-gray-800">
               <div className="flex items-center space-x-2">
