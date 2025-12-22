@@ -34,6 +34,7 @@ export const useInactivityTimer = () => {
       if (user && window.confirm('세션이 곧 만료됩니다. 계속 사용하시겠습니까?')) {
         resetTimer();
       } else if (user) {
+                // 계속 사용 안 하면 남은 5분 뒤 로그아웃(선택)
         logoutTimerRef.current = setTimeout(() => {
           alert('비활성 상태로 인해 자동 로그아웃됩니다.');
           logout();
