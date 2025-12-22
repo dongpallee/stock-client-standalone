@@ -74,9 +74,12 @@ const Dashboard = () => {
   // 시간 경과 계산
   const getTimeAgo = (isoString) => {
     if (!isoString) return '기록 없음';
-    const now = new Date();
+
     const past = new Date(isoString);
-    const diffMs = now - past;
+    if (Number.isNaN(past.getTime())) return '기록 없음'; // ✅ Invalid Date 방어
+
+    const now = new Date();
+    const diffMs = now.getTime() - past.getTime();
     const diffMins = Math.floor(diffMs / 60000);
     const diffHours = Math.floor(diffMs / 3600000);
 
@@ -85,6 +88,7 @@ const Dashboard = () => {
     if (diffHours < 24) return `${diffHours}시간 전`;
     return `${Math.floor(diffHours / 24)}일 전`;
   };
+
 
   return (
     <div className="p-6 space-y-6">
