@@ -14,7 +14,6 @@ import {
   Database,
   RefreshCw,
   Trash2,
-  Settings,
   Activity,
   Clock,
   HardDrive,
