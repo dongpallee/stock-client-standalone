@@ -27,11 +27,11 @@ const LoginForm = () => {
       allowHtml: false, 
       maxLength: name === 'username' ? 50 : 128 
     });
-    
-    setFormData({
-      ...formData,
+  
+    setFormData((prev) => ({
+      ...prev,
       [name]: sanitizedValue,
-    });
+    }));
   };
 
   const handleSubmit = async (e) => {
