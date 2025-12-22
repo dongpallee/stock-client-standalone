@@ -143,8 +143,8 @@ const AnalysisResults = () => {
                   <div className="flex items-center space-x-3">
                     <div className="font-medium text-lg">{data.name} ({code})</div>
                     <Badge 
-                      variant={data.signal === 'buy' ? 'default' : data.signal === 'sell' ? 'destructive' : 'secondary'}
-                      className="flex items-center space-x-1"
+                      variant="outline"
+                      className={`flex items-center space-x-1 ${getSignalColor(data.signal)}`}
                     >
                       {getSignalIcon(data.signal)}
                       <span>{getSignalText(data.signal)}</span>
