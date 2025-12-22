@@ -45,7 +45,16 @@ const generateMockToken = (userId, username) => {
 const parseMockToken = (token) => {
   try {
     if (!token || !token.startsWith('mock.')) return null;
-    const payload = JSON.parse(atob(token.split('.')[1]));
+
+    const parts = token.split('.');
+    if (parts.length < 2) return null;
+
+    const payload = JSON.parse(atob(parts[1]));
+    if (!payload?.exp) return null;
+
+    const now = Math.floor(Date.now() / 1000);
+    if (payload.exp <= now) return null; // expired
+
     return payload;
   } catch {
     return null;
@@ -91,6 +100,8 @@ export const mockAuthAPI = {
       }
     };
   },
+
+
 
   // Login
   login: async (credentials) => {
@@ -211,6 +222,7 @@ export const mockAuthAPI = {
     if (user.password !== passwordData.old_password) {
       throw new Error('Current password is incorrect');
     }
+    
 
     user.password = passwordData.new_password;
     localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
