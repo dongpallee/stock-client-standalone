@@ -1,4 +1,4 @@
-/**
+files/**
  * Standalone API - Frontend-only mode using local JSON files
  * No backend server required!
  */
@@ -6,7 +6,7 @@
 import { mockAuthAPI } from './mockAuth';
 
 // Configuration
-const USE_MOCK_DATA = import.meta.env.VITE_DATA_SOURCE === 'mock' || true;
+const USE_MOCK_DATA = (import.meta.env.VITE_DATA_SOURCE ?? 'mock') === 'mock';
 const DATA_BASE_PATH = '/data';
 
 // Simulate network delay for realistic UX
