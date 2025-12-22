@@ -111,7 +111,7 @@ const AnalysisResults = () => {
             <span>AI 분석 결과</span>
           </CardTitle>
           <CardDescription>
-            실시간 AI 기반 주식 분석 및 투자 신호
+            실시간 AI 기반 주식 분석 및 투자 신호 요약
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
