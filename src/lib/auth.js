@@ -56,7 +56,7 @@ export const isSessionValid = () => {
 };
 
 
-// 토큰 유효성 검사
+// 토큰 유효성 검사(JWT 만료 시간(exp) 기준)
 export const isTokenValid = () => {
   const token = getToken();
   if (!token) return false;
