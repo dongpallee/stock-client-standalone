@@ -76,7 +76,10 @@ const StockList = () => {
   } = useQuery({
     queryKey: ['stocks', {
       page: currentPage,
+      per_page: 20,
       search: searchTerm,
+      sort_by: sortBy,
+      sort_order: sortOrder,
       market: marketFilter,
       change_type: changeFilter,
       market_cap_min: marketCapMin,
@@ -84,6 +87,7 @@ const StockList = () => {
       volume_min: volumeMin,
       sector: sectorFilter
     }],
+    
     queryFn: () => stockAPI.getStocks({
       page: currentPage,
       per_page: 20,
