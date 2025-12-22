@@ -243,8 +243,8 @@ const AlertSystem = ({ className = "" }) => {
                           {alert.title}
                         </h4>
                         <Badge className={getPriorityColor(alert.priority)} size="sm">
-                          {alert.priority === 'high' ? '긴급' : 
-                           alert.priority === 'medium' ? '중요' : '일반'}
+                          {alert.priority === 'high' ? '높음' : 
+                           alert.priority === 'medium' ? '중간' : '낮음'}
                         </Badge>
                         {alert.action && (
                           <Badge className={getActionColor(alert.action)} size="sm">
