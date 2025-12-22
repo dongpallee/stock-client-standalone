@@ -25,8 +25,19 @@ const AccountOverview = ({ data }) => {
 
   const accountData = data || defaultData;
   
-  const profitPercentage = ((accountData.total_profit / accountData.total_investment) * 100) || 0;
-  const dailyProfitPercentage = ((accountData.daily_profit / accountData.total_portfolio_value) * 100) || 0;
+    const safeNumber = (v, fallback = 0) =>
+    Number.isFinite(Number(v)) ? Number(v) : fallback;
+
+  const investment = safeNumber(accountData.total_investment);
+  const portfolioValue = safeNumber(accountData.total_portfolio_value);
+  const totalProfit = safeNumber(accountData.total_profit);
+  const dailyProfit = safeNumber(accountData.daily_profit);
+
+  const profitPercentage =
+    investment > 0 ? (totalProfit / investment) * 100 : 0;
+
+  const dailyProfitPercentage =
+    portfolioValue > 0 ? (dailyProfit / portfolioValue) * 100 : 0;
 
   const formatKoreanCurrency = (amount) => {
     if (amount >= 100000000) { // 1억 이상
