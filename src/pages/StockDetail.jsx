@@ -21,7 +21,6 @@ import {
   AlertCircle,
   Target,
   Calendar,
-  DollarSign,
   Activity,
   ExternalLink,
   ChevronDown,
