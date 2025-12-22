@@ -33,7 +33,7 @@ export const removeToken = () => {
   localStorage.removeItem('last_activity'); // 추가: 로그아웃 시 활동시간도 정리
 };
 
-// 세션 시작 시간 설정
+// 세션 시작 시간 설정(로그인 시점의 세션 시작 시간 기록 - 세션 만료 판단용)
 export const setSessionStartTime = () => {
   localStorage.setItem('session_start_time', Date.now().toString());
 };
