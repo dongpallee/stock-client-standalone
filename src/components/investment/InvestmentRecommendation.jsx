@@ -26,7 +26,7 @@ const InvestmentRecommendation = ({ analysisData, className = "" }) => {
           <div className="flex items-center justify-center h-48">
             <div className="text-center">
               <Brain className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-500">AI 분석 결과를 불러오는 중...</p>
+              <p className="text-gray-500">AI 분석 결과를 불러오는 중입니다.</p>
             </div>
           </div>
         </CardContent>
