@@ -39,16 +39,22 @@ const AccountOverview = ({ data }) => {
   const dailyProfitPercentage =
     portfolioValue > 0 ? (dailyProfit / portfolioValue) * 100 : 0;
 
+  const normalizeWon = (amount) => {
+    const n = Number(amount);
+    if (!Number.isFinite(n)) return 0;
+    const rounded = Math.round(n);
+    return Object.is(rounded, -0) ? 0 : rounded;
+  };
+
   const formatKoreanCurrency = (amount) => {
-    if (amount >= 100000000) { // 1억 이상
-      return `${(amount / 100000000).toFixed(1)}억원`;
-    } else if (amount >= 10000000) { // 1천만 이상
-      return `${(amount / 10000000).toFixed(0)}천만원`;
-    } else if (amount >= 10000) { // 1만 이상
-      return `${(amount / 10000).toFixed(0)}만원`;
-    } else {
-      return `${amount.toLocaleString()}원`;
-    }
+    const won = normalizeWon(amount);
+    const abs = Math.abs(won);
+    const sign = won < 0 ? '-' : '';
+
+    if (abs >= 100000000) return `${sign}${(abs / 100000000).toFixed(1)}억원`;
+    if (abs >= 10000000) return `${sign}${(abs / 10000000).toFixed(0)}천만원`;
+    if (abs >= 10000) return `${sign}${(abs / 10000).toFixed(0)}만원`;
+    return `${sign}${abs.toLocaleString()}원`;
   };
 
   const formatPercentage = (percentage) => {
