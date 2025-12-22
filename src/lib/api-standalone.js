@@ -6,11 +6,11 @@ files/**
 
 import { mockAuthAPI } from './mockAuth';
 
-// Configuration
+// Configuration (reserved for future switching between mock/local sources)
 const USE_MOCK_DATA = (import.meta.env.VITE_DATA_SOURCE ?? 'mock') === 'mock';
 const DATA_BASE_PATH = '/data';
 
-// Simulate network delay for realistic UX
+// Optional artificial delay to mimic network latency (for UI/UX testing)
 const simulateDelay = (ms = 300) => new Promise(resolve => setTimeout(resolve, ms));
 
 // Fetch JSON file helper
