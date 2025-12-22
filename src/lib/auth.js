@@ -93,7 +93,8 @@ export const updateLastActivity = () => {
 
 // 마지막 활동 시간 조회
 export const getLastActivity = () => {
-  return localStorage.getItem('last_activity');
+  const v = localStorage.getItem('last_activity');
+  return toNumber(v);
 };
 
 // 비활성 시간 확인 (30분)
