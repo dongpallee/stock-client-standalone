@@ -150,7 +150,8 @@ const PriceChart = ({ stockData, analysisData, className = "" }) => {
               {formatPrice(currentPrice)}원
             </div>
             <div className={`text-sm font-medium ${getChangeColor(changeAmount)}`}>
-              {changeAmount >= 0 ? '+' : ''}{formatPrice(changeAmount)}원 ({formatPercent(changeRate)})
+              {changePrefix}
+              {formatPrice(changeAmount)}원 ({formatPercent(changeRate)})
             </div>
           </div>
         </div>
