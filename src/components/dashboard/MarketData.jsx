@@ -152,7 +152,7 @@ const MarketData = () => {
           </Button>
         </CardTitle>
         <CardDescription>
-          실시간 한국 주식 시장 데이터 및 차트
+          AI 기반 한국 주식 시장 데이터 및 차트
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
