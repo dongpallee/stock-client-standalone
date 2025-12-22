@@ -45,7 +45,9 @@ export const isSessionValid = () => {
   const now = Date.now();
   const sessionDuration = 24 * 60 * 60 * 1000; // 24시간
   
-  return (now - parseInt(startTime)) < sessionDuration;
+  const start = getSessionStartTime();
+  if (!Number.isFinite(start)) return false;
+  return (Date.now() - start) < sessionDuration;
 };
 
 // 토큰 유효성 검사
