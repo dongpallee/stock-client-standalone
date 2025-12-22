@@ -121,7 +121,7 @@ export const logout = () => {
   if (window.inactivityTimer) {
     clearTimeout(window.inactivityTimer);
   }
-  window.location.href = '/login';
+  window.location.replace('/login');
 };
 
 // 토큰에서 사용자 ID 추출
