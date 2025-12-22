@@ -174,7 +174,7 @@ const AlertPanel = () => {
             <div className="flex items-center space-x-2">
               <Button
                 onClick={handleTestAlert}
-                disabled={testAlertMutation.isLoading}
+                disabled={testAlertMutation.isPending}
                 variant="outline"
                 size="sm"
               >
