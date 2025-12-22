@@ -311,7 +311,7 @@ const AlertPanel = () => {
                     {!alert.acknowledged && (
                       <Button
                         onClick={() => acknowledgeMutation.mutate(alert.id)}
-                        disabled={acknowledgeMutation.isLoading}
+                        disabled={acknowledgeMutation.isPending}
                         variant="outline"
                         size="sm"
                       >
