@@ -6,7 +6,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../co
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Badge } from '../components/ui/badge';
-import { Alert, AlertDescription } from '../components/ui/alert';
 import StockSearch from '../components/search/StockSearch';
 import WorkflowAnalysisModal from '../components/analysis/WorkflowAnalysisModal';
 import { initSocket } from '../utils/socket';
