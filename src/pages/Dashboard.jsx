@@ -17,8 +17,7 @@ import {
   Activity,
   TrendingUp,
   TrendingDown,
-  Circle,
-  RefreshCw,
+  Circle,,
   Loader2,
   BarChart3,
   ChevronDown,
@@ -32,11 +31,16 @@ const Dashboard = () => {
   const [showAgentDetails, setShowAgentDetails] = useState(false);
 
   // D-1: 에이전트 상태 조회
-  const { data: agentsData, isLoading: agentsLoading } = useQuery({
+  const {
+    data: agentsData,
+    isLoading: agentsLoading,
+    dataUpdatedAt: agentsUpdatedAt
+  } = useQuery({
     queryKey: ['agents-status'],
     queryFn: () => stockAPI.getAgentsStatus(),
     refetchInterval: 10000 // 10초마다 갱신
   });
+
 
   // D-2: 인기 종목 조회
   const { data: mostViewedStocks, isLoading: stocksLoading } = useQuery({
@@ -75,9 +79,12 @@ const Dashboard = () => {
   // 시간 경과 계산
   const getTimeAgo = (isoString) => {
     if (!isoString) return '기록 없음';
-    const now = new Date();
+
     const past = new Date(isoString);
-    const diffMs = now - past;
+    if (Number.isNaN(past.getTime())) return '기록 없음'; // ✅ Invalid Date 방어
+
+    const now = new Date();
+    const diffMs = now.getTime() - past.getTime();
     const diffMins = Math.floor(diffMs / 60000);
     const diffHours = Math.floor(diffMs / 3600000);
 
@@ -86,6 +93,7 @@ const Dashboard = () => {
     if (diffHours < 24) return `${diffHours}시간 전`;
     return `${Math.floor(diffHours / 24)}일 전`;
   };
+
 
   return (
     <div className="p-6 space-y-6">
@@ -118,7 +126,7 @@ const Dashboard = () => {
                 <div className="flex items-end justify-between">
                   <div>
                     <div className="text-3xl font-bold">
-                      {marketIndices.indices.kospi.current?.toFixed(2)}
+                      {fmt2(marketIndices?.indices?.kospi?.current)}
                     </div>
                     <div className={`flex items-center gap-1 mt-1 ${
                       (marketIndices.indices.kospi.change_rate || 0) >= 0 ? 'text-red-600' : 'text-blue-600'
@@ -129,9 +137,9 @@ const Dashboard = () => {
                         <TrendingDown className="h-4 w-4" />
                       )}
                       <span className="font-semibold">
-                        {(marketIndices.indices.kospi.change_rate || 0) >= 0 ? '+' : ''}
-                        {marketIndices.indices.kospi.change?.toFixed(2)}
-                        ({marketIndices.indices.kospi.change_rate?.toFixed(2)}%)
+                        {(Number(marketIndices?.indices?.kospi?.change_rate) || 0) >= 0 ? '+' : ''}
+                        {fmt2(marketIndices?.indices?.kospi?.change)}
+                        ({fmt2(marketIndices?.indices?.kospi?.change_rate)}%)
                       </span>
                     </div>
                   </div>
@@ -156,7 +164,7 @@ const Dashboard = () => {
                   </div>
                   <div className="bg-gray-50 p-2 rounded">
                     <div className="text-gray-500 text-xs">거래량</div>
-                    <div className="font-semibold">{(marketIndices.indices.kospi.volume / 1000000).toFixed(1)}M</div>
+                    <div className="font-semibold">{fmtMillion(marketIndices?.indices?.kospi?.volume)</div>
                   </div>
                 </div>
 
@@ -421,7 +429,7 @@ const Dashboard = () => {
 
               {/* 마지막 업데이트 시간 */}
               <div className="mt-4 pt-4 border-t text-xs text-gray-400 text-right">
-                마지막 업데이트: {new Date().toLocaleTimeString('ko-KR')}
+                마지막 업데이트: {agentsUpdatedAt ? new Date(agentsUpdatedAt).toLocaleTimeString('ko-KR') : '-'}
               </div>
             </>
           )}
