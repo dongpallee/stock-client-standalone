@@ -99,13 +99,13 @@ export const getLastActivity = () => {
 
 // 비활성 시간 확인 (30분)
 export const isInactivityTimeoutReached = () => {
-  const lastActivity = getLastActivity();
-  if (!lastActivity) return false;
-  
+  const lastActivity = getLastActivity(); // 이제 숫자 or null
+  if (lastActivity === null) return false;
+
   const now = Date.now();
   const inactivityTimeout = 30 * 60 * 1000; // 30분
-  
-  return (now - parseInt(lastActivity)) > inactivityTimeout;
+
+  return (now - lastActivity) > inactivityTimeout;
 };
 
 // 로그아웃
