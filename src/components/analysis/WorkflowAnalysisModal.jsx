@@ -333,7 +333,7 @@ const WorkflowAnalysisModal = ({ requestId, socket, onClose }) => {
                 {isDynamic && <Badge variant="outline" className="ml-2 text-blue-600 border-blue-200 bg-blue-50">실시간 연결됨</Badge>}
               </h2>
               <div className="flex items-center gap-2 text-xs text-slate-500 mt-1">
-                <span className="font-mono bg-slate-200 px-1.5 py-0.5 rounded">{requestId}</span>
+                <span className="font-mono bg-slate-200 px-1.5 py-0.5 rounded">요청ID:{requestId}</span>
                 {lastUpdate && <span>• 마지막 수신: {new Date(lastUpdate).toLocaleTimeString()}</span>}
               </div>
             </div>
