@@ -122,7 +122,13 @@ const AnalysisResults = () => {
               <div className="text-sm text-muted-foreground">시장 분위기</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-blue-600">76%</div>
+              <div className="text-2xl font-bold text-blue-600">
+                {Math.round(
+                  Object.values(analysisData)
+                    .reduce((sum, d) => sum + d.confidence, 0) /
+                  Object.values(analysisData).length
+                )}%
+              </div>
               <div className="text-sm text-muted-foreground">평균 분석 신뢰도</div>
             </div>
             <div className="text-center">
