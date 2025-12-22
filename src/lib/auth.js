@@ -117,7 +117,10 @@ export const isInactivityTimeoutReached = () => {
   return (now - parseInt(lastActivity)) > inactivityTimeout;
 };
 
-// 로그아웃
+// 로그아웃 처리
+// - 토큰 및 세션 정보 제거
+// - 비활성 타이머 정리
+// - 로그인 페이지로 이동
 export const logout = () => {
   removeToken();
   // 비활성 타이머 정리
