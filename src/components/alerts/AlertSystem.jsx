@@ -314,19 +314,19 @@ const AlertSystem = ({ className = "" }) => {
                 <div className="text-lg font-bold text-red-600">
                   {alerts.filter(a => a.priority === 'high').length}
                 </div>
-                <div className="text-xs text-gray-500">긴급</div>
+                <div className="text-xs text-gray-500">높음</div>
               </div>
               <div>
                 <div className="text-lg font-bold text-yellow-600">
                   {alerts.filter(a => a.priority === 'medium').length}
                 </div>
-                <div className="text-xs text-gray-500">중요</div>
+                <div className="text-xs text-gray-500">중간</div>
               </div>
               <div>
                 <div className="text-lg font-bold text-blue-600">
                   {alerts.filter(a => a.priority === 'low').length}
                 </div>
-                <div className="text-xs text-gray-500">일반</div>
+                <div className="text-xs text-gray-500">낮음</div>
               </div>
             </div>
           </div>
