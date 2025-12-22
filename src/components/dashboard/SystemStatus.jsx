@@ -16,20 +16,6 @@ import {
 } from 'lucide-react';
 
 const SystemStatus = ({ data }) => {
-  const getStatusColor = (status) => {
-    switch (status) {
-      case 'active':
-      case 'running':
-        return 'bg-green-500';
-      case 'warning':
-        return 'bg-yellow-500';
-      case 'error':
-      case 'stopped':
-        return 'bg-red-500';
-      default:
-        return 'bg-gray-500';
-    }
-  };
 
   const getStatusIcon = (status) => {
     switch (status) {
