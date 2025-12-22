@@ -116,18 +116,21 @@ const Ranking = () => {
           </p> 
         </div> 
         <div className="flex items-center space-x-2"> 
-          <Button 
-            variant={limit === 20 ? "default" : "outline"} 
-            size="sm" 
-            onClick={() => setLimit(20)} > 
-            Top 20 
-          </Button> 
-          <Button 
-            variant={limit === 50 ? "default" : "outline"} 
-            size="sm" 
-            onClick={() => setLimit(50)} 
-          > 
-            Top 50 
+          <Button
+            variant={limit === 20 ? "default" : "outline"}
+            size="sm"
+            disabled={topStocksLoading || limit === 20}
+            onClick={() => setLimit(20)}
+          >
+            Top 20
+          </Button>
+          <Button
+            variant={limit === 50 ? "default" : "outline"}
+            size="sm"
+            disabled={topStocksLoading || limit === 50}
+            onClick={() => setLimit(50)}
+          >
+            Top 50
           </Button> 
         </div> 
       </div>
