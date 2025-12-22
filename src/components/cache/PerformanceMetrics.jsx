@@ -191,8 +191,8 @@ const PerformanceMetrics = () => {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="overview">개요</SelectItem>
-                  <SelectItem value="performance">성능</SelectItem>
+                  <SelectItem value="overview">요약</SelectItem>
+                  <SelectItem value="performance">응답/SelectItem>
                   <SelectItem value="resource">리소스</SelectItem>
                   <SelectItem value="distribution">분포</SelectItem>
                 </SelectContent>
