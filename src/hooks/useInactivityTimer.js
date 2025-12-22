@@ -29,9 +29,15 @@ export const useInactivityTimer = () => {
     // 경고 타이머 설정 (25분 후)
     warningTimerRef.current = setTimeout(() => {
         // 경고 시점엔 로그아웃 타이머를 일단 정리(UX 안정화)
+      if (logoutTimerRef.current) clearTimeout(logoutTimerRef.current);
 
-      if (user && confirm('세션이 곧 만료됩니다. 계속 사용하시겠습니까?')) {
-        resetTimer(); // 사용자가 계속 사용하겠다고 하면 타이머 리셋
+      if (user && window.confirm('세션이 곧 만료됩니다. 계속 사용하시겠습니까?')) {
+        resetTimer();
+      } else if (user) {
+        logoutTimerRef.current = setTimeout(() => {
+          alert('비활성 상태로 인해 자동 로그아웃됩니다.');
+          logout();
+        }, WARNING_TIME);
       }
     }, INACTIVITY_TIMEOUT - WARNING_TIME);
 
