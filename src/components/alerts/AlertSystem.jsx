@@ -121,15 +121,20 @@ const AlertSystem = ({ className = "" }) => {
     }
   };
 
-  const formatTime = (date) => {
+  const formatTime = (value) => {
+    const date = toDate(value);
+    if (Number.isNaN(date.getTime())) return '-';
+
     const now = new Date();
     const diff = Math.floor((now - date) / (1000 * 60));
-    
+
     if (diff < 1) return '방금 전';
     if (diff < 60) return `${diff}분 전`;
     if (diff < 24 * 60) return `${Math.floor(diff / 60)}시간 전`;
     return date.toLocaleDateString('ko-KR');
   };
+
+  const toDate = (v) => (v instanceof Date ? v : new Date(v));
 
   const markAsRead = (alertId) => {
     setAlerts(alerts.map(alert => 
