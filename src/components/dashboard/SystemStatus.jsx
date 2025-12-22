@@ -100,7 +100,9 @@ const SystemStatus = ({ data }) => {
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium">마지막 업데이트</span>
               <span className="text-sm text-muted-foreground">
-                {new Date().toLocaleTimeString('ko-KR')}
+                {systemData?.updatedAt
+                  ? new Date(systemData.updatedAt).toLocaleString('ko-KR')
+                  : '-'}
               </span>
             </div>
           </div>
