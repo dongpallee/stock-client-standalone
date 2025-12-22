@@ -208,7 +208,7 @@ const AnalysisResults = () => {
         <CardHeader>
           <CardTitle className="flex items-center space-x-2">
             <Eye className="h-5 w-5 text-blue-500" />
-            <span>AI 시장 인사이트</span>
+            <span>AI 시장 인사이트 요약</span>
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
