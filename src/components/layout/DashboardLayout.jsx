@@ -11,8 +11,7 @@ import {
   Menu,
   X,
   User,
-  Home,
-  Activity
+  Home
 } from 'lucide-react';
 
 const DashboardLayout = ({ children }) => {
