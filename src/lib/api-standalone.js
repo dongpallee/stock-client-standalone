@@ -200,7 +200,7 @@ export const stockAPI = {
       }
 
       const newItem = {
-        id: watchlist.length + 1,
+        id: crypto?.randomUUID?.() ?? String(Date.now()),
         stock_code: stockCode,
         stock_name: stock.stock_name,
         notes: notes,
