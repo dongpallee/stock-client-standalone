@@ -161,7 +161,10 @@ const AnalysisResults = () => {
                     </Badge>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <div className={`h-3 w-3 rounded-full ${getSentimentColor(data.ai_sentiment)}`} />
+                    <div
+                      className={`h-3 w-3 rounded-full ${getSentimentColor(data.ai_sentiment)}`}
+                      title={`AI 심리: ${getSentimentText(data.ai_sentiment)}`}
+                    />
                     <span className="text-sm">{getSentimentText(data.ai_sentiment)}</span>
                   </div>
                 </div>
