@@ -29,7 +29,7 @@ export const useInactivityTimer = () => {
         // 경고 시점엔 로그아웃 타이머를 일단 정리(UX 안정화)
       if (logoutTimerRef.current) clearTimeout(logoutTimerRef.current);
 
-      if (user && window.confirm('세션이 곧 만료됩니다. 계속 사용하시겠습니까?')) {
+      if (user && window.confirm('세션이 5분 후 만료됩니다. 계속 사용하시겠습니까?')) {
         resetTimer();
       } else if (user) {
                 // 계속 사용 안 하면 남은 5분 뒤 로그아웃(선택)
