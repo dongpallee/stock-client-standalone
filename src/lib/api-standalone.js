@@ -164,11 +164,11 @@ export const stockAPI = {
   // Watchlist API
   watchlist: {
     getList: async () => {
-      const currentUser = JSON.parse(localStorage.getItem('current_user'));
+      const currentUser = safeJSONParse(localStorage.getItem('current_user'), null);
       if (!currentUser) return [];
 
       const watchlistKey = `user_watchlist_${currentUser.id}`;
-      const watchlist = JSON.parse(localStorage.getItem(watchlistKey) || '[]');
+      const watchlist = safeJSONParse(localStorage.getItem(watchlistKey), []);
 
       // Enrich with current price data
       const stockList = await fetchJSON('/stocks/stock-list.json');
