@@ -110,8 +110,9 @@ const MarketDataWidget = () => {
             <Globe className="h-5 w-5" />
             <span>금융시장 데이터</span>
           </div>
-          <Button onClick={handleRefresh} variant="outline" size="sm">
-            <RefreshCw className="h-4 w-4" />
+
+          <Button onClick={handleRefresh} variant="outline" size="sm" disabled={isFetching}>
+            <RefreshCw className={`h-4 w-4 ${isFetching ? 'animate-spin' : ''}`} />
           </Button>
         </CardTitle>
       </CardHeader>
