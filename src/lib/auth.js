@@ -117,7 +117,7 @@ export const isInactivityTimeoutReached = () => {
   return (now - lastActivity) > inactivityTimeout;
 };
 
-// 로그아웃
+// 로그아웃 처리 (인증 정보 정리 후 로그인 페이지로 이동)
 export const logout = () => {
   removeToken();
   // 비활성 타이머 정리
