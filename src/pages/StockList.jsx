@@ -697,9 +697,9 @@ const StockList = () => {
                             현재가: {stock.current_price.toLocaleString()}원
                           </span>
                         )}
-                        {stock.change_rate && (
+                        {stock.change_rate !== null && stock.change_rate !== undefined && (
                           <span className={stock.change_rate >= 0 ? 'text-red-600' : 'text-blue-600'}>
-                            변동률: {stock.change_rate >= 0 ? '+' : ''}{stock.change_rate.toFixed(2)}%
+                            변동률: {stock.change_rate >= 0 ? '+' : ''}{Number(stock.change_rate).toFixed(2)}%
                           </span>
                         )}
                         {stock.per && (
