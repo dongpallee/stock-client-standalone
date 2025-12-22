@@ -18,17 +18,23 @@ const PriceChart = ({ stockData, analysisData, className = "" }) => {
 
   // 가격 데이터 포맷팅
   const formatPrice = (price) => {
-    return new Intl.NumberFormat('ko-KR').format(price);
+    const n = Number(price);
+    if (!Number.isFinite(n)) return '-';
+    return new Intl.NumberFormat('ko-KR').format(n);
   };
 
   const formatPercent = (value) => {
-    const sign = value >= 0 ? '+' : '';
-    return `${sign}${value?.toFixed(2)}%`;
+    const n = Number(value);
+    if (!Number.isFinite(n)) return '-';
+    const sign = n >= 0 ? '+' : '';
+    return `${sign}${n.toFixed(2)}%`;
   };
 
   const getChangeColor = (change) => {
-    if (change > 0) return 'text-red-600';
-    if (change < 0) return 'text-blue-600';
+    const n = Number(change);
+    if (!Number.isFinite(n)) return 'text-gray-600';
+    if (n > 0) return 'text-red-600';
+    if (n < 0) return 'text-blue-600';
     return 'text-gray-600';
   };
 
