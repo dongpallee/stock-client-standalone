@@ -34,7 +34,7 @@ export const useInactivityTimer = () => {
       } else if (user) {
                 // 계속 사용 안 하면 남은 5분 뒤 로그아웃(선택)
         logoutTimerRef.current = setTimeout(() => {
-          alert('비활성 상태로 인해 자동 로그아웃됩니다.');
+          alert('장시간 미사용으로 자동 로그아웃됩니다.');
           logout();
         }, WARNING_TIME);
       }
