@@ -127,20 +127,17 @@ const AlertPanel = () => {
   const getTimeAgo = (dateString) => {
     const now = new Date();
     const alertTime = new Date(dateString);
-    const diffMs = now - alertTime;
+    if (Number.isNaN(alertTime.getTime())) return '-';
+
+    const diffMs = now.getTime() - alertTime.getTime();
     const diffMins = Math.floor(diffMs / 60000);
     const diffHours = Math.floor(diffMins / 60);
     const diffDays = Math.floor(diffHours / 24);
 
-    if (diffDays > 0) {
-      return `${diffDays}일 전`;
-    } else if (diffHours > 0) {
-      return `${diffHours}시간 전`;
-    } else if (diffMins > 0) {
-      return `${diffMins}분 전`;
-    } else {
-      return '방금 전';
-    }
+    if (diffDays > 0) return `${diffDays}일 전`;
+    if (diffHours > 0) return `${diffHours}시간 전`;
+    if (diffMins > 0) return `${diffMins}분 전`;
+    return '방금 전';
   };
 
   const handleTestAlert = () => {
