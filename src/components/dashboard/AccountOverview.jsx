@@ -69,7 +69,7 @@ const AccountOverview = ({ data }) => {
           <span>포트폴리오 개요</span>
         </CardTitle>
         <CardDescription>
-          실시간 포트폴리오 가치 및 수익률 현황
+          포트폴리오 가치 및 수익률 현황
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
