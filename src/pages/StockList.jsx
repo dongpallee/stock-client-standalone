@@ -112,16 +112,18 @@ const StockList = () => {
 
   // 관심종목 추가/제거 mutation
   const toggleWatchlistMutation = useMutation({
-    mutationFn: (stockCode) => {
-      const isInWatchlist = watchlistData?.watchlist?.some(
-        item => item.stock_code === stockCode
-      );
-      return isInWatchlist
+    mutationFn: async (stockCode) => {
+      const inList = watchlistData?.watchlist?.some((item) => item.stock_code === stockCode);
+      return inList
         ? stockAPI.watchlist.remove(stockCode)
         : stockAPI.watchlist.add(stockCode);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(['watchlist']);
+      queryClient.invalidateQueries({ queryKey: ['watchlist'] });
+    },
+    onError: (err) => {
+      console.error('[watchlist] toggle failed:', err);
+      // TODO: toast/alert로 사용자 피드백
     },
   });
 
