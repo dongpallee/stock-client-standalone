@@ -288,7 +288,7 @@ const PerformanceMetrics = () => {
 
           {metricType === 'performance' && (
             <div>
-              <h4 className="text-lg font-medium mb-4">성능 지표 비교</h4>
+              <h4 className="text-lg font-medium mb-4">최근 지표 비교</h4>
               <ResponsiveContainer width="100%" height={400}>
                 <BarChart data={performanceData.slice(-10)}>
                   <CartesianGrid strokeDasharray="3 3" />
