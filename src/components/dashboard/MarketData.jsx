@@ -101,6 +101,7 @@ const MarketData = () => {
   }, [selectedStock, timeframe]);
 
   const formatKoreanCurrency = (amount) => {
+    if (amount == null) return '-';
     return amount.toLocaleString() + '원';
   };
 
