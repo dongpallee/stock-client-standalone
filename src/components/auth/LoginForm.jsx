@@ -71,7 +71,7 @@ const LoginForm = () => {
           : '로그인에 실패했습니다. 아이디/비밀번호를 확인해 주세요.'
         );
       }
-    } catch (error) {
+    } catch (err) {
       setError('로그인 중 오류가 발생했습니다. 다시 시도해주세요.');
     } finally {
       setLoading(false);
