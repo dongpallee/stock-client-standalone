@@ -165,7 +165,7 @@ const CacheStatusWidget = () => {
           <CardTitle className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <Database className="h-5 w-5" />
-              <span>캐시 시스템</span>
+              <span>캐시 상태</span>
               {realtimeStats && <Badge variant="secondary">실시간</Badge>}
             </div>
             <div className="flex items-center space-x-2">
