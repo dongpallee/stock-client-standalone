@@ -211,9 +211,9 @@ stock-client-standalone/
 - **Framer Motion** - 부드러운 애니메이션
 
 ### 데이터 & 상태 관리
-- **TanStack Query 5.85.0** - 강력한 데이터 페칭 및 캐싱
-- **React Hook Form 7.56.3** - 고성능 폼 검증
-- **Zod 3.24.4** - TypeScript 우선 스키마 검증
+- **TanStack Query 5+** - 강력한 데이터 페칭 및 캐싱
+- **React Hook Form 7+** - 고성능 폼 검증
+- **Zod 3+** - TypeScript 우선 스키마 검증
 
 ### 데이터 시각화
 - **Recharts 2.15.3** - 구성 가능한 차트 라이브러리
