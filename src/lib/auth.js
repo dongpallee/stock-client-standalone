@@ -90,7 +90,7 @@ export const getUser = () => {
   }
 };
 
-// 로그인 상태 확인 (세션 유효성 포함)
+// 로그인 상태 확인 (토큰 유효 + 사용자 정보 존재 + 세션 유효)
 export const isAuthenticated = () => {
   return isTokenValid() && getUser() !== null && isSessionValid();
 };
