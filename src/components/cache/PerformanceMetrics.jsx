@@ -26,7 +26,6 @@ import {
 } from 'recharts';
 import {
   Activity,
-  Clock,
   Zap,
   Database,
   TrendingUp,
