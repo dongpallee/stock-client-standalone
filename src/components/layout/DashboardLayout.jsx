@@ -27,9 +27,13 @@ const DashboardLayout = ({ children }) => {
     { name: '관심종목', href: '/watchlist', icon: Star },
   ];
 
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
+
+  const handleLogout = async () => {
+    try {
+      await logout?.();
+    } finally {
+      navigate('/login', { replace: true });
+    }
   };
 
   return (
