@@ -113,7 +113,7 @@ const LoginForm = () => {
                 type="text"
                 value={formData.username}
                 onChange={handleChange}
-                placeholder="사용자명을 입력하세요"
+                placeholder="아이디를 입력하세요"
                 required
                 disabled={loading}
               />
