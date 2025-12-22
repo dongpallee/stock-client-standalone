@@ -35,14 +35,22 @@ const AlertPanel = () => {
   const queryClient = useQueryClient();
 
   // 알림 히스토리 조회
-  const { data: alertsData, isLoading, refetch } = useQuery({
+  const {
+    data: alertsData,
+    isLoading,
+    isError,
+    error,
+    refetch
+  } = useQuery({
     queryKey: [queryKeys.monitoringAlerts, { page: currentPage, per_page: perPage, type: alertTypeFilter }],
-    queryFn: () => monitoringAPI.getAlerts({
-      page: currentPage,
-      per_page: perPage,
-      type: alertTypeFilter || undefined
-    }),
-    refetchInterval: 30000 // 30초마다 갱신
+    queryFn: () =>
+      monitoringAPI.getAlerts({
+        page: currentPage,
+        per_page: perPage,
+        type: alertTypeFilter || undefined
+      }),
+    refetchInterval: 30000,
+    refetchIntervalInBackground: false
   });
 
   // 알림 확인 뮤테이션
