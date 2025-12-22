@@ -92,7 +92,7 @@ export const isAuthenticated = () => {
   return isTokenValid() && getUser() !== null && isSessionValid();
 };
 
-// 사용자 비활성 시간 추적
+// 사용자 마지막 활동 시각 갱신 (비활성 로그아웃 판단용)
 export const updateLastActivity = () => {
   localStorage.setItem('last_activity', Date.now().toString());
 };
