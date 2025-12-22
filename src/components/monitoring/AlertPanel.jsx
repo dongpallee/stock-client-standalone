@@ -233,7 +233,7 @@ const AlertPanel = () => {
           {/* 통계 정보 */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="text-center p-2 bg-muted rounded">
-              <div className="text-2xl font-bold">{alerts.length}</div>
+              <div className="text-2xl font-bold">{pagination.total ?? alerts.length}</div>
               <div className="text-sm text-muted-foreground">전체 알림</div>
             </div>
             <div className="text-center p-2 bg-muted rounded">
