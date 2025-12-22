@@ -21,7 +21,7 @@ import Settings from './pages/Settings';
 
 import './App.css';
 
-// 비활성 타이머를 사용하는 래퍼 컴포넌트
+// 사용자 비활성 상태를 감지하기 위한 래퍼 컴포넌트
 const AppWithInactivityTimer = ({ children }) => {
   useInactivityTimer();
   return children;
