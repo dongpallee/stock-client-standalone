@@ -9,7 +9,6 @@ export const useInactivityTimer = () => {
   const { logout, user } = useAuth();
   const warningTimerRef = useRef(null);
   const logoutTimerRef = useRef(null);
-  const lastActivityRef = useRef(Date.now());
 
   // 활동 갱신
   const resetTimer = useCallback(() => {
