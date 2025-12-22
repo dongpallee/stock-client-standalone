@@ -126,7 +126,9 @@ const AnalysisResults = () => {
               <div className="text-sm text-muted-foreground">평균 분석 신뢰도</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-purple-600">4</div>
+              <div className="text-2xl font-bold text-purple-600">
+                {Object.keys(analysisData).length}
+              </div>
               <div className="text-sm text-muted-foreground">분석 종목 수</div>
             </div>
             <div className="text-center">
