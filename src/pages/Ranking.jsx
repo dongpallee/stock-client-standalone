@@ -35,12 +35,16 @@ const Ranking = () => {
   });
 
   // 카테고리별 랭킹 조회
+  const CATEGORY_LIMIT = 10;
+
   const { 
     data: categoryRankingData, 
-    isLoading: categoryLoading 
+    isLoading: categoryLoading,
+    error: categoryError,
   } = useQuery({
-    queryKey: ['ranking-by-category', selectedCategory, 10],
-    queryFn: () => rankingAPI.getRankingByCategory(selectedCategory, 10),
+    queryKey: ['ranking-by-category', selectedCategory, CATEGORY_LIMIT],
+    queryFn: () => rankingAPI.getRankingByCategory(selectedCategory, CATEGORY_LIMIT),
+    enabled: activeTab === 'category',
   });
 
   const topStocks = topStocksData?.data?.ranking || [];
@@ -101,33 +105,36 @@ const Ranking = () => {
     );
   }
 
-  return (
-    <div className="space-y-6">
-      {/* 페이지 헤더 */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">종목 랭킹</h1>
-          <p className="text-gray-500 mt-1">
-            상승 가능성이 높은 종목들을 확인하세요
-          </p>
-        </div>
-        <div className="flex items-center space-x-2">
-          <Button
-            variant={limit === 20 ? "default" : "outline"}
-            size="sm"
-            onClick={() => setLimit(20)}
-          >
-            Top 20
-          </Button>
-          <Button
-            variant={limit === 50 ? "default" : "outline"}
-            size="sm"
-            onClick={() => setLimit(50)}
-          >
-            Top 50
-          </Button>
-        </div>
+  return ( 
+    <div className="space-y-6"> 
+      {/* 페이지 헤더 */} 
+      <div className="flex items-center justify-between"> 
+        <div> 
+          <h1 className="text-3xl font-bold text-gray-900">종목 랭킹</h1> 
+          <p className="text-gray-500 mt-1"> 
+            상승 가능성이 높은 종목들을 확인하세요 
+          </p> 
+        </div> 
+        <div className="flex items-center space-x-2"> 
+          <Button 
+            variant={limit === 20 ? "default" : "outline"} 
+            size="sm" 
+            onClick={() => setLimit(20)} > 
+            Top 20 
+          </Button> 
+          <Button 
+            variant={limit === 50 ? "default" : "outline"} 
+            size="sm" 
+            onClick={() => setLimit(50)} 
+          > 
+            Top 50 
+          </Button> 
+        </div> 
       </div>
+
+
+
+
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
         <TabsList className="grid w-full grid-cols-2 lg:grid-cols-4">
