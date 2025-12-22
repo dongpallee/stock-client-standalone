@@ -18,7 +18,7 @@ const MarketData = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   // Mock Korean stock market data
-  const [marketData, setMarketData] = useState({
+  const MARKET_DATA = {
     '005930': { // 삼성전자
       name: '삼성전자',
       price: 71000,
@@ -55,7 +55,7 @@ const MarketData = () => {
       low: 770000,
       market_cap: '112조원'
     }
-  });
+  };
 
   // Mock chart data generator
   const generateChartData = () => {
