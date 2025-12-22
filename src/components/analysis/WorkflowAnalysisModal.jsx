@@ -346,7 +346,7 @@ const WorkflowAnalysisModal = ({ requestId, socket, onClose }) => {
                  setEdges(lEdges);
               }}
               className="p-2 hover:bg-white rounded-full transition-colors text-slate-500"
-              title="레이아웃 재정렬"
+              title="레이아웃 다시 정렬"
             >
               <RotateCcw className="w-5 h-5" />
             </button>
