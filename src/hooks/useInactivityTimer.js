@@ -43,7 +43,7 @@ export const useInactivityTimer = () => {
     // 로그아웃 타이머 설정 (30분 후)
     logoutTimerRef.current = setTimeout(() => {
       if (user) {
-        alert('비활성 상태로 인해 자동 로그아웃됩니다.');
+        alert('장시간 미사용으로 자동 로그아웃됩니다.');
         logout();
       }
     }, INACTIVITY_TIMEOUT);
