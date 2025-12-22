@@ -107,7 +107,7 @@ pnpm preview
 | **호스팅** | 정적 사이트 (무료) | 서버 필요 (유료) |
 | **사용자 인증** | ❌ 없음 (LocalStorage) | ✅ JWT 인증 |
 | **실시간 업데이트** | ❌ 없음 | ✅ WebSocket |
-| **뉴스 수집** | ❌ 없음 | ✅ Perplexity AI |
+| **뉴스 수집** | ❌ 없음 | ✅ 외부 뉴스/검색API 연동(예:Perplexity 등) |
 | **데이터베이스** | ❌ 없음 | ✅ SQLite/PostgreSQL |
 | **캐싱** | LocalStorage | ✅ Redis |
 | **배포** | Vercel/Netlify (무료) | VPS/Cloud (유료) |
