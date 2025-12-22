@@ -26,6 +26,7 @@ import {
 } from 'recharts';
 import {
   Activity,
+  Clock,
   Zap,
   Database,
   TrendingUp,
@@ -72,7 +73,6 @@ const PerformanceMetrics = () => {
           minute: '2-digit',
           ...(timeRange !== '1h' && { month: '2-digit', day: '2-digit' })
         }),
-        
         timestamp: time.getTime(),
         hitRate: Math.max(0, Math.min(100, baseHitRate + (Math.random() - 0.5) * 5)),
         responseTime: Math.max(10, baseResponseTime + (Math.random() - 0.5) * 20),
@@ -181,9 +181,9 @@ const PerformanceMetrics = () => {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="1h">지난 1시간</SelectItem>
-                  <SelectItem value="24h">지난24시간</SelectItem>
-                  <SelectItem value="7d">지난7일</SelectItem>
+                  <SelectItem value="1h">최근 1시간</SelectItem>
+                  <SelectItem value="24h">최근 24시간</SelectItem>
+                  <SelectItem value="7d">최근 7일</SelectItem>
                 </SelectContent>
               </Select>
               <Select value={metricType} onValueChange={setMetricType}>
@@ -191,8 +191,8 @@ const PerformanceMetrics = () => {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="overview">요약</SelectItem>
-                  <SelectItem value="performance">응답/SelectItem>
+                  <SelectItem value="overview">개요</SelectItem>
+                  <SelectItem value="performance">성능</SelectItem>
                   <SelectItem value="resource">리소스</SelectItem>
                   <SelectItem value="distribution">분포</SelectItem>
                 </SelectContent>
@@ -210,7 +210,7 @@ const PerformanceMetrics = () => {
               <div className="text-2xl font-bold text-green-600">
                 {formatNumber(aggregatedStats.avgHitRate || 0)}%
               </div>
-              <div className="text-sm text-muted-foreground">평균 적중율</div>
+              <div className="text-sm text-muted-foreground">평균 히트율</div>
             </div>
             <div className="text-center p-4 bg-muted rounded-lg">
               <div className="text-2xl font-bold text-blue-600">
@@ -288,7 +288,7 @@ const PerformanceMetrics = () => {
 
           {metricType === 'performance' && (
             <div>
-              <h4 className="text-lg font-medium mb-4">최근 지표 비교</h4>
+              <h4 className="text-lg font-medium mb-4">성능 지표 비교</h4>
               <ResponsiveContainer width="100%" height={400}>
                 <BarChart data={performanceData.slice(-10)}>
                   <CartesianGrid strokeDasharray="3 3" />
