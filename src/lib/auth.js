@@ -33,7 +33,8 @@ export const setSessionStartTime = () => {
 
 // 세션 시작 시간 조회
 export const getSessionStartTime = () => {
-  return localStorage.getItem('session_start_time');
+  const v = localStorage.getItem('session_start_time');
+  return v ? Number(v) : null;
 };
 
 // 세션 유효성 확인 (24시간)
@@ -84,7 +85,8 @@ export const updateLastActivity = () => {
 
 // 마지막 활동 시간 조회
 export const getLastActivity = () => {
-  return localStorage.getItem('last_activity');
+  const v = localStorage.getItem('last_activity');
+  return v ? Number(v) : null;
 };
 
 // 비활성 시간 확인 (30분)
