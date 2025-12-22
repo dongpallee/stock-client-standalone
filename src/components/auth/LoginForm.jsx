@@ -78,7 +78,7 @@ const LoginForm = () => {
         );
       }
     } catch (err) {
-      setError('일시적인 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.'
+      setError('일시적인 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.')
     } finally {
       setLoading(false);
     }
