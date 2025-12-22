@@ -74,7 +74,7 @@ const LoginForm = () => {
       } else {
         setError(typeof result?.error === 'string' && result.error.trim()
           ? result.error
-          : '로그인에 실패했습니다. 아이디/비밀번호를 확인해 주세요.'
+          : '입력하신 정보로 로그인할 수 없습니다. 다시 확인해 주세요.'
         );
       }
     } catch (err) {
