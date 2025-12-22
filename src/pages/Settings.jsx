@@ -47,6 +47,7 @@ const Settings = () => {
 
   const [avatarFile, setAvatarFile] = useState(null);
   const [avatarPreview, setAvatarPreview] = useState(null);
+  const [avatarObjectUrl, setAvatarObjectUrl] = useState(null);
 
   // 프로필 업데이트 mutation
   const updateProfileMutation = useMutation({
