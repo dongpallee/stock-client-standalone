@@ -1,5 +1,11 @@
 import { jwtDecode } from 'jwt-decode';
 
+// 안전한 숫자 변환 (NaN 방어)
+const toNumber = (v) => {
+  const n = Number(v);
+  return Number.isFinite(n) ? n : null;
+};
+
 // 토큰 저장 (리프레시 토큰 포함)
 export const setToken = (token, refreshToken = null) => {
   localStorage.setItem('access_token', token);
