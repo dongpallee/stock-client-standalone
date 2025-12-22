@@ -58,14 +58,20 @@ const MarketDataWidget = () => {
   };
 
   const getTrendIcon = (value) => {
-    if (value > 0) return <TrendingUp className="h-4 w-4 text-green-600" />;
-    if (value < 0) return <TrendingDown className="h-4 w-4 text-red-600" />;
+    const num = typeof value === 'number' ? value : Number(value);
+    if (!Number.isFinite(num)) return <div className="h-4 w-4" />;
+
+    if (num > 0) return <TrendingUp className="h-4 w-4 text-green-600" />;
+    if (num < 0) return <TrendingDown className="h-4 w-4 text-red-600" />;
     return <div className="h-4 w-4" />;
   };
 
   const getTrendColor = (value) => {
-    if (value > 0) return 'text-green-600';
-    if (value < 0) return 'text-red-600';
+    const num = typeof value === 'number' ? value : Number(value);
+    if (!Number.isFinite(num)) return 'text-gray-600';
+
+    if (num > 0) return 'text-green-600';
+    if (num < 0) return 'text-red-600';
     return 'text-gray-600';
   };
 
