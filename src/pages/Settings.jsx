@@ -157,16 +157,32 @@ const Settings = () => {
 
   // 아바타 파일 선택 핸들러
   const handleAvatarChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setAvatarFile(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setAvatarPreview(reader.result);
-      };
-      reader.readAsDataURL(file);
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const MAX_MB = 5;
+
+    if (!file.type.startsWith('image/')) {
+      alert('이미지 파일만 업로드할 수 있습니다.');
+      e.target.value = '';
+      return;
     }
+
+    if (file.size > MAX_MB * 1024 * 1024) {
+      alert(`파일 크기는 최대 ${MAX_MB}MB까지 가능합니다.`);
+      e.target.value = '';
+      return;
+    }
+
+    // 이전 objectURL 정리
+    if (avatarObjectUrl) URL.revokeObjectURL(avatarObjectUrl);
+
+    const url = URL.createObjectURL(file);
+    setAvatarFile(file);
+    setAvatarPreview(url);
+    setAvatarObjectUrl(url);
   };
+
 
   // 계정 삭제 핸들러
   const handleDeleteAccount = () => {
