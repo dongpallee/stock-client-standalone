@@ -148,7 +148,7 @@ const AlertSystem = ({ className = "" }) => {
 
   const filteredAlerts = alerts.filter(alert => {
     if (filter === 'unread') return !alert.isRead;
-    if (filter === 'high') return alert.priority === 'high';
+    if (filter === 'important') return ['high', 'medium'].includes(alert.priority);
     return true;
   });
 
