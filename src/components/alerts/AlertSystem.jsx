@@ -300,7 +300,7 @@ const AlertSystem = ({ className = "" }) => {
                  '새로운 알림이 없습니다.'}
               </p>
               <p className="text-sm text-gray-400">
-                새로운 투자 기회나 시장 변동이 있으면 알려드리겠습니다.
+                시장 변동, 기술적 신호, 관련 뉴스가 감지되면 알려드릴게요.
               </p>
             </div>
           )}
