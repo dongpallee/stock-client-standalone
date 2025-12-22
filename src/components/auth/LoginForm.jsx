@@ -127,7 +127,7 @@ const LoginForm = () => {
                 type="password"
                 value={formData.password}
                 onChange={handleChange}
-                placeholder="비밀번호를 입력하세요"
+                placeholder="비밀번호를 입력해 주세요"
                 required
                 disabled={loading}
               />
