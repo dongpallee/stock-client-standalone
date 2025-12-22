@@ -81,9 +81,9 @@ const InvestmentRecommendation = ({ analysisData, className = "" }) => {
   const getInvestmentAdvice = (type) => {
     const baseAdvice = {
       action: recommendation.action || '보유',
-      targetPrice: recommendation.target_price || 0,
-      stopLoss: recommendation.stop_loss || 0,
-      timeHorizon: recommendation.time_horizon || '3-6개월',
+      targetPrice: recommendation.target_price ?? null,
+      stopLoss: recommendation.stop_loss ?? null,
+            timeHorizon: recommendation.time_horizon || '3-6개월',
       reason: recommendation.reason || 'AI 분석을 통한 종합적 판단'
     };
 
@@ -195,7 +195,7 @@ const InvestmentRecommendation = ({ analysisData, className = "" }) => {
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-gray-600">목표가</span>
                     <span className="font-bold text-green-600">
-                      {currentAdvice.targetPrice?.toLocaleString() || 'N/A'}원
+                      {currentAdvice.targetPrice == null ? 'N/A' : `${currentAdvice.targetPrice.toLocaleString()}원`}
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
