@@ -88,7 +88,7 @@ function App() {
                 </ProtectedRoute>
               } />
 
-              {/* 기본 리다이렉트 */}
+              {/* 기본 진입 경로 및 예외 경로 리다이렉트 */}
               <Route path="/" element={<Navigate to="/dashboard" replace />} />
               <Route path="*" element={<Navigate to="/dashboard" replace />} />
               </Routes>
