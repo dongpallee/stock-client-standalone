@@ -56,7 +56,8 @@ const CacheStatusWidget = () => {
   const refreshMutation = useMutation({
     mutationFn: (params) => cacheAPI.refresh(params),
     onSuccess: () => {
-      queryClient.invalidateQueries([queryKeys.cacheStats]);
+      queryClient.invalidateQueries({ queryKey: [queryKeys.cacheStats] });
+
     }
   });
 
