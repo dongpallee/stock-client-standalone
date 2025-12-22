@@ -240,7 +240,7 @@ const AnalysisResults = () => {
         <CardHeader>
           <CardTitle className="flex items-center space-x-2">
             <Star className="h-5 w-5 text-yellow-500" />
-            <span>투자 추천</span>
+            <span>투자 아이디어</span>
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
