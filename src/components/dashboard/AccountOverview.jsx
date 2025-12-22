@@ -132,7 +132,7 @@ const AccountOverview = ({ data }) => {
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <PieChart className="h-4 w-4 text-orange-500" />
-              <span className="text-sm font-medium">수익률 분포</span>
+              <span className="text-sm font-medium">총 손익률</span>
             </div>
             <span className="text-sm font-medium">{profitPercentage.toFixed(1)}%</span>
           </div>
