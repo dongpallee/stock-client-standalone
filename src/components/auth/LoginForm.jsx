@@ -54,7 +54,7 @@ const LoginForm = () => {
 
     // 아이디 길이 및 형식 검증
     if (formData.username.length < 3 || formData.username.length > 50) {
-      setError('아이디는 3-50자 사이여야 합니다.');
+      setError('아이디는 3-50자여야 합니다.');
       setLoading(false);
       return;
     }
