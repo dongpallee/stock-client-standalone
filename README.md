@@ -205,7 +205,7 @@ stock-client-standalone/
 - **React Router 7+** - 클라이언트 사이드 라우팅
 
 ### UI & 스타일링
-- **Tailwind CSS 4.1.7** - 유틸리티 우선 CSS 프레임워크
+- **Tailwind CSS 4+** - 유틸리티 우선 CSS 프레임워크
 - **shadcn/ui** - Radix UI 기반의 고품질 React 컴포넌트
 - **Lucide React** - 아름다운 아이콘 라이브러리
 - **Framer Motion** - 부드러운 애니메이션
