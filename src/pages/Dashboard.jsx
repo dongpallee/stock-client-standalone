@@ -17,7 +17,7 @@ import {
   Activity,
   TrendingUp,
   TrendingDown,
-  Circle,,
+  Circle,
   Loader2,
   BarChart3,
   ChevronDown,
