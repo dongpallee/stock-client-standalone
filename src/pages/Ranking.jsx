@@ -8,7 +8,6 @@ import { Badge } from '../components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
 import { 
   Trophy, 
-  TrendingUp, 
   BarChart3, 
   Newspaper,
   Calculator,
@@ -35,12 +34,16 @@ const Ranking = () => {
   });
 
   // 카테고리별 랭킹 조회
+  const CATEGORY_LIMIT = 10;
+
   const { 
     data: categoryRankingData, 
-    isLoading: categoryLoading 
+    isLoading: categoryLoading,
+    error: categoryError,
   } = useQuery({
-    queryKey: ['ranking-by-category', selectedCategory, 10],
-    queryFn: () => rankingAPI.getRankingByCategory(selectedCategory, 10),
+    queryKey: ['ranking-by-category', selectedCategory, CATEGORY_LIMIT],
+    queryFn: () => rankingAPI.getRankingByCategory(selectedCategory, CATEGORY_LIMIT),
+    enabled: activeTab === 'category',
   });
 
   const topStocks = topStocksData?.data?.ranking || [];
@@ -101,20 +104,21 @@ const Ranking = () => {
     );
   }
 
-  return (
-    <div className="space-y-6">
-      {/* 페이지 헤더 */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">종목 랭킹</h1>
-          <p className="text-gray-500 mt-1">
-            상승 가능성이 높은 종목들을 확인하세요
-          </p>
-        </div>
-        <div className="flex items-center space-x-2">
+  return ( 
+    <div className="space-y-6"> 
+      {/* 페이지 헤더 */} 
+      <div className="flex items-center justify-between"> 
+        <div> 
+          <h1 className="text-3xl font-bold text-gray-900">종목 랭킹</h1> 
+          <p className="text-gray-500 mt-1"> 
+            상승 가능성이 높은 종목들을 확인하세요 
+          </p> 
+        </div> 
+        <div className="flex items-center space-x-2"> 
           <Button
             variant={limit === 20 ? "default" : "outline"}
             size="sm"
+            disabled={topStocksLoading || limit === 20}
             onClick={() => setLimit(20)}
           >
             Top 20
@@ -122,14 +126,19 @@ const Ranking = () => {
           <Button
             variant={limit === 50 ? "default" : "outline"}
             size="sm"
+            disabled={topStocksLoading || limit === 50}
             onClick={() => setLimit(50)}
           >
             Top 50
-          </Button>
-        </div>
+          </Button> 
+        </div> 
       </div>
 
-      <Tabs defaultValue="overall" className="space-y-6">
+
+
+
+
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
         <TabsList className="grid w-full grid-cols-2 lg:grid-cols-4">
           <TabsTrigger value="overall">전체 랭킹</TabsTrigger>
           <TabsTrigger value="category">카테고리별</TabsTrigger>
@@ -231,13 +240,15 @@ const Ranking = () => {
               return (
                 <Card 
                   key={category.id}
-                  className={`cursor-pointer transition-colors ${
-                    selectedCategory === category.id 
-                      ? 'ring-2 ring-blue-500 bg-blue-50' 
-                      : 'hover:bg-gray-50'
-                  }`}
+                  role="button"
+                  tabIndex={0}
+                  className="cursor-pointer ..."
                   onClick={() => setSelectedCategory(category.id)}
-                >
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') setSelectedCategory(category.id);
+                  }}
+                >  
+
                   <CardContent className="pt-6">
                     <div className="text-center">
                       <Icon className={`h-8 w-8 mx-auto mb-2 ${
@@ -258,14 +269,15 @@ const Ranking = () => {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center">
-                {React.createElement(
-                  categories.find(c => c.id === selectedCategory)?.icon || Trophy,
-                  { className: "h-5 w-5 mr-2" }
-                )}
-                {categories.find(c => c.id === selectedCategory)?.name} 분석 Top 10
+                const selectedCategoryMeta =
+                  categories.find(c = c.id === selectedCategory) ?? categories[0];
+                const SelectedIcon = selectedCategoryMeta.icon;
+
+                <SelectedIcon className="h-5 w-5 mr-2" />
+                {selectedCategoryMeta.name} 분석 Top {CATEGORY_LIMIT}
               </CardTitle>
               <CardDescription>
-                {categories.find(c => c.id === selectedCategory)?.description} 기준 상위 10개 종목
+                {selectedCategoryMeta.description} 기준 상위 {CATEGORY_LIMIT}개 종목
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -273,6 +285,14 @@ const Ranking = () => {
                 <div className="flex items-center justify-center py-8">
                   <Loader2 className="h-8 w-8 animate-spin" />
                 </div>
+              ) : categoryError ? (
+                <div className="flex items-center justify-center py-8">
+                  <div className="text-center">
+                    <AlertCircle className="h-10 w-10 text-red-500 mx-auto mb-3" />
+                    <p className="text-gray-600">카테고리 랭킹을 불러오지 못했습니다.</p>
+                  </div>
+                </div>
+
               ) : categoryRanking.length > 0 ? (
                 <div className="space-y-3">
                   {categoryRanking.map((stock) => (
