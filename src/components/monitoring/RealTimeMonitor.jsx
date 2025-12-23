@@ -202,7 +202,11 @@ const RealTimeMonitor = () => {
           <div className="flex items-center space-x-2">
             <div className={`w-2 h-2 rounded-full ${connectionStatus === 'connected' ? 'bg-green-500' : 'bg-red-500'}`} />
             <span className={`text-sm ${getConnectionStatusColor(connectionStatus)}`}>
-              {connectionStatus === 'connected' ? '연결됨' : '연결 안됨'}
+              {connectionStatus === 'connected'
+                ? '연결됨'
+                : connectionStatus === 'connecting'
+                  ? '연결 중...'
+                  : '연결 끊김'}
             </span>
           </div>
           <Badge variant={getStatusBadgeVariant(monitoringStatus?.monitoring_status)}>
