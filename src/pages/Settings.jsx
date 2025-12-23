@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '../contexts/AuthContext';
 import { stockAPI } from '../lib/api';
@@ -10,7 +10,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs'
 import { Badge } from '../components/ui/badge';
 import {
   User,
-  Mail,
   Lock,
   Image as ImageIcon,
   Trash2,
@@ -25,6 +24,12 @@ import {
   CheckCircle,
   Info
 } from 'lucide-react';
+
+useEffect(() => {
+  return () => {
+    if (avatarObjectUrl) URL.revokeObjectURL(avatarObjectUrl);
+  };
+}, [avatarObjectUrl]);
 
 const Settings = () => {
   const { user, logout } = useAuth();
@@ -48,6 +53,7 @@ const Settings = () => {
 
   const [avatarFile, setAvatarFile] = useState(null);
   const [avatarPreview, setAvatarPreview] = useState(null);
+  const [avatarObjectUrl, setAvatarObjectUrl] = useState(null);
 
   // 프로필 업데이트 mutation
   const updateProfileMutation = useMutation({
@@ -90,16 +96,38 @@ const Settings = () => {
   });
 
   // 로그인 기록 조회
-  const { data: loginHistory, isLoading: historyLoading } = useQuery({
+  const {
+    data: loginHistory,
+    isLoading: historyLoading,
+    isError: historyError,
+    error: historyErrorObj,
+    refetch: refetchHistory,
+  } = useQuery({
     queryKey: ['login-history'],
     queryFn: () => stockAPI.settings.getLoginHistory(),
+    staleTime: 60_000,
+    retry: 1,
+    refetchOnWindowFocus: false,
   });
 
+
+
+
   // 활성 세션 조회
-  const { data: activeSessions, isLoading: sessionsLoading } = useQuery({
+  const {
+    data: activeSessions,
+    isLoading: sessionsLoading,
+    isError: sessionsError,
+    error: sessionsErrorObj,
+    refetch: refetchSessions,
+  } = useQuery({
     queryKey: ['active-sessions'],
     queryFn: () => stockAPI.settings.getActiveSessions(),
+    staleTime: 30_000,
+    retry: 1,
+    refetchOnWindowFocus: false,
   });
+
 
   // 프로필 업데이트 핸들러
   const handleProfileUpdate = (e) => {
@@ -129,16 +157,32 @@ const Settings = () => {
 
   // 아바타 파일 선택 핸들러
   const handleAvatarChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setAvatarFile(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setAvatarPreview(reader.result);
-      };
-      reader.readAsDataURL(file);
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const MAX_MB = 5;
+
+    if (!file.type.startsWith('image/')) {
+      alert('이미지 파일만 업로드할 수 있습니다.');
+      e.target.value = '';
+      return;
     }
+
+    if (file.size > MAX_MB * 1024 * 1024) {
+      alert(`파일 크기는 최대 ${MAX_MB}MB까지 가능합니다.`);
+      e.target.value = '';
+      return;
+    }
+
+    // 이전 objectURL 정리
+    if (avatarObjectUrl) URL.revokeObjectURL(avatarObjectUrl);
+
+    const url = URL.createObjectURL(file);
+    setAvatarFile(file);
+    setAvatarPreview(url);
+    setAvatarObjectUrl(url);
   };
+
 
   // 계정 삭제 핸들러
   const handleDeleteAccount = () => {
