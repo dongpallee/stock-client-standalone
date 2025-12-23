@@ -7,7 +7,6 @@ import {
   TrendingUp, 
   TrendingDown, 
   Target,
-  Zap,
   Eye,
   AlertCircle,
   Star,
@@ -112,7 +111,7 @@ const AnalysisResults = () => {
             <span>AI 분석 결과</span>
           </CardTitle>
           <CardDescription>
-            실시간 AI 기반 주식 분석 및 투자 신호
+            실시간 AI 기반 주식 분석 및 투자 신호 요약
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -120,19 +119,29 @@ const AnalysisResults = () => {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 rounded-lg bg-gray-50 dark:bg-gray-800">
             <div className="text-center">
               <div className="text-2xl font-bold text-red-600">강세</div>
-              <div className="text-sm text-muted-foreground">시장 심리</div>
+              <div className="text-sm text-muted-foreground">시장 분위기</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-blue-600">76%</div>
-              <div className="text-sm text-muted-foreground">평균 신뢰도</div>
+              <div className="text-2xl font-bold text-blue-600">
+                {Math.round(
+                  Object.values(analysisData)
+                    .reduce((sum, d) => sum + d.confidence, 0) /
+                  Object.values(analysisData).length
+                )}%
+              </div>
+              <div className="text-sm text-muted-foreground">평균 분석 신뢰도</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-purple-600">4</div>
-              <div className="text-sm text-muted-foreground">분석 종목</div>
+              <div className="text-2xl font-bold text-purple-600">
+                {Object.keys(analysisData).length}
+              </div>
+              <div className="text-sm text-muted-foreground">분석 종목 수</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-green-600">2</div>
-              <div className="text-sm text-muted-foreground">매수 신호</div>
+              <div className="text-2xl font-bold text-green-600">
+                {Object.values(analysisData).filter(d => d.signal === 'buy').length}
+              </div>
+              <div className="text-sm text-muted-foreground">매수 신호 수</div>
             </div>
           </div>
 
@@ -144,15 +153,18 @@ const AnalysisResults = () => {
                   <div className="flex items-center space-x-3">
                     <div className="font-medium text-lg">{data.name} ({code})</div>
                     <Badge 
-                      variant={data.signal === 'buy' ? 'default' : data.signal === 'sell' ? 'destructive' : 'secondary'}
-                      className="flex items-center space-x-1"
+                      variant="outline"
+                      className={`flex items-center space-x-1 ${getSignalColor(data.signal)}`}
                     >
                       {getSignalIcon(data.signal)}
                       <span>{getSignalText(data.signal)}</span>
                     </Badge>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <div className={`h-3 w-3 rounded-full ${getSentimentColor(data.ai_sentiment)}`} />
+                    <div
+                      className={`h-3 w-3 rounded-full ${getSentimentColor(data.ai_sentiment)}`}
+                      title={`AI 심리: ${getSentimentText(data.ai_sentiment)}`}
+                    />
                     <span className="text-sm">{getSentimentText(data.ai_sentiment)}</span>
                   </div>
                 </div>
@@ -189,10 +201,10 @@ const AnalysisResults = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <div className="text-sm font-medium">핵심 요인</div>
+                  <div className="text-sm font-medium">핵심 근거</div>
                   <div className="flex flex-wrap gap-2">
-                    {data.factors.map((factor, index) => (
-                      <Badge key={index} variant="outline" className="text-xs">
+                    {data.factors.map((factor) => (
+                      <Badge key={factor} variant="outline" className="text-xs">
                         {factor}
                       </Badge>
                     ))}
@@ -209,7 +221,7 @@ const AnalysisResults = () => {
         <CardHeader>
           <CardTitle className="flex items-center space-x-2">
             <Eye className="h-5 w-5 text-blue-500" />
-            <span>AI 시장 인사이트</span>
+            <span>AI 시장 인사이트 요약</span>
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -241,7 +253,7 @@ const AnalysisResults = () => {
         <CardHeader>
           <CardTitle className="flex items-center space-x-2">
             <Star className="h-5 w-5 text-yellow-500" />
-            <span>투자 추천</span>
+            <span>투자 아이디어</span>
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">

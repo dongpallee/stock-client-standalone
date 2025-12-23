@@ -58,14 +58,20 @@ const MarketDataWidget = () => {
   };
 
   const getTrendIcon = (value) => {
-    if (value > 0) return <TrendingUp className="h-4 w-4 text-green-600" />;
-    if (value < 0) return <TrendingDown className="h-4 w-4 text-red-600" />;
+    const num = typeof value === 'number' ? value : Number(value);
+    if (!Number.isFinite(num)) return <div className="h-4 w-4" />;
+
+    if (num > 0) return <TrendingUp className="h-4 w-4 text-green-600" />;
+    if (num < 0) return <TrendingDown className="h-4 w-4 text-red-600" />;
     return <div className="h-4 w-4" />;
   };
 
   const getTrendColor = (value) => {
-    if (value > 0) return 'text-green-600';
-    if (value < 0) return 'text-red-600';
+    const num = typeof value === 'number' ? value : Number(value);
+    if (!Number.isFinite(num)) return 'text-gray-600';
+
+    if (num > 0) return 'text-green-600';
+    if (num < 0) return 'text-red-600';
     return 'text-gray-600';
   };
 
@@ -110,8 +116,9 @@ const MarketDataWidget = () => {
             <Globe className="h-5 w-5" />
             <span>금융시장 데이터</span>
           </div>
-          <Button onClick={handleRefresh} variant="outline" size="sm">
-            <RefreshCw className="h-4 w-4" />
+
+          <Button onClick={handleRefresh} variant="outline" size="sm" disabled={isFetching}>
+            <RefreshCw className={`h-4 w-4 ${isFetching ? 'animate-spin' : ''}`} />
           </Button>
         </CardTitle>
       </CardHeader>
@@ -131,9 +138,9 @@ const MarketDataWidget = () => {
               </div>
             ) : (
               <div className="space-y-3">
-                {exchangeRates.slice(0, 6).map((rate, index) => (
+                {exchangeRates.slice(0, 6).map((rate) => (
                   <div
-                    key={index}
+                    key={rate.currency ?? `${rate.currency_name ?? 'UNKNOWN'}-${rate.last_updated ?? ''}`}
                     className="flex items-center justify-between p-3 bg-muted rounded-lg"
                   >
                     <div className="flex items-center space-x-3">

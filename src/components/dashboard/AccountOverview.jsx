@@ -25,19 +25,36 @@ const AccountOverview = ({ data }) => {
 
   const accountData = data || defaultData;
   
-  const profitPercentage = ((accountData.total_profit / accountData.total_investment) * 100) || 0;
-  const dailyProfitPercentage = ((accountData.daily_profit / accountData.total_portfolio_value) * 100) || 0;
+    const safeNumber = (v, fallback = 0) =>
+    Number.isFinite(Number(v)) ? Number(v) : fallback;
+
+  const investment = safeNumber(accountData.total_investment);
+  const portfolioValue = safeNumber(accountData.total_portfolio_value);
+  const totalProfit = safeNumber(accountData.total_profit);
+  const dailyProfit = safeNumber(accountData.daily_profit);
+
+  const profitPercentage =
+    investment > 0 ? (totalProfit / investment) * 100 : 0;
+
+  const dailyProfitPercentage =
+    portfolioValue > 0 ? (dailyProfit / portfolioValue) * 100 : 0;
+
+  const normalizeWon = (amount) => {
+    const n = Number(amount);
+    if (!Number.isFinite(n)) return 0;
+    const rounded = Math.round(n);
+    return Object.is(rounded, -0) ? 0 : rounded;
+  };
 
   const formatKoreanCurrency = (amount) => {
-    if (amount >= 100000000) { // 1억 이상
-      return `${(amount / 100000000).toFixed(1)}억원`;
-    } else if (amount >= 10000000) { // 1천만 이상
-      return `${(amount / 10000000).toFixed(0)}천만원`;
-    } else if (amount >= 10000) { // 1만 이상
-      return `${(amount / 10000).toFixed(0)}만원`;
-    } else {
-      return `${amount.toLocaleString()}원`;
-    }
+    const won = normalizeWon(amount);
+    const abs = Math.abs(won);
+    const sign = won < 0 ? '-' : '';
+
+    if (abs >= 100000000) return `${sign}${(abs / 100000000).toFixed(1)}억원`;
+    if (abs >= 10000000) return `${sign}${(abs / 10000000).toFixed(0)}천만원`;
+    if (abs >= 10000) return `${sign}${(abs / 10000).toFixed(0)}만원`;
+    return `${sign}${abs.toLocaleString()}원`;
   };
 
   const formatPercentage = (percentage) => {
@@ -52,7 +69,7 @@ const AccountOverview = ({ data }) => {
           <span>포트폴리오 개요</span>
         </CardTitle>
         <CardDescription>
-          실시간 포트폴리오 가치 및 수익률 현황
+          포트폴리오 가치 및 수익률 현황
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
@@ -98,7 +115,7 @@ const AccountOverview = ({ data }) => {
             <div className="space-y-2">
               <div className="flex items-center space-x-2">
                 <Target className="h-4 w-4 text-purple-500" />
-                <span className="text-sm font-medium">일일 손익</span>
+                <span className="text-sm font-medium">금일 손익</span>
               </div>
               <div className={`text-xl font-bold ${accountData.daily_profit >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                 {formatKoreanCurrency(accountData.daily_profit)}
@@ -115,11 +132,17 @@ const AccountOverview = ({ data }) => {
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <PieChart className="h-4 w-4 text-orange-500" />
-              <span className="text-sm font-medium">수익률 분포</span>
+              <span className="text-sm font-medium">총 손익률</span>
             </div>
             <span className="text-sm font-medium">{profitPercentage.toFixed(1)}%</span>
           </div>
-          <Progress value={Math.min(Math.abs(profitPercentage), 100)} className="h-3" />
+          <Progress
+            value={Math.min(Math.abs(profitPercentage), 100)}
+            className="h-3"
+          />
+          <span className="text-xs text-muted-foreground">
+            {profitPercentage >= 0 ? '수익 구간' : '손실 구간'}
+          </span>
           <div className="flex justify-between text-xs text-muted-foreground">
             <span>투자원금: {formatKoreanCurrency(accountData.total_investment)}</span>
             <span>수익: {formatKoreanCurrency(accountData.total_profit)}</span>
@@ -130,9 +153,11 @@ const AccountOverview = ({ data }) => {
         <div className="grid grid-cols-3 gap-4 pt-4 border-t">
           <div className="text-center">
             <div className="text-lg font-bold text-blue-600">
-              {((accountData.profitable_stocks / (accountData.watchlist_count || 1)) * 100).toFixed(1)}%
+              {accountData.watchlist_count > 0
+                ? ((accountData.profitable_stocks / accountData.watchlist_count) * 100).toFixed(1)
+                : '0.0'}%
             </div>
-            <div className="text-xs text-muted-foreground">수익종목 비율</div>
+            <div className="text-xs text-muted-foreground">수익종목 비중</div>
           </div>
           <div className="text-center">
             <div className="text-lg font-bold text-purple-600">
@@ -144,13 +169,13 @@ const AccountOverview = ({ data }) => {
             <div className="text-lg font-bold text-green-600">
               {profitPercentage > 20 ? '공격적' : profitPercentage > 10 ? '중도' : '보수적'}
             </div>
-            <div className="text-xs text-muted-foreground">투자성향</div>
+            <div className="text-xs text-muted-foreground">성과 등급</div>
           </div>
         </div>
 
         {/* Portfolio Breakdown */}
         <div className="space-y-3">
-          <h4 className="text-sm font-medium">포트폴리오 구성</h4>
+          <h4 className="text-sm font-medium">포트폴리오 구성 요약</h4>
           <div className="space-y-2">
             <div className="flex justify-between items-center p-2 rounded bg-gray-50 dark:bg-gray-800">
               <div className="flex items-center space-x-2">

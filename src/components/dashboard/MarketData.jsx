@@ -10,7 +10,6 @@ import {
   BarChart3,
   Activity,
   RefreshCw,
-  Globe
 } from 'lucide-react';
 
 const MarketData = () => {
@@ -19,7 +18,7 @@ const MarketData = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   // Mock Korean stock market data
-  const [marketData, setMarketData] = useState({
+  const MARKET_DATA = {
     '005930': { // 삼성전자
       name: '삼성전자',
       price: 71000,
@@ -56,7 +55,7 @@ const MarketData = () => {
       low: 770000,
       market_cap: '112조원'
     }
-  });
+  };
 
   // Mock chart data generator
   const generateChartData = () => {
@@ -102,6 +101,7 @@ const MarketData = () => {
   }, [selectedStock, timeframe]);
 
   const formatKoreanCurrency = (amount) => {
+    if (amount == null) return '-';
     return amount.toLocaleString() + '원';
   };
 
@@ -141,7 +141,10 @@ const MarketData = () => {
             size="sm" 
             onClick={() => {
               setIsLoading(true);
-              setTimeout(() => setIsLoading(false), 1000);
+              setTimeout(() => {
+                setChartData(generateChartData());
+                setIsLoading(false);
+              }, 1000);
             }}
             disabled={isLoading}
           >
@@ -149,7 +152,7 @@ const MarketData = () => {
           </Button>
         </CardTitle>
         <CardDescription>
-          실시간 한국 주식 시장 데이터 및 차트
+          AI 기반 한국 주식 시장 데이터 및 차트
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
@@ -224,8 +227,11 @@ const MarketData = () => {
                 <LineChart data={chartData}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="time" />
-                  <YAxis 
-                    domain={['dataMin - 1000', 'dataMax + 1000']}
+                  <YAxis
+                    domain={[
+                      (dataMin) => dataMin - 1000,
+                      (dataMax) => dataMax + 1000
+                    ]}
                     tickFormatter={(value) => `${Math.round(value / 1000)}K`}
                   />
                   <Tooltip 

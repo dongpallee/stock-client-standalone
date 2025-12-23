@@ -35,21 +35,29 @@ const AlertPanel = () => {
   const queryClient = useQueryClient();
 
   // 알림 히스토리 조회
-  const { data: alertsData, isLoading, refetch } = useQuery({
+  const {
+    data: alertsData,
+    isLoading,
+    isError,
+    error,
+    refetch
+  } = useQuery({
     queryKey: [queryKeys.monitoringAlerts, { page: currentPage, per_page: perPage, type: alertTypeFilter }],
-    queryFn: () => monitoringAPI.getAlerts({
-      page: currentPage,
-      per_page: perPage,
-      type: alertTypeFilter || undefined
-    }),
-    refetchInterval: 30000 // 30초마다 갱신
+    queryFn: () =>
+      monitoringAPI.getAlerts({
+        page: currentPage,
+        per_page: perPage,
+        type: alertTypeFilter || undefined
+      }),
+    refetchInterval: 30000,
+    refetchIntervalInBackground: false
   });
 
   // 알림 확인 뮤테이션
   const acknowledgeMutation = useMutation({
     mutationFn: (alertId) => monitoringAPI.acknowledgeAlert(alertId),
     onSuccess: () => {
-      queryClient.invalidateQueries([queryKeys.monitoringAlerts]);
+      queryClient.invalidateQueries({ queryKey: [queryKeys.monitoringAlerts] });
     }
   });
 
@@ -57,7 +65,7 @@ const AlertPanel = () => {
   const testAlertMutation = useMutation({
     mutationFn: (params) => monitoringAPI.testAlert(params),
     onSuccess: () => {
-      queryClient.invalidateQueries([queryKeys.monitoringAlerts]);
+      queryClient.invalidateQueries({ queryKey: [queryKeys.monitoringAlerts] });
     }
   });
 
@@ -165,7 +173,7 @@ const AlertPanel = () => {
             <div className="flex items-center space-x-2">
               <Button
                 onClick={handleTestAlert}
-                disabled={testAlertMutation.isLoading}
+                disabled={testAlertMutation.isPending}
                 variant="outline"
                 size="sm"
               >
@@ -224,7 +232,7 @@ const AlertPanel = () => {
           {/* 통계 정보 */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="text-center p-2 bg-muted rounded">
-              <div className="text-2xl font-bold">{alerts.length}</div>
+              <div className="text-2xl font-bold">{pagination.total ?? alerts.length}</div>
               <div className="text-sm text-muted-foreground">전체 알림</div>
             </div>
             <div className="text-center p-2 bg-muted rounded">
@@ -302,7 +310,7 @@ const AlertPanel = () => {
                     {!alert.acknowledged && (
                       <Button
                         onClick={() => acknowledgeMutation.mutate(alert.id)}
-                        disabled={acknowledgeMutation.isLoading}
+                        disabled={acknowledgeMutation.isPending}
                         variant="outline"
                         size="sm"
                       >
