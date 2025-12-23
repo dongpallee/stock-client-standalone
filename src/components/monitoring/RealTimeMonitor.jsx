@@ -63,7 +63,7 @@ const RealTimeMonitor = () => {
     mutationFn: (params) => monitoringAPI.start(params),
     onSuccess: (data) => {
       setIsMonitoring(true);
-      queryClient.invalidateQueries([queryKeys.monitoringStatus]);
+      queryClient.invalidateQueries({ queryKey: [queryKeys.monitoringStatus] });
 
       // WebSocket 모니터링 시작
       if (wsManager.isConnected) {
@@ -81,7 +81,7 @@ const RealTimeMonitor = () => {
     mutationFn: () => monitoringAPI.stop(),
     onSuccess: () => {
       setIsMonitoring(false);
-      queryClient.invalidateQueries([queryKeys.monitoringStatus]);
+      queryClient.invalidateQueries({ queryKey: [queryKeys.monitoringStatus] });
 
       // WebSocket 모니터링 중단
       if (wsManager.isConnected) {
