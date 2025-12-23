@@ -6,7 +6,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../co
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Badge } from '../components/ui/badge';
-import { Alert, AlertDescription } from '../components/ui/alert';
 import StockSearch from '../components/search/StockSearch';
 import WorkflowAnalysisModal from '../components/analysis/WorkflowAnalysisModal';
 import { initSocket } from '../utils/socket';
@@ -76,7 +75,10 @@ const StockList = () => {
   } = useQuery({
     queryKey: ['stocks', {
       page: currentPage,
+      per_page: 20,
       search: searchTerm,
+      sort_by: sortBy,
+      sort_order: sortOrder,
       market: marketFilter,
       change_type: changeFilter,
       market_cap_min: marketCapMin,
@@ -84,6 +86,7 @@ const StockList = () => {
       volume_min: volumeMin,
       sector: sectorFilter
     }],
+    
     queryFn: () => stockAPI.getStocks({
       page: currentPage,
       per_page: 20,
@@ -108,16 +111,18 @@ const StockList = () => {
 
   // 관심종목 추가/제거 mutation
   const toggleWatchlistMutation = useMutation({
-    mutationFn: (stockCode) => {
-      const isInWatchlist = watchlistData?.watchlist?.some(
-        item => item.stock_code === stockCode
-      );
-      return isInWatchlist
+    mutationFn: async (stockCode) => {
+      const inList = watchlistData?.watchlist?.some((item) => item.stock_code === stockCode);
+      return inList
         ? stockAPI.watchlist.remove(stockCode)
         : stockAPI.watchlist.add(stockCode);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(['watchlist']);
+      queryClient.invalidateQueries({ queryKey: ['watchlist'] });
+    },
+    onError: (err) => {
+      console.error('[watchlist] toggle failed:', err);
+      // TODO: toast/alert로 사용자 피드백
     },
   });
 
@@ -171,10 +176,19 @@ const StockList = () => {
   });
 
   // 분석 데이터가 당일 것인지 확인하는 헬퍼 함수
+  const parseLocalDate = (v) => {
+    if (!v) return null;
+    // "YYYY-MM-DD" 형태면 로컬 날짜로 강제
+    const m = String(v).match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (m) return new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+    const d = new Date(v);
+    return Number.isFinite(d.getTime()) ? d : null;
+  };
+
   const isAnalysisFromToday = (analysisDate) => {
-    if (!analysisDate) return false;
+    const analysisDt = parseLocalDate(analysisDate);
+    if (!analysisDt) return false;
     const today = new Date();
-    const analysisDt = new Date(analysisDate);
     return (
       analysisDt.getFullYear() === today.getFullYear() &&
       analysisDt.getMonth() === today.getMonth() &&
@@ -215,8 +229,10 @@ const StockList = () => {
   const handleSearch = (e) => {
     e.preventDefault();
     setCurrentPage(1);
-    refetch();
+    // refetch 제거: queryKey 변화로 자동 조회
   };
+
+
 
   const handleAnalyze = (stockCode) => {
     // 이미 분석 중이거나 mutation이 진행 중이면 무시
@@ -684,9 +700,9 @@ const StockList = () => {
                             현재가: {stock.current_price.toLocaleString()}원
                           </span>
                         )}
-                        {stock.change_rate && (
+                        {stock.change_rate !== null && stock.change_rate !== undefined && (
                           <span className={stock.change_rate >= 0 ? 'text-red-600' : 'text-blue-600'}>
-                            변동률: {stock.change_rate >= 0 ? '+' : ''}{stock.change_rate.toFixed(2)}%
+                            변동률: {stock.change_rate >= 0 ? '+' : ''}{Number(stock.change_rate).toFixed(2)}%
                           </span>
                         )}
                         {stock.per && (
