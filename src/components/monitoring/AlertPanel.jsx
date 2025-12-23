@@ -172,7 +172,7 @@ const AlertPanel = () => {
               >
                 테스트 알림
               </Button>
-              <Button onClick={() => refetch()} variant="outline" size="sm">
+              <Button onClick={() => refetch()} variant="outline" size="sm" aria-label="새로고침">
                 <RefreshCw className="h-4 w-4" />
               </Button>
             </div>
