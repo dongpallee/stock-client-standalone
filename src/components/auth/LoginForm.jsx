@@ -23,39 +23,45 @@ const LoginForm = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     // 사용자 입력값 정리
-    const sanitizedValue = sanitizeInput(value, { 
-      allowHtml: false, 
-      maxLength: name === 'username' ? 50 : 128 
-    });
-    
-    setFormData({
-      ...formData,
+    let nextValue = value;
+
+    if (name === 'username') {
+      nextValue = sanitizeInput(value, { allowHtml: false, maxLength: 50 });
+    } else if (name === 'password') {
+      // 비밀번호는 sanitize로 변경/제거하지 말고 길이만 제한(원문 유지)
+      nextValue = value.slice(0, 128);
+    }
+
+  
+    setFormData((prev) => ({
+      ...prev,
       [name]: sanitizedValue,
-    });
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (loading) return;
     setLoading(true);
     setError('');
 
     // 입력값 검증
     if (!formData.username.trim() || !formData.password.trim()) {
-      setError('사용자명과 비밀번호를 모두 입력해주세요.');
+      setError('아이디과 비밀번호를 모두 입력해주세요.');
       setLoading(false);
       return;
     }
 
-    // 사용자명 길이 및 형식 검증
+    // 아이디 길이 및 형식 검증
     if (formData.username.length < 3 || formData.username.length > 50) {
-      setError('사용자명은 3-50자 사이여야 합니다.');
+      setError('아이디는 3-50자여야 합니다.');
       setLoading(false);
       return;
     }
 
     // 비밀번호 길이 검증
     if (formData.password.length < 6) {
-      setError('비밀번호는 최소 6자 이상이어야 합니다.');
+      setError('비밀번호는 최소 6자 이상 입력해주세요.');
       setLoading(false);
       return;
     }
@@ -64,12 +70,15 @@ const LoginForm = () => {
       const result = await login(formData);
       
       if (result.success) {
-        navigate('/dashboard');
+        navigate('/dashboard', { replace: true });
       } else {
-        setError(result.error);
+        setError(typeof result?.error === 'string' && result.error.trim()
+          ? result.error
+          : '입력하신 정보로 로그인할 수 없습니다. 다시 확인해 주세요.'
+        );
       }
-    } catch (error) {
-      setError('로그인 중 오류가 발생했습니다. 다시 시도해주세요.');
+    } catch (err) {
+      setError('일시적인 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.')
     } finally {
       setLoading(false);
     }
@@ -85,7 +94,7 @@ const LoginForm = () => {
           </div>
           <CardTitle className="text-2xl">로그인</CardTitle>
           <CardDescription>
-            계정에 로그인하여 주식 분석을 시작하세요
+            로그인하고 주식 분석을 시작해 보세요.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -97,14 +106,14 @@ const LoginForm = () => {
             )}
             
             <div className="space-y-2">
-              <Label htmlFor="username">사용자명</Label>
+              <Label htmlFor="username">아이디</Label>
               <Input
                 id="username"
                 name="username"
                 type="text"
                 value={formData.username}
                 onChange={handleChange}
-                placeholder="사용자명을 입력하세요"
+                placeholder="아이디를 입력하세요"
                 required
                 disabled={loading}
               />
@@ -118,7 +127,7 @@ const LoginForm = () => {
                 type="password"
                 value={formData.password}
                 onChange={handleChange}
-                placeholder="비밀번호를 입력하세요"
+                placeholder="비밀번호를 입력해 주세요"
                 required
                 disabled={loading}
               />
@@ -132,7 +141,7 @@ const LoginForm = () => {
               {loading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  로그인 중...
+                  로그인 하는중...
                 </>
               ) : (
                 '로그인'
@@ -142,7 +151,7 @@ const LoginForm = () => {
           
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
-              계정이 없으신가요?{' '}
+              처음이신가요? 회원가입
               <Link 
                 to="/register" 
                 className="text-blue-600 hover:text-blue-500 font-medium"

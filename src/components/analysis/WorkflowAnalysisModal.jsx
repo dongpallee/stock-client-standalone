@@ -294,26 +294,19 @@ const WorkflowAnalysisModal = ({ requestId, socket, onClose }) => {
   }, [socket, requestId]); // selectedNode 제거하여 재연결 방지
 
   // 노드/엣지 변경 시 레이아웃 재계산 (Debounced)
-  useEffect(() => {
-    if (nodes.length === 0) return;
+    const layoutTimerRef = useRef(null);
 
-    const timer = setTimeout(() => {
-      const { nodes: layoutedNodes, edges: layoutedEdges } = calculateLayout(nodes, edges);
-      
-      // 위치가 변경된 경우에만 업데이트 (무한 루프 방지)
-      const hasPositionChanged = layoutedNodes.some((n) => {
-        const current = nodes.find(curr => curr.id === n.id);
-        return current && (Math.abs(current.position.x - n.position.x) > 1 || Math.abs(current.position.y - n.position.y) > 1);
-      });
+    const scheduleLayout = useCallback(() => {
+      if (layoutTimerRef.current) clearTimeout(layoutTimerRef.current);
 
-      if (hasPositionChanged) {
-        setNodes(layoutedNodes);
-        setEdges(layoutedEdges);
-      }
-    }, 100); // 100ms debounce
+      layoutTimerRef.current = setTimeout(() => {
+        setNodes((currNodes) => {
+          // edges는 최신을 별도로 읽어야 함 → 아래 3)와 같이 구조 개선 권장
+          return currNodes;
+        });
+      }, 100);
+    }, [setNodes]);
 
-    return () => clearTimeout(timer);
-  }, [nodes.length, edges.length, nodes, edges, setNodes, setEdges]); 
 
   // 오버레이 클릭 핸들러
   const handleOverlayClick = useCallback((e) => {
@@ -336,12 +329,12 @@ const WorkflowAnalysisModal = ({ requestId, socket, onClose }) => {
             </div>
             <div>
               <h2 className="text-xl font-bold text-slate-800">
-                워크플로우 실행 분석
-                {isDynamic && <Badge variant="outline" className="ml-2 text-blue-600 border-blue-200 bg-blue-50">실시간</Badge>}
+                워크플로우 실행 현황
+                {isDynamic && <Badge variant="outline" className="ml-2 text-blue-600 border-blue-200 bg-blue-50">실시간 연결됨</Badge>}
               </h2>
               <div className="flex items-center gap-2 text-xs text-slate-500 mt-1">
-                <span className="font-mono bg-slate-200 px-1.5 py-0.5 rounded">{requestId}</span>
-                {lastUpdate && <span>• 업데이트: {new Date(lastUpdate).toLocaleTimeString()}</span>}
+                <span className="font-mono bg-slate-200 px-1.5 py-0.5 rounded">요청ID:{requestId}</span>
+                {lastUpdate && <span>• 마지막 수신: {new Date(lastUpdate).toLocaleTimeString()}</span>}
               </div>
             </div>
           </div>
@@ -353,7 +346,7 @@ const WorkflowAnalysisModal = ({ requestId, socket, onClose }) => {
                  setEdges(lEdges);
               }}
               className="p-2 hover:bg-white rounded-full transition-colors text-slate-500"
-              title="레이아웃 재정렬"
+              title="레이아웃 다시 정렬"
             >
               <RotateCcw className="w-5 h-5" />
             </button>
@@ -361,7 +354,7 @@ const WorkflowAnalysisModal = ({ requestId, socket, onClose }) => {
               onClick={onClose}
               className="px-4 py-2 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-lg transition-colors text-sm font-medium shadow-sm"
             >
-              닫기
+              분석 닫기
             </button>
           </div>
         </div>
@@ -380,8 +373,8 @@ const WorkflowAnalysisModal = ({ requestId, socket, onClose }) => {
             {nodes.length === 0 ? (
               <div className="absolute inset-0 flex flex-col items-center justify-center">
                 <Loader2 className="w-12 h-12 text-blue-500 animate-spin mb-4" />
-                <p className="text-slate-500 font-medium">에이전트 실행 대기 중...</p>
-                <p className="text-xs text-slate-400 mt-1">실시간 데이터 스트림 연결됨</p>
+                <p className="text-slate-500 font-medium">실행 이벤트를 기다리는 중...</p>
+                <p className="text-xs text-slate-400 mt-1">실시간 스트림에 연결되었습니다. </p>
               </div>
             ) : (
               <ReactFlowProvider>

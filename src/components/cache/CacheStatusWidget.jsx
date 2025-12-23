@@ -1,5 +1,7 @@
 /**
- * 캐시 상태 위젯 컴포넌트
+ *  * CacheStatusWidget
+ * - 캐시 통계 / 헬스 / 성능을 시각화하는 관리자용 위젯
+ * - React Query + WebSocket 실시간 갱신 지원
  */
 
 import React, { useState, useEffect } from 'react';
@@ -10,15 +12,13 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { wsManager } from '@/lib/wsManager';
 import {
   Database,
   RefreshCw,
   Trash2,
-  Settings,
   Activity,
   Clock,
-  HardDrive,
-  Zap,
   AlertCircle,
   CheckCircle,
   TrendingUp,
@@ -37,7 +37,7 @@ const CacheStatusWidget = () => {
   const { data: cacheStats, isLoading, refetch } = useQuery({
     queryKey: [queryKeys.cacheStats],
     queryFn: cacheAPI.getStats,
-    refetchInterval: 30000
+    refetchInterval: isSubscribed ? false : 30000
   });
 
   // 캐시 설정 조회
@@ -58,7 +58,8 @@ const CacheStatusWidget = () => {
   const refreshMutation = useMutation({
     mutationFn: (params) => cacheAPI.refresh(params),
     onSuccess: () => {
-      queryClient.invalidateQueries([queryKeys.cacheStats]);
+      queryClient.invalidateQueries({ queryKey: [queryKeys.cacheStats] });
+
     }
   });
 
@@ -66,7 +67,8 @@ const CacheStatusWidget = () => {
   const clearMutation = useMutation({
     mutationFn: (params) => cacheAPI.clear(params),
     onSuccess: () => {
-      queryClient.invalidateQueries([queryKeys.cacheStats]);
+      queryClient.invalidateQueries({ queryKey: [queryKeys.cacheStats] });
+
     }
   });
 
@@ -105,7 +107,7 @@ const CacheStatusWidget = () => {
   const formatBytes = (bytes) => {
     if (bytes === 0) return '0 Bytes';
     const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   };
@@ -131,6 +133,7 @@ const CacheStatusWidget = () => {
 
   const calculateHitRate = () => {
     if (!currentStats || !currentStats.hits || !currentStats.misses) return 0;
+    
     const total = currentStats.hits + currentStats.misses;
     return total > 0 ? (currentStats.hits / total) * 100 : 0;
   };
@@ -162,7 +165,7 @@ const CacheStatusWidget = () => {
           <CardTitle className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <Database className="h-5 w-5" />
-              <span>캐시 시스템</span>
+              <span>캐시 상태</span>
               {realtimeStats && <Badge variant="secondary">실시간</Badge>}
             </div>
             <div className="flex items-center space-x-2">
@@ -340,7 +343,11 @@ const CacheStatusWidget = () => {
                 </Button>
 
                 <Button
-                  onClick={() => clearMutation.mutate()}
+                  onClick={() => {
+                    if (confirm('정말 캐시를 전체 삭제하시겠습니까?')) {
+                      clearMutation.mutate();
+                    }
+                  }}
                   disabled={clearMutation.isLoading}
                   className="h-20 flex-col"
                   variant="outline"

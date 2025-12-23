@@ -24,10 +24,11 @@ const RegisterForm = () => {
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   const validateForm = () => {
@@ -52,6 +53,8 @@ const RegisterForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (loading) return;
+
     setLoading(true);
     setError('');
 
@@ -60,19 +63,24 @@ const RegisterForm = () => {
       return;
     }
 
-    const { confirmPassword, ...registerData } = formData;
-    const result = await register(registerData);
-    
-    if (result.success) {
-      setSuccess(true);
-      setTimeout(() => {
-        navigate('/login');
-      }, 2000);
-    } else {
-      setError(result.error);
+    try {
+      const { confirmPassword, ...registerData } = formData;
+      const result = await register(registerData);
+
+      if (result?.success) {
+        setSuccess(true);
+      } else {
+        setError(
+          typeof result?.error === 'string' && result.error.trim()
+            ? result.error
+            : '회원가입에 실패했습니다. 입력 정보를 확인해 주세요.'
+        );
+      }
+    } catch (err) {
+      setError('회원가입 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+    } finally {
+      setLoading(false);
     }
-    
-    setLoading(false);
   };
 
   if (success) {
@@ -194,7 +202,7 @@ const RegisterForm = () => {
               {loading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  가입 중...
+                  가입하는 중..
                 </>
               ) : (
                 '회원가입'
