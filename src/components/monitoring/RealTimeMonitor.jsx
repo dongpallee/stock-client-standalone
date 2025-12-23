@@ -28,6 +28,7 @@ import {
 
 import { monitoringAPI, queryKeys } from '@/lib/api';
 import AlertPanel from './AlertPanel';
+import { wsManager } from '@/lib/wsManager'; // ✅ 실제 경로로 수정
 
 const RealTimeMonitor = () => {
   const [isMonitoring, setIsMonitoring] = useState(false);
