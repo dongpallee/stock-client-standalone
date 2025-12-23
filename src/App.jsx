@@ -24,7 +24,7 @@ import './App.css';
 // 사용자 비활성 상태를 감지하기 위한 래퍼 컴포넌트
 const AppWithInactivityTimer = ({ children }) => {
   useInactivityTimer();
-  return children;
+  return <>{children}</>;
 };
 
 function App() {

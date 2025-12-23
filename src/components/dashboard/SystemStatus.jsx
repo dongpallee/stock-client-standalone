@@ -16,20 +16,6 @@ import {
 } from 'lucide-react';
 
 const SystemStatus = ({ data }) => {
-  const getStatusColor = (status) => {
-    switch (status) {
-      case 'active':
-      case 'running':
-        return 'bg-green-500';
-      case 'warning':
-        return 'bg-yellow-500';
-      case 'error':
-      case 'stopped':
-        return 'bg-red-500';
-      default:
-        return 'bg-gray-500';
-    }
-  };
 
   const getStatusIcon = (status) => {
     switch (status) {
@@ -82,7 +68,7 @@ const SystemStatus = ({ data }) => {
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center space-x-2">
-          <CheckCircle className="h-5 w-5 text-green-500" />
+          {getStatusIcon(systemData?.status)}
           <span>시스템 상태</span>
         </CardTitle>
         <CardDescription>
@@ -114,7 +100,9 @@ const SystemStatus = ({ data }) => {
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium">마지막 업데이트</span>
               <span className="text-sm text-muted-foreground">
-                {new Date().toLocaleTimeString('ko-KR')}
+                {systemData?.updatedAt
+                  ? new Date(systemData.updatedAt).toLocaleString('ko-KR')
+                  : '-'}
               </span>
             </div>
           </div>

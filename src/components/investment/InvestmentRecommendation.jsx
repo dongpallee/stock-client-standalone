@@ -1,16 +1,13 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
-import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
-import { Progress } from '../ui/progress';
-import { 
-  TrendingUp, 
-  TrendingDown, 
-  Target, 
-  Shield, 
+import {
+  TrendingUp,
+  TrendingDown,
+  Target,
+  Shield,
   Zap,
-  Star,
   AlertTriangle,
   CheckCircle,
   Clock,
@@ -29,7 +26,7 @@ const InvestmentRecommendation = ({ analysisData, className = "" }) => {
           <div className="flex items-center justify-center h-48">
             <div className="text-center">
               <Brain className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-500">AI 분석 결과를 불러오는 중...</p>
+              <p className="text-gray-500">AI 분석 결과를 불러오는 중입니다.</p>
             </div>
           </div>
         </CardContent>
@@ -84,9 +81,9 @@ const InvestmentRecommendation = ({ analysisData, className = "" }) => {
   const getInvestmentAdvice = (type) => {
     const baseAdvice = {
       action: recommendation.action || '보유',
-      targetPrice: recommendation.target_price || 0,
-      stopLoss: recommendation.stop_loss || 0,
-      timeHorizon: recommendation.time_horizon || '3-6개월',
+      targetPrice: recommendation.target_price ?? null,
+      stopLoss: recommendation.stop_loss ?? null,
+            timeHorizon: recommendation.time_horizon || '3-6개월',
       reason: recommendation.reason || 'AI 분석을 통한 종합적 판단'
     };
 
@@ -133,8 +130,10 @@ const InvestmentRecommendation = ({ analysisData, className = "" }) => {
             </CardDescription>
           </div>
           <Badge className={`${getRiskColor(riskLevel)} border-0`}>
-            {riskLevel === 'low' ? '낮음' : 
-             riskLevel === 'medium' ? '보통' : '높음'} 위험
+             {riskLevel === 'low' ? '낮음'
+              : riskLevel === 'medium' ? '보통'
+              : riskLevel === 'high' ? '높음'
+              : '알 수 없음'} 위험
           </Badge>
         </div>
       </CardHeader>
@@ -198,7 +197,7 @@ const InvestmentRecommendation = ({ analysisData, className = "" }) => {
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-gray-600">목표가</span>
                     <span className="font-bold text-green-600">
-                      {currentAdvice.targetPrice?.toLocaleString() || 'N/A'}원
+                      {currentAdvice.targetPrice == null ? 'N/A' : `${currentAdvice.targetPrice.toLocaleString()}원`}
                     </span>
                   </div>
                   <div className="flex justify-between items-center">

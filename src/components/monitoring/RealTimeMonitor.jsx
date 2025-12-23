@@ -28,6 +28,7 @@ import {
 
 import { monitoringAPI, queryKeys } from '@/lib/api';
 import AlertPanel from './AlertPanel';
+import { wsManager } from '@/lib/wsManager'; // ✅ 실제 경로로 수정
 
 const RealTimeMonitor = () => {
   const [isMonitoring, setIsMonitoring] = useState(false);
@@ -62,7 +63,7 @@ const RealTimeMonitor = () => {
     mutationFn: (params) => monitoringAPI.start(params),
     onSuccess: (data) => {
       setIsMonitoring(true);
-      queryClient.invalidateQueries([queryKeys.monitoringStatus]);
+      queryClient.invalidateQueries({ queryKey: [queryKeys.monitoringStatus] });
 
       // WebSocket 모니터링 시작
       if (wsManager.isConnected) {
@@ -80,7 +81,7 @@ const RealTimeMonitor = () => {
     mutationFn: () => monitoringAPI.stop(),
     onSuccess: () => {
       setIsMonitoring(false);
-      queryClient.invalidateQueries([queryKeys.monitoringStatus]);
+      queryClient.invalidateQueries({ queryKey: [queryKeys.monitoringStatus] });
 
       // WebSocket 모니터링 중단
       if (wsManager.isConnected) {
@@ -201,7 +202,11 @@ const RealTimeMonitor = () => {
           <div className="flex items-center space-x-2">
             <div className={`w-2 h-2 rounded-full ${connectionStatus === 'connected' ? 'bg-green-500' : 'bg-red-500'}`} />
             <span className={`text-sm ${getConnectionStatusColor(connectionStatus)}`}>
-              {connectionStatus === 'connected' ? '연결됨' : '연결 안됨'}
+              {connectionStatus === 'connected'
+                ? '연결됨'
+                : connectionStatus === 'connecting'
+                  ? '연결 중...'
+                  : '연결 끊김'}
             </span>
           </div>
           <Badge variant={getStatusBadgeVariant(monitoringStatus?.monitoring_status)}>

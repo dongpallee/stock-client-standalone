@@ -35,21 +35,29 @@ const AlertPanel = () => {
   const queryClient = useQueryClient();
 
   // 알림 히스토리 조회
-  const { data: alertsData, isLoading, refetch } = useQuery({
+  const {
+    data: alertsData,
+    isLoading,
+    isError,
+    error,
+    refetch
+  } = useQuery({
     queryKey: [queryKeys.monitoringAlerts, { page: currentPage, per_page: perPage, type: alertTypeFilter }],
-    queryFn: () => monitoringAPI.getAlerts({
-      page: currentPage,
-      per_page: perPage,
-      type: alertTypeFilter || undefined
-    }),
-    refetchInterval: 30000 // 30초마다 갱신
+    queryFn: () =>
+      monitoringAPI.getAlerts({
+        page: currentPage,
+        per_page: perPage,
+        type: alertTypeFilter || undefined
+      }),
+    refetchInterval: 30000,
+    refetchIntervalInBackground: false
   });
 
   // 알림 확인 뮤테이션
   const acknowledgeMutation = useMutation({
     mutationFn: (alertId) => monitoringAPI.acknowledgeAlert(alertId),
     onSuccess: () => {
-      queryClient.invalidateQueries([queryKeys.monitoringAlerts]);
+      queryClient.invalidateQueries({ queryKey: [queryKeys.monitoringAlerts] });
     }
   });
 
@@ -57,7 +65,7 @@ const AlertPanel = () => {
   const testAlertMutation = useMutation({
     mutationFn: (params) => monitoringAPI.testAlert(params),
     onSuccess: () => {
-      queryClient.invalidateQueries([queryKeys.monitoringAlerts]);
+      queryClient.invalidateQueries({ queryKey: [queryKeys.monitoringAlerts] });
     }
   });
 
@@ -112,7 +120,9 @@ const AlertPanel = () => {
   };
 
   const formatDateTime = (dateString) => {
-    return new Date(dateString).toLocaleString('ko-KR', {
+    const d = new Date(dateString);
+    if (Number.isNaN(d.getTime())) return '-';
+    return d.toLocaleString('ko-KR', {
       year: 'numeric',
       month: '2-digit',
       day: '2-digit',
@@ -125,20 +135,17 @@ const AlertPanel = () => {
   const getTimeAgo = (dateString) => {
     const now = new Date();
     const alertTime = new Date(dateString);
-    const diffMs = now - alertTime;
+    if (Number.isNaN(alertTime.getTime())) return '-';
+
+    const diffMs = now.getTime() - alertTime.getTime();
     const diffMins = Math.floor(diffMs / 60000);
     const diffHours = Math.floor(diffMins / 60);
     const diffDays = Math.floor(diffHours / 24);
 
-    if (diffDays > 0) {
-      return `${diffDays}일 전`;
-    } else if (diffHours > 0) {
-      return `${diffHours}시간 전`;
-    } else if (diffMins > 0) {
-      return `${diffMins}분 전`;
-    } else {
-      return '방금 전';
-    }
+    if (diffDays > 0) return `${diffDays}일 전`;
+    if (diffHours > 0) return `${diffHours}시간 전`;
+    if (diffMins > 0) return `${diffMins}분 전`;
+    return '방금 전';
   };
 
   const handleTestAlert = () => {
@@ -166,13 +173,13 @@ const AlertPanel = () => {
             <div className="flex items-center space-x-2">
               <Button
                 onClick={handleTestAlert}
-                disabled={testAlertMutation.isLoading}
+                disabled={testAlertMutation.isPending}
                 variant="outline"
                 size="sm"
               >
                 테스트 알림
               </Button>
-              <Button onClick={() => refetch()} variant="outline" size="sm">
+              <Button onClick={() => refetch()} variant="outline" size="sm" aria-label="새로고침">
                 <RefreshCw className="h-4 w-4" />
               </Button>
             </div>
@@ -225,7 +232,7 @@ const AlertPanel = () => {
           {/* 통계 정보 */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="text-center p-2 bg-muted rounded">
-              <div className="text-2xl font-bold">{alerts.length}</div>
+              <div className="text-2xl font-bold">{pagination.total ?? alerts.length}</div>
               <div className="text-sm text-muted-foreground">전체 알림</div>
             </div>
             <div className="text-center p-2 bg-muted rounded">
@@ -303,7 +310,7 @@ const AlertPanel = () => {
                     {!alert.acknowledged && (
                       <Button
                         onClick={() => acknowledgeMutation.mutate(alert.id)}
-                        disabled={acknowledgeMutation.isLoading}
+                        disabled={acknowledgeMutation.isPending}
                         variant="outline"
                         size="sm"
                       >

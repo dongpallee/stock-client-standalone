@@ -6,14 +6,11 @@ import {
   TrendingUp,
   BarChart3,
   Star,
-  Trophy,
   Settings,
   LogOut,
   Menu,
-  X,
   User,
-  Home,
-  Activity
+  Home
 } from 'lucide-react';
 
 const DashboardLayout = ({ children }) => {
@@ -30,9 +27,13 @@ const DashboardLayout = ({ children }) => {
     { name: '관심종목', href: '/watchlist', icon: Star },
   ];
 
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
+
+  const handleLogout = async () => {
+    try {
+      await logout?.();
+    } finally {
+      navigate('/login', { replace: true });
+    }
   };
 
   return (
@@ -45,8 +46,11 @@ const DashboardLayout = ({ children }) => {
             <div className="flex items-center space-x-8">
               {/* 모바일 메뉴 버튼 */}
               <button
+                type="button"
                 className="md:hidden"
-                onClick={() => setSidebarOpen(!sidebarOpen)}
+                aria-label={sidebarOpen ? '메뉴 닫기' : '메뉴 열기'}
+                aria-expanded={sidebarOpen}
+                onClick={() => setSidebarOpen((v) => !v)}
               >
                 <Menu className="h-6 w-6 text-gray-400" />
               </button>
@@ -59,7 +63,9 @@ const DashboardLayout = ({ children }) => {
               {/* 네비게이션 메뉴 */}
               <div className="hidden md:flex space-x-1">
                 {navigation.map((item) => {
-                  const isActive = location.pathname === item.href;
+                  const isActive =
+                    location.pathname === item.href ||
+                    (item.href !== '/dashboard' && location.pathname.startsWith(item.href));
                   return (
                     <Link
                       key={item.name}

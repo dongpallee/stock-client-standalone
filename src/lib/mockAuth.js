@@ -1,6 +1,7 @@
 /**
- * Mock Authentication System for Standalone Mode
- * Uses LocalStorage to simulate backend authentication
+ * Standalone Mode Mock Auth
+ * - LocalStorage 기반으로 인증/세션을 "모의" 처리합니다.
+ * - 보안 목적이 아닌 데모/프로토타이핑 용도입니다.
  */
 
 const STORAGE_KEYS = {
@@ -20,7 +21,7 @@ const initializeDefaultUsers = () => {
         id: 1,
         username: 'demo',
         email: 'demo@example.com',
-        password: 'demo1234', // In real app, this would be hashed
+        password: 'demo1234', // In real app, this would be hashed(보안 목적 아님)
         name: '데모 사용자',
         created_at: new Date().toISOString()
       }
@@ -45,7 +46,16 @@ const generateMockToken = (userId, username) => {
 const parseMockToken = (token) => {
   try {
     if (!token || !token.startsWith('mock.')) return null;
-    const payload = JSON.parse(atob(token.split('.')[1]));
+
+    const parts = token.split('.');
+    if (parts.length < 2) return null;
+
+    const payload = JSON.parse(atob(parts[1]));
+    if (!payload?.exp) return null;
+
+    const now = Math.floor(Date.now() / 1000);
+    if (payload.exp <= now) return null; // expired
+
     return payload;
   } catch {
     return null;
@@ -91,6 +101,8 @@ export const mockAuthAPI = {
       }
     };
   },
+
+
 
   // Login
   login: async (credentials) => {
@@ -171,31 +183,39 @@ export const mockAuthAPI = {
   updateProfile: async (userData) => {
     await new Promise(resolve => setTimeout(resolve, 500));
 
-    const currentUser = JSON.parse(localStorage.getItem(STORAGE_KEYS.CURRENT_USER));
-    if (!currentUser) {
+    const currentUserRaw = localStorage.getItem(STORAGE_KEYS.CURRENT_USER);
+    if (!currentUserRaw) {
       throw new Error('Not authenticated');
     }
+    const currentUser = JSON.parse(currentUserRaw);
 
     const users = JSON.parse(localStorage.getItem(STORAGE_KEYS.USERS) || '[]');
     const userIndex = users.findIndex(u => u.id === currentUser.id);
+      if (userIndex === -1) {
+        throw new Error('User not found');
+      }
 
-    if (userIndex !== -1) {
       users[userIndex] = { ...users[userIndex], ...userData, id: currentUser.id };
-      localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
-      localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify({ ...users[userIndex], password: undefined }));
-    }
 
-    return { data: { ...users[userIndex], password: undefined } };
-  },
+      localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
+      localStorage.setItem(
+        STORAGE_KEYS.CURRENT_USER,
+        JSON.stringify({ ...users[userIndex], password: undefined })
+      );
+
+      return { data: { ...users[userIndex], password: undefined } }; 
+    },
+
 
   // Change password
   changePassword: async (passwordData) => {
     await new Promise(resolve => setTimeout(resolve, 500));
 
-    const currentUser = JSON.parse(localStorage.getItem(STORAGE_KEYS.CURRENT_USER));
-    if (!currentUser) {
+    const currentUserRaw = localStorage.getItem(STORAGE_KEYS.CURRENT_USER);
+    if (!currentUserRaw) {
       throw new Error('Not authenticated');
     }
+    const currentUser = JSON.parse(currentUserRaw);
 
     const users = JSON.parse(localStorage.getItem(STORAGE_KEYS.USERS) || '[]');
     const user = users.find(u => u.id === currentUser.id);
@@ -203,6 +223,7 @@ export const mockAuthAPI = {
     if (user.password !== passwordData.old_password) {
       throw new Error('Current password is incorrect');
     }
+    
 
     user.password = passwordData.new_password;
     localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
@@ -214,10 +235,11 @@ export const mockAuthAPI = {
   getWatchlist: async () => {
     await new Promise(resolve => setTimeout(resolve, 300));
 
-    const currentUser = JSON.parse(localStorage.getItem(STORAGE_KEYS.CURRENT_USER));
-    if (!currentUser) {
-      return [];
+    const currentUserRaw = localStorage.getItem(STORAGE_KEYS.CURRENT_USER);
+    if (!currentUserRaw) {
+      throw new Error('Not authenticated');
     }
+    const currentUser = JSON.parse(currentUserRaw);
 
     const watchlistKey = `${STORAGE_KEYS.WATCHLIST}_${currentUser.id}`;
     const watchlist = JSON.parse(localStorage.getItem(watchlistKey) || '[]');
@@ -229,10 +251,11 @@ export const mockAuthAPI = {
   addToWatchlist: async (stockData) => {
     await new Promise(resolve => setTimeout(resolve, 300));
 
-    const currentUser = JSON.parse(localStorage.getItem(STORAGE_KEYS.CURRENT_USER));
-    if (!currentUser) {
+    const currentUserRaw = localStorage.getItem(STORAGE_KEYS.CURRENT_USER);
+    if (!currentUserRaw) {
       throw new Error('Not authenticated');
     }
+    const currentUser = JSON.parse(currentUserRaw);
 
     const watchlistKey = `${STORAGE_KEYS.WATCHLIST}_${currentUser.id}`;
     const watchlist = JSON.parse(localStorage.getItem(watchlistKey) || '[]');
@@ -243,7 +266,7 @@ export const mockAuthAPI = {
     }
 
     const newItem = {
-      id: watchlist.length + 1,
+      id: Date.now(),
       stock_code: stockData.stock_code,
       stock_name: stockData.stock_name,
       notes: stockData.notes || '',
@@ -268,7 +291,11 @@ export const mockAuthAPI = {
     const watchlistKey = `${STORAGE_KEYS.WATCHLIST}_${currentUser.id}`;
     let watchlist = JSON.parse(localStorage.getItem(watchlistKey) || '[]');
 
-    watchlist = watchlist.filter(item => item.id !== parseInt(watchlistId));
+    const id = Number.parseInt(String(watchlistId), 10);
+    if (Number.isNaN(id)) {
+      throw new Error('Invalid watchlist id');
+    }
+    watchlist = watchlist.filter(item => item.id !== id);
     localStorage.setItem(watchlistKey, JSON.stringify(watchlist));
 
     return { message: 'Removed from watchlist' };
