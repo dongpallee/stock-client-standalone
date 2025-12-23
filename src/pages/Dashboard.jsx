@@ -17,7 +17,7 @@ import {
   Activity,
   TrendingUp,
   TrendingDown,
-  Circle,,
+  Circle,
   Loader2,
   BarChart3,
   ChevronDown,
@@ -164,7 +164,8 @@ const Dashboard = () => {
                   </div>
                   <div className="bg-gray-50 p-2 rounded">
                     <div className="text-gray-500 text-xs">거래량</div>
-                    <div className="font-semibold">{fmtMillion(marketIndices?.indices?.kospi?.volume)</div>
+                    <div className="font-semibold">
+                      {fmtMillion(marketIndices?.indices?.kospi?.volume)}</div>
                   </div>
                 </div>
 

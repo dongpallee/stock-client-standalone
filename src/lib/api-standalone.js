@@ -1,15 +1,16 @@
-/**
- * Standalone API - Frontend-only mode using local JSON files
- * No backend server required!
+files/**
+ * Standalone API (Frontend-only)
+ * - Uses static JSON files (/public/data) + LocalStorage-based mock auth
+ * - No backend server required
  */
 
 import { mockAuthAPI } from './mockAuth';
 
-// Configuration
-const USE_MOCK_DATA = import.meta.env.VITE_DATA_SOURCE === 'mock' || true;
+// Configuration (reserved for future switching between mock/local sources)
+const USE_MOCK_DATA = (import.meta.env.VITE_DATA_SOURCE ?? 'mock') === 'mock';
 const DATA_BASE_PATH = '/data';
 
-// Simulate network delay for realistic UX
+// Optional artificial delay to mimic network latency (for UI/UX testing)
 const simulateDelay = (ms = 300) => new Promise(resolve => setTimeout(resolve, ms));
 
 // Fetch JSON file helper
@@ -164,11 +165,11 @@ export const stockAPI = {
   // Watchlist API
   watchlist: {
     getList: async () => {
-      const currentUser = JSON.parse(localStorage.getItem('current_user'));
+      const currentUser = safeJSONParse(localStorage.getItem('current_user'), null);
       if (!currentUser) return [];
 
       const watchlistKey = `user_watchlist_${currentUser.id}`;
-      const watchlist = JSON.parse(localStorage.getItem(watchlistKey) || '[]');
+      const watchlist = safeJSONParse(localStorage.getItem(watchlistKey), []);
 
       // Enrich with current price data
       const stockList = await fetchJSON('/stocks/stock-list.json');
@@ -200,7 +201,7 @@ export const stockAPI = {
       }
 
       const newItem = {
-        id: watchlist.length + 1,
+        id: crypto?.randomUUID?.() ?? String(Date.now()),
         stock_code: stockCode,
         stock_name: stock.stock_name,
         notes: notes,
@@ -225,6 +226,8 @@ export const stockAPI = {
 
       return { message: 'Removed from watchlist' };
     },
+      
+
 
     check: async (stockCode) => {
       const currentUser = JSON.parse(localStorage.getItem('current_user'));

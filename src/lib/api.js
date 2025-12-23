@@ -1,12 +1,14 @@
 /**
- * Standalone API - Frontend-only mode using local JSON files
- * No backend server required!
+ * Standalone API (Frontend-only)
+ * - Stock/Market data: served from /public/data JSON files
+ * - Auth/Settings: mockAuthAPI (LocalStorage 기반)
+ * - No backend required
  */
 
 import { mockAuthAPI } from './mockAuth';
 
 // Configuration
-const USE_MOCK_DATA = import.meta.env.VITE_DATA_SOURCE === 'mock' || true;
+const USE_MOCK_DATA = import.meta.env.VITE_DATA_SOURCE === 'mock';
 const DATA_BASE_PATH = '/data';
 
 // Simulate network delay for realistic UX
@@ -16,9 +18,12 @@ const simulateDelay = (ms = 300) => new Promise(resolve => setTimeout(resolve, m
 const fetchJSON = async (path) => {
   await simulateDelay();
   try {
-    const response = await fetch(`${DATA_BASE_PATH}${path}`);
+    const joinPath = (base, p) =>
+    `${base.replace(/\/$/, '')}/${String(p).replace(/^\//, '')}`;
+
+  const response = await fetch(joinPath(DATA_BASE_PATH, path));
     if (!response.ok) {
-      throw new Error(`Failed to fetch ${path}`);
+      throw new Error(`Failed to fetch ${path} (HTTP ${response.status})`);
     }
     return await response.json();
   } catch (error) {
@@ -71,7 +76,7 @@ export const stockAPI = {
   getStock: async (stockCode) => {
     try {
       const data = await fetchJSON(`/stocks/${stockCode}.json`);
-      return data;
+      return { data };
     } catch {
       // Fallback: get from stock list
       const list = await fetchJSON('/stocks/stock-list.json');
@@ -82,7 +87,7 @@ export const stockAPI = {
   },
 
   // Analyze stock (mock - just returns existing analysis)
-  analyzeStock: async (stockCode, requestId) => {
+  analyzeStock: async (stockCode) => {
     await simulateDelay(2000); // Simulate analysis time
     const data = await fetchJSON(`/stocks/${stockCode}.json`);
     return data.analysis || null;
@@ -200,7 +205,7 @@ export const stockAPI = {
       }
 
       const newItem = {
-        id: watchlist.length + 1,
+        id: crypto?.randomUUID ? crypto.randomUUID() : String(Date.now()),
         stock_code: stockCode,
         stock_name: stock.stock_name,
         notes: notes,
