@@ -8,8 +8,6 @@ import {
   Bell, 
   BellRing, 
   TrendingUp, 
-  TrendingDown, 
-  AlertTriangle, 
   Info, 
   CheckCircle,
   X,
@@ -42,7 +40,7 @@ const AlertSystem = ({ className = "" }) => {
       type: 'price_target',
       priority: 'high',
       title: '삼성전자 목표가 도달',
-      message: '삼성전자가 설정한 목표가 75,000원에 근접했습니다. (현재: 74,500원)',
+      message: '목표가 75,000원에 근접했습니다. 현재 74,500원 입니다.',
       stockCode: '005930',
       stockName: '삼성전자',
       timestamp: new Date(Date.now() - 5 * 60 * 1000),
@@ -123,15 +121,20 @@ const AlertSystem = ({ className = "" }) => {
     }
   };
 
-  const formatTime = (date) => {
+  const formatTime = (value) => {
+    const date = toDate(value);
+    if (Number.isNaN(date.getTime())) return '-';
+
     const now = new Date();
     const diff = Math.floor((now - date) / (1000 * 60));
-    
+
     if (diff < 1) return '방금 전';
     if (diff < 60) return `${diff}분 전`;
     if (diff < 24 * 60) return `${Math.floor(diff / 60)}시간 전`;
     return date.toLocaleDateString('ko-KR');
   };
+
+  const toDate = (v) => (v instanceof Date ? v : new Date(v));
 
   const markAsRead = (alertId) => {
     setAlerts(alerts.map(alert => 
@@ -145,7 +148,7 @@ const AlertSystem = ({ className = "" }) => {
 
   const filteredAlerts = alerts.filter(alert => {
     if (filter === 'unread') return !alert.isRead;
-    if (filter === 'high') return alert.priority === 'high';
+    if (filter === 'important') return ['high', 'medium'].includes(alert.priority);
     return true;
   });
 
@@ -167,14 +170,14 @@ const AlertSystem = ({ className = "" }) => {
             <div>
               <CardTitle>투자 알림</CardTitle>
               <CardDescription>
-                실시간 시장 동향 및 투자 기회 알림
+                시장 변동·신호·뉴스를 실시간으로 알려드려요
               </CardDescription>
             </div>
           </div>
           
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2 text-sm">
-              <span>알림</span>
+              <span>알림 수신</span>
               <Switch 
                 checked={isEnabled} 
                 onCheckedChange={setIsEnabled}
@@ -214,7 +217,7 @@ const AlertSystem = ({ className = "" }) => {
           
           <div className="ml-auto text-xs text-gray-500 flex items-center gap-1">
             <Clock className="h-3 w-3" />
-            마지막 업데이트: {formatTime(lastUpdate)}
+            업데이트: {formatTime(lastUpdate)}
           </div>
         </div>
 
@@ -240,8 +243,8 @@ const AlertSystem = ({ className = "" }) => {
                           {alert.title}
                         </h4>
                         <Badge className={getPriorityColor(alert.priority)} size="sm">
-                          {alert.priority === 'high' ? '긴급' : 
-                           alert.priority === 'medium' ? '중요' : '일반'}
+                          {alert.priority === 'high' ? '높음' : 
+                           alert.priority === 'medium' ? '중간' : '낮음'}
                         </Badge>
                         {alert.action && (
                           <Badge className={getActionColor(alert.action)} size="sm">
@@ -297,7 +300,7 @@ const AlertSystem = ({ className = "" }) => {
                  '새로운 알림이 없습니다.'}
               </p>
               <p className="text-sm text-gray-400">
-                새로운 투자 기회나 시장 변동이 있으면 알려드리겠습니다.
+                시장 변동, 기술적 신호, 관련 뉴스가 감지되면 알려드릴게요.
               </p>
             </div>
           )}
@@ -311,19 +314,19 @@ const AlertSystem = ({ className = "" }) => {
                 <div className="text-lg font-bold text-red-600">
                   {alerts.filter(a => a.priority === 'high').length}
                 </div>
-                <div className="text-xs text-gray-500">긴급</div>
+                <div className="text-xs text-gray-500">높음</div>
               </div>
               <div>
                 <div className="text-lg font-bold text-yellow-600">
                   {alerts.filter(a => a.priority === 'medium').length}
                 </div>
-                <div className="text-xs text-gray-500">중요</div>
+                <div className="text-xs text-gray-500">중간</div>
               </div>
               <div>
                 <div className="text-lg font-bold text-blue-600">
                   {alerts.filter(a => a.priority === 'low').length}
                 </div>
-                <div className="text-xs text-gray-500">일반</div>
+                <div className="text-xs text-gray-500">낮음</div>
               </div>
             </div>
           </div>
